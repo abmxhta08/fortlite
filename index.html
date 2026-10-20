@@ -168,6 +168,7 @@
   #lobby .card .poor { color: #ff6a6a; font-size: 11px; margin-top: 4px; min-height: 14px; }
   #lobby .verbtn { position: absolute; left: 24px; top: 196px; width: 250px; display: none; padding: 12px 18px; border-radius: 14px; border: 2px solid rgba(255,210,74,0.8); background: rgba(5,12,28,0.85); color: #ffd24a; font-weight: 900; font-size: 18px; letter-spacing: 3px; cursor: pointer; }
   #lobby[data-tab="play"] .verbtn { display: block; }
+  #lobby .vtag { position: absolute; left: 26px; bottom: 6px; font-size: 11px; letter-spacing: 2px; color: #7f94ab; pointer-events: none; }
   #lobby .verbtn:hover { background: rgba(255,210,74,0.15); }
   #verPanel { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.55); z-index: 5; }
   #verPanel.open { display: flex; }
@@ -339,6 +340,11 @@
   #overlay h1 { margin: 0 0 12px; font-size: 40px; }
   #overlay p { margin: 4px 0; max-width: 520px; line-height: 1.4; white-space: pre-line; }
   #overlay button { margin-top: 20px; padding: 12px 36px; font-size: 20px; cursor: pointer; }
+  /* lobby layout: player badge above the character (replaces the PLAYER / READY line), no starting-loadout card, larger creator tag */
+  #lobby .status, #lobby .loadpanel { display: none !important; }
+  #lobby[data-tab="play"] .pcard { top: 12%; bottom: auto !important; }
+  #lobby .creator { font-size: 18px !important; padding: 7px 16px !important; letter-spacing: 1.5px; }
+  #lobby #skinName { display: none !important; } /* skin name label under the character */
 </style>
 </head>
 <body>
@@ -493,19 +499,22 @@
   <section class="tabpanel" id="tab-how">
     <h2>HOW TO PLAY</h2>
     <ul>
-      <li>Space: jump from the plane, then jump (hop) on the ground • WASD: steer your glider</li>
+      <li>Space: jump from the plane, then jump (hop) on the ground • WASD: steer your glider (first or third person — V switches views while gliding)</li>
       <li>WASD move • Mouse look • Left click shoot</li>
-      <li>R reload (every gun has a magazine; reserve ammo is unlimited; the minigun overheats instead) • 1–5 select an inventory spot, I rearranges them (click with a medkit or potion held to use it) • Hold G to aim a grenade, release to throw • M mute • Esc pause</li>
+      <li>R reload (every gun has a magazine; reserve ammo is unlimited; the minigun overheats instead; the shotgun loads one shell at a time and can fire as soon as one shell is in) • 1–5 select an inventory spot, I rearranges them (click with a medkit or potion held to use it) • Hold G to aim a grenade, release to throw • M mute • Esc pause</li>
       <li>You start with a pistol. Look at a chest and press E to open it; press E at a weapon on the floor to pick it up (a full inventory swaps your active gun).</li>
       <li>Shield potions (blue) add up to 100 shield; medkits come out of chests.</li>
       <li>Four supply drops land each match (every ~30 s once the storm starts). Press E to open one — it holds a jetpack, sniper or minigun. Jetpack: hold Space while airborne. Sniper: right-click or Q toggles the scope.</li>
+      <li><b>Third-person gliding:</b> glide in either camera (V switches while gliding); in third person your character hangs beneath the glider, hands on its handles.</li>
+      <li><b>Shotgun:</b> now reloads one shell at a time (same total time from empty). Each shell is loaded immediately, and you can fire as soon as one is in.</li>
       <li><b>Movement:</b> Space jumps (about 1.7 m — enough to hop onto cars, crates and low ledges; a ledge up to ~2 m is climbed automatically) • <b>C</b> toggles crouch (slower, smaller target, you can't stand up under a low ceiling) • <b>V</b> switches first / third person (also in Settings).</li>
       <li><b>Grapple gun</b> (rare chest find): aim at a solid surface — the crosshair turns green when it can attach — and left-click. 45 m range, 5 charges, 1 s cooldown; a charge is only spent on a successful hook. Click again or switch item to let go.</li>
       <li><b>Shockwave grenade</b> (rare chest find, stack of 3): hold G to aim, release to throw. After 1 s it launches everyone nearby — including you — without any damage. Walls block it.</li>
       <li>Shield damage flashes the screen edge blue, health damage red; a wedge shows which way the hit came from, and the storm pulses without a direction.</li>
+      <li><b>Maps</b> rotate Meadow Town → Haunted Hollow → <b>Dustfall Canyon</b>, a desert town: Dusty Junction (central town, most chests), Scrap Valley (scrapyard), Redrock Outpost (military compound), Oasis Springs (a quiet pond) and <b>Redrock Mine</b>, an abandoned quarry under the road bridge. The quarry is 3 m deep with four stair-ramps out (west, north, east, south), benches, rock formations, mine carts and a small timber-framed mine entrance with loot. You can also drop off the rim, or grapple / shockwave across. The pond is shallow and walkable.</li>
       <li>Stay inside the shrinking zone — the storm hurts everyone.</li>
       <li>Last contestant standing wins 1 coin (Quick Match or Ranked).</li>
-      <li><b>Ranked:</b> each elimination +5 • 1st +30 • 2nd–5th +15 • 6th–10th +5 • 11th–25th +0. A rank-based entry fee is paid when the match starts (Bronze 0, Silver 5, Gold 10, Platinum 15, Diamond 20, Champion 30, Legendary 40). Ranks: Bronze 0, Silver 100, Gold 250, Platinum 500, Diamond 800, Champion 1,200, Legendary 5,000 points. Bots get sharper with every division (faster reactions, steadier aim, longer sight, smarter use of cover); Champion and Legendary bots have perfect aim but the same health and damage as everyone. Quick Match never changes your points.</li>
+      <li><b>Ranked:</b> each elimination +5 • 1st +30 • 2nd–5th +15 • 6th–10th +5 • 11th–25th +0. A rank-based entry fee is paid when the match starts (Bronze 0, Silver 5, Gold 10, Platinum 15, Diamond 20, Champion 30, Legendary 40). Ranks: Bronze 0, Silver 100, Gold 250, Platinum 500, Diamond 800, Champion 1,200, Legendary 5,000 points. Bots get sharper with every division (faster reactions, steadier aim, longer sight, smarter use of cover) but have the same health and damage as everyone, and even Legendary bots miss. Quick Match never changes your points.</li>
     </ul>
   </section>
   <section class="tabpanel" id="tab-settings">
@@ -521,16 +530,19 @@
     <button class="small" id="resetStats">Reset stats</button>
   </section>
   <button class="verbtn" id="verBtn">v1.1 UPDATE</button>
+  <div class="vtag">FORTLITE v1.1</div>
   <div id="rankPanel"><div class="vbox"><h2>RANK PROGRESSION</h2><div class="vsub" id="rpSub"></div><div class="rtrack" id="rpTrack"></div><table id="rpTable"></table><button id="rpClose">CLOSE</button></div></div>
   <div id="verPanel"><div class="vbox">
-    <h2>VERSION 1.1</h2><div class="vsub">WHAT'S NEW</div>
+    <h2>WHAT'S NEW IN v1.1</h2><div class="vsub">FORTLITE VERSION 1.1</div>
     <ul>
+      <li><b>New map: Dustfall Canyon</b> — five named locations (Dusty Junction, Scrap Valley, Redrock Outpost, Oasis Springs and <b>Redrock Mine</b>): a desert town, scrapyard, military outpost, oasis and an abandoned quarry with stair-ramps, a timber-framed mine entrance and a road bridge overhead. Maps now rotate Meadow Town → Haunted Hollow → Dustfall Canyon.</li>
+      <li><b>Ranked bots rebalanced</b> — combat effectiveness is reduced in every division (aim error and reaction time retuned), including more forgiving Champion and Legendary opponents. Higher divisions are still harder.</li>
       <li><b>Movement:</b> higher jump that lands on cars, crates and roofs, automatic mantling of ledges up to ~2 m, and <b>C</b> to crouch.</li>
       <li><b>Third person:</b> press <b>V</b> (or use Settings) for an over-the-shoulder camera that pulls in against walls.</li>
       <li><b>Sniper:</b> click or <b>Q</b> once to scope in, again to scope out.</li>
       <li><b>Minigun buff:</b> +15% damage, 30% faster spin-up, 20% tighter spread.</li>
       <li><b>Grapple gun</b> and <b>Shockwave grenade:</b> new rare chest finds. Swing to ledges, or launch everyone nearby with zero damage.</li>
-      <li><b>Ranked:</b> new Legendary division at 5,000 points, Champion entry fee now 30, and bots get tougher with every rank.</li>
+      <li><b>Ranked:</b> new Legendary division at 5,000 points and Champion entry fee now 30.</li>
       <li><b>Damage feedback:</b> blue/red screen edges, hit-direction wedges, trailing health bars, new hit sounds and a SHIELD BROKEN alert.</li>
     </ul>
     <button id="verClose">CLOSE</button>
@@ -551,6 +563,7 @@
   // ---- Constants ----
   const HALF = 100, EYE_H = 1.6, BODY_R = 0.35, BODY_H = 1.8, MAX_HEALTH = 100, TOTAL = 25, BOT_COUNT = TOTAL - 1; // always 25 contestants: you + 24 bots
   const PLAYER_SPEED = 6, BOT_SPEED = 5, FALL_SPEED = 12, GRAVITY = 18, JUMP_H = 1.7, JUMP_V = Math.sqrt(2 * GRAVITY * JUMP_H); // jump apex 1.7 m: car hoods / roofs and crates are reachable, 3 m walls are not
+  const STEP_H = 0.5; // stairs / ramps: grounded characters walk up and down steps this tall without jumping
   const STAND_H = 1.8, CROUCH_H = 1.15, CROUCH_EYE = 1.0, CROUCH_SPEED = 0.55, MANTLE_MAX = 2.0, MANTLE_TIME = 0.3;
   const PLANE_TIME = 20, PLANE_ALT = 90, ROUTE_X0 = -105, ROUTE_X1 = 105, PLAYER_AUTO_JUMP = 18;
   const GLIDE_SPEED = 20, GLIDE_FALL = 8, GLIDE_CAP = 15, STORM_FORCE_START = 55;
@@ -567,7 +580,7 @@
   const WEAPONS = [
     { name: 'Pistol', mag: 15, reload: 1.2, dmg: 15, cd: 0.33, pellets: 1, spread: 0.03, range: 50, auto: false, kick: 0.05, sfx: 'pistol', rating: 1, color: 0xb8b8c0, len: 0.45 },
     { name: 'Assault Rifle', mag: 30, reload: 2.0, dmg: 20, cd: 1 / 6, pellets: 1, spread: 0.012, range: 70, auto: true, kick: 0.07, sfx: 'rifle', rating: 4, color: 0x4f9a48, len: 1.0 },
-    { name: 'Shotgun', mag: 5, reload: 2.4, dmg: 12, cd: 0.9, pellets: 6, spread: 0.07, range: 18, auto: false, kick: 0.16, sfx: 'shotgun', rating: 3, color: 0xb06a30, len: 1.1 },
+    { name: 'Shotgun', shells: true, mag: 5, reload: 2.4, dmg: 12, cd: 0.9, pellets: 6, spread: 0.07, range: 18, auto: false, kick: 0.16, sfx: 'shotgun', rating: 3, color: 0xb06a30, len: 1.1 },
     { name: 'SMG', mag: 20, reload: 1.7, dmg: 9, cd: 0.08, pellets: 1, spread: 0.045, range: 40, auto: true, kick: 0.04, sfx: 'smg', rating: 3, color: 0x2ab0c0, len: 0.7 },
     { name: 'Sniper Rifle', mag: 1, reload: 2.2, dmg: 80, cd: 1.5, pellets: 1, spread: 0.03, range: 200, auto: false, kick: 0.22, sfx: 'sniper', rating: 3, color: 0x9a5ad0, len: 1.4 },
     { name: 'Minigun', dmg: 9.2, cd: 0.05, pellets: 1, spread: 0.064, range: 50, auto: true, kick: 0.05, sfx: 'minigun', rating: 5, color: 0xd04040, len: 1.1, spin: 0.42, heatPerShot: 2.2, mag: 200, reload: 3.4 }
@@ -594,7 +607,7 @@
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x9ec7e8);
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 600);
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.15, 450);
   camera.rotation.order = 'YXZ';
   scene.add(camera);
   const ambient = new THREE.AmbientLight(0xffffff, 0.7);
@@ -641,8 +654,12 @@
   const N = 2 * HALF, NN = N * N;
   // Data of the ACTIVE map; swapped by useMap() whenever a new match picks its map.
   let solids = [], roofs = [], roadRects = [], treeSpots = [], roofCenters = [];
+  // Sunken terrain (Dustfall's Redrock Mine quarry): qmask marks the 1 m cells whose walkable floor is qFloor (< 0). blocked1 / link1 / deckR describe an optional
+  // second walking layer (the road bridge), which crosses over cells that are floor-level in layer 0.
+  let qmask = null, qFloor = 0, blocked1 = null, link1 = null, deckR = null;
+  const gAt = (x, z) => qmask && qmask[cellOf(x, z)] ? qFloor : 0; // walkable ground height: the quarry floor inside the quarry mask, 0 everywhere else
   let blocked = new Uint8Array(NN), comp = new Int32Array(NN), mainComp = -1, curMap = null;
-  const gS = new Float32Array(NN), par = new Int32Array(NN), seenS = new Int32Array(NN), closedS = new Int32Array(NN);
+  const gS = new Float32Array(NN * 2), par = new Int32Array(NN * 2), seenS = new Int32Array(NN * 2), closedS = new Int32Array(NN * 2); // node id = layer * NN + cell
   const DX = [1, -1, 0, 0, 1, 1, -1, -1], DZ = [0, 0, 1, -1, 1, -1, 1, -1];
   const hI = [], hF = [];
   let stamp = 0;
@@ -679,34 +696,41 @@
     }
     return -1;
   }
-  // Returns an array of [x,z] corner waypoints, or null if unreachable.
-  function findPath(sx, sz, tx, tz) {
-    const s = nearestFree(cellOf(sx, sz)), g = nearestFree(cellOf(tx, tz));
+  // Returns an array of [x,z] corner waypoints, or null if unreachable. sy (the walker's height) tells whether a bot starts on the bridge layer.
+  function findPath(sx, sz, tx, tz, sy) {
+    let s = -1;
+    if (blocked1 && deckR && sy > -1.2 && sx > deckR.x0 && sx < deckR.x1 && sz > deckR.z0 && sz < deckR.z1) { const c0 = cellOf(sx, sz); if (!blocked1[c0]) s = NN + c0; }
+    if (s < 0) s = nearestFree(cellOf(sx, sz));
+    const g = nearestFree(cellOf(tx, tz));
     if (s < 0 || g < 0) return null;
     stamp++; hI.length = 0; hF.length = 0;
     const gx = g % N, gz = (g / N) | 0;
     gS[s] = 0; seenS[s] = stamp; par[s] = -1; hpush(s, 0);
     let expanded = 0;
+    const relax = (cur, ni, nx, nz, step) => {
+      const ng = gS[cur] + step;
+      if (seenS[ni] !== stamp || ng < gS[ni]) {
+        seenS[ni] = stamp; gS[ni] = ng; par[ni] = cur;
+        const ddx = Math.abs(nx - gx), ddz = Math.abs(nz - gz);
+        hpush(ni, ng + ddx + ddz - 0.586 * Math.min(ddx, ddz));
+      }
+    };
     while (hI.length) {
       const cur = hpop();
       if (closedS[cur] === stamp) continue;
       closedS[cur] = stamp;
       if (cur === g) break;
       if (++expanded > 40000) return null;
-      const cx = cur % N, cz = (cur / N) | 0;
+      const lay = cur >= NN ? 1 : 0, cell = lay ? cur - NN : cur, cx = cell % N, cz = (cell / N) | 0, bl = lay ? blocked1 : blocked, off = lay ? NN : 0;
       for (let k = 0; k < 8; k++) {
         const nx = cx + DX[k], nz = cz + DZ[k];
         if (nx < 0 || nz < 0 || nx >= N || nz >= N) continue;
         const ni = nz * N + nx;
-        if (blocked[ni]) continue;
-        if (k >= 4 && (blocked[cz * N + nx] || blocked[nz * N + cx])) continue;
-        const ng = gS[cur] + (k < 4 ? 1 : 1.414);
-        if (seenS[ni] !== stamp || ng < gS[ni]) {
-          seenS[ni] = stamp; gS[ni] = ng; par[ni] = cur;
-          const ddx = Math.abs(nx - gx), ddz = Math.abs(nz - gz);
-          hpush(ni, ng + ddx + ddz - 0.586 * Math.min(ddx, ddz));
-        }
+        if (bl[ni]) continue;
+        if (k >= 4 && (bl[cz * N + nx] || bl[nz * N + cx])) continue;
+        relax(cur, off + ni, nx, nz, k < 4 ? 1 : 1.414);
       }
+      if (link1 && link1[cell] && !(lay ? blocked[cell] : blocked1[cell])) relax(cur, lay ? cell : NN + cell, cx, cz, 1); // step onto / off the bridge
     }
     if (closedS[g] !== stamp) return null;
     const cells = [];
@@ -716,7 +740,8 @@
     for (let i = 1; i < cells.length; i++) {
       const nxt = cells[i + 1];
       if (nxt !== undefined && cells[i] - cells[i - 1] === nxt - cells[i]) continue; // straight run
-      out.push([(cells[i] % N) - HALF + 0.5, ((cells[i] / N) | 0) - HALF + 0.5]);
+      const cc = cells[i] >= NN ? cells[i] - NN : cells[i];
+      out.push([(cc % N) - HALF + 0.5, ((cc / N) | 0) - HALF + 0.5]);
     }
     return out;
   }
@@ -739,12 +764,21 @@
       mm: { floor: '#2b2540', road: '#5f4e44', path: '#6e5d4c', tree: '#4a3b34', roof: '#8a78b0' },
       card: 'linear-gradient(#1a1240 0%, #3a1f5e 52%, #26302b 52%, #1c2420 100%)', accent: '#b07cff', orb: '#fff2c0',
       pois: [{ name: 'Crypt Hollow', x: -30, z: 30, r: 20 }, { name: 'Pumpkin Patch', x: 76, z: -60, r: 18 }, { name: "Witch's Row", x: -17, z: -20, r: 17 }, { name: 'Raven Barn', x: 34, z: -67, r: 16 },
-        { name: 'Lantern Lane', x: 40, z: 16, r: 16 }, { name: 'Moonlit Manor', x: 73, z: 72, r: 16 }, { name: 'Hollow Mill', x: -67, z: -67, r: 16 }, { name: 'Ghost Hall', x: -13, z: 70, r: 16 }, { name: 'Dead Oak Road', x: -68, z: -15, r: 17 }] }
+        { name: 'Lantern Lane', x: 40, z: 16, r: 16 }, { name: 'Moonlit Manor', x: 73, z: 72, r: 16 }, { name: 'Hollow Mill', x: -67, z: -67, r: 16 }, { name: 'Ghost Hall', x: -13, z: 70, r: 16 }, { name: 'Dead Oak Road', x: -68, z: -15, r: 17 }] },
+    { id: 2, name: 'Dustfall Canyon', seed: 31415, sky: 0xbfe0f5, fog: [0xe6d8b4, 170, 520], ambient: [0xfff1de, 0.46], sun: [0xfff0d0, 0.95],
+      ground: 0xd9b878, road: 0x8a7458, pathColor: 0xc7a974, roadCenters: [], paths: [], perim: 0xb98a58,
+      skyTop: 0x3f86d6, skyHorizon: 0xcfe6f5, hemi: [0xcfe6ff, 0xc9a06a, 0.46], sunOff: [70, 110, 40],
+      quarry: true, deck: { x0: -17, x1: 17, z0: -3.4, z1: 3.4, linkW: 2 }, deckOn: { x0: -14.5, x1: 14.5, z0: -4.2, z1: 4.2 },
+      mm: { floor: '#d6b878', road: '#8a7458', path: '#c7a974', tree: '#4d8a45', roof: '#ecdcb4' },
+      card: 'linear-gradient(#5aa0e0 0%, #bfe0f5 50%, #d9b878 50%, #c79a62 100%)', accent: '#ff9a4a', orb: '#fff6c8',
+      pois: [{ name: 'Dusty Junction', x: -30, z: 2, r: 24 }, { name: 'Dusty Junction', x: 32, z: 2, r: 20, label: false }, { name: 'Scrap Valley', x: -70, z: 64, r: 20 }, { name: 'Redrock Outpost', x: 70, z: -62, r: 20 },
+        { name: 'Oasis Springs', x: 66, z: 68, r: 18 }, { name: 'Redrock Mine', x: 0, z: 0, r: 22 }, { name: 'Redrock Mine', x: -2, z: -20, r: 11, label: false }, { name: 'Redrock Mine', x: 4, z: 20, r: 11, label: false }] }
   ];
 
   function buildMap(def) {
     const solids = [], roofs = [], buildings = [], buckets = {}, group = new THREE.Group();
     const roadRects = [], treeSpots = [], occ = [], clearRects = []; // occ: footprints, clearRects: door clearings
+    const mmRects = [], mmPolys = [], chestRegions = []; let chestPlan = null, qm = null, qFloor = 0; // map-specific minimap rectangles; chestPlan: per-area chest quotas (hand-made maps)
     let seed = def.seed;
     function mr() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
     const mrand = (a, b) => a + mr() * (b - a);
@@ -773,18 +807,18 @@
         im.frustumCulled = false;
         group.add(im);
       }
-      for (const kind of ['day', 'bare']) {
+      for (const kind of ['day', 'bare', 'palm', 'cactus', 'rock']) {
         const geos = treeVariants(kind);
         treeInst[kind].forEach((list, vi) => {
           if (!list.length || !geos[vi]) return;
           const im = new THREE.InstancedMesh(geos[vi], treeMat, list.length), up = new THREE.Vector3(0, 1, 0);
-          list.forEach((t, i) => { pos.set(t[0], 0, t[1]); q.setFromAxisAngle(up, t[3]); sc.set(t[2], t[2], t[2]); mtx.compose(pos, q, sc); im.setMatrixAt(i, mtx); });
+          list.forEach((t, i) => { pos.set(t[0], t[4] || 0, t[1]); q.setFromAxisAngle(up, t[3]); sc.set(t[2], t[2], t[2]); mtx.compose(pos, q, sc); im.setMatrixAt(i, mtx); });
           im.instanceMatrix.needsUpdate = true; im.frustumCulled = false; group.add(im);
         });
       }
     }
 
-    addBox(-HALF, HALF, -0.1, 0, -HALF, HALF, def.ground, false);
+    if (!def.quarry) addBox(-HALF, HALF, -0.1, 0, -HALF, HALF, def.ground, false); // (maps with a quarry build their ground around it)
     // Roads (flat 3x3 grid of blocks) and narrower dirt paths
     def.roadCenters.forEach(c => {
       roadRects.push({ x0: -HALF + 3, x1: HALF - 3, z0: c - 3, z1: c + 3 }, { x0: c - 3, x1: c + 3, z0: -HALF + 3, z1: HALF - 3 });
@@ -792,12 +826,13 @@
     (def.paths || []).forEach(c => {
       roadRects.push({ x0: -HALF + 3, x1: HALF - 3, z0: c - 1.5, z1: c + 1.5, path: true }, { x0: c - 1.5, x1: c + 1.5, z0: -HALF + 3, z1: HALF - 3, path: true });
     });
-    roadRects.forEach(r => addBox(r.x0, r.x1, 0, r.path ? 0.025 : 0.03, r.z0, r.z1, r.path ? def.pathColor : def.road, false));
+    roadRects.forEach(r => addBox(r.x0, r.x1, 0, r.path ? 0.03 : 0.06, r.z0, r.z1, r.path ? def.pathColor : def.road, false));
     // Perimeter (visual low wall, tall collision)
-    addBox(-HALF - 1, HALF + 1, 0, 3, -HALF - 1, -HALF, 0x2e2e38, false);
-    addBox(-HALF - 1, HALF + 1, 0, 3, HALF, HALF + 1, 0x2e2e38, false);
-    addBox(-HALF - 1, -HALF, 0, 3, -HALF, HALF, 0x2e2e38, false);
-    addBox(HALF, HALF + 1, 0, 3, -HALF, HALF, 0x2e2e38, false);
+    const PER = def.perim || 0x2e2e38;
+    addBox(-HALF - 1, HALF + 1, 0, 3, -HALF - 1, -HALF, PER, false);
+    addBox(-HALF - 1, HALF + 1, 0, 3, HALF, HALF + 1, PER, false);
+    addBox(-HALF - 1, -HALF, 0, 3, -HALF, HALF, PER, false);
+    addBox(HALF, HALF + 1, 0, 3, -HALF, HALF, PER, false);
     solids.push({ x0: -HALF - 10, x1: HALF + 10, y0: 0, y1: 80, z0: -HALF - 10, z1: -HALF }, { x0: -HALF - 10, x1: HALF + 10, y0: 0, y1: 80, z0: HALF, z1: HALF + 10 },
                 { x0: -HALF - 10, x1: -HALF, y0: 0, y1: 80, z0: -HALF - 10, z1: HALF + 10 }, { x0: HALF, x1: HALF + 10, y0: 0, y1: 80, z0: -HALF - 10, z1: HALF + 10 });
 
@@ -881,8 +916,12 @@
       else if (off) { L(-hw + 1.0, -hw + 3.0, top, top + 1.5, -hd + 1.0, -hd + 3.0, shade(b.wall, 0.85), false, true); L(hw - 2.6, hw - 1.2, top, top + 0.8, hd - 2.6, hd - 1.2, 0x8d949c, false, true); }
     }
     // Trees: a handful of tapered-trunk / faceted-canopy variants, drawn as instanced meshes (one draw call per variant per map).
-    const treeInst = { day: [[], [], [], [], []], bare: [[], [], []] };
+    const treeInst = { day: [[], [], [], [], []], bare: [[], [], []], palm: [[], []], cactus: [[], []], rock: [[], [], []] };
     const treeHash = (x, z) => { const v = Math.sin(x * 12.9898 + z * 78.233) * 43758.5453; return v - Math.floor(v); };
+    function addProp(kind, x, z, k, y) { // faceted desert props drawn as instanced vertex-coloured meshes (position-hashed variant + rotation)
+      const hsh = treeHash(x, z), set = treeInst[kind], v = Math.floor(hsh * set.length * 7.31) % set.length;
+      set[v].push([x, z, k, hsh * Math.PI * 2, y || 0]);
+    }
     function addTree(x, z, k, bare) { // visuals only (collision is added by the caller); variant + rotation come from the position, not the RNG
       const hsh = treeHash(x, z), set = bare ? treeInst.bare : treeInst.day, v = Math.floor(hsh * set.length * 7.31) % set.length;
       set[v].push([x, z, k, hsh * Math.PI * 2]);
@@ -1032,20 +1071,319 @@
         occ.push(rc); pumpkins++;
       }
     }
+    if (def.id === 2) {
+      // ===================== DUSTFALL CANYON =====================
+      // A desert town around an abandoned quarry (3 m deep, real lower floor) crossed by a road bridge. Five named areas:
+      // Dusty Junction (both rims of the bridge), Scrap Valley (SW), Redrock Outpost (NE), Oasis Springs (SE) and Redrock Mine (the quarry).
+      const SAND = def.ground, FL = -3.0, T = 3;
+      qFloor = FL; qm = new Uint8Array(NN);
+      const CL = [0xb5532e, 0xc9683a, 0xa8482a], CAP = 0xe6bc7c, TEAL = 0x22a39b, RUST = [0x8a4a2a, 0x7a6a5a, 0x9a5a30, 0x6a6a6a, 0x7a3a2a, 0x8a7a3a], TIMBER = 0x7a5230;
+      const manualChests = chestRegions;
+      const solidBox = (x0, x1, y0, y1, z0, z1, col, o) => { addBox(x0, x1, y0, y1, z0, z1, col, true); if (o) Object.assign(solids[solids.length - 1], o); };
+      const deco = (x0, x1, y0, y1, z0, z1, col, glow) => addBox(x0, x1, y0, y1, z0, z1, col, false, glow);
+      const reserve = (x0, x1, z0, z1) => occ.push({ x0, x1, z0, z1 });
+      const segs = (lo, hi, gaps) => { const out = []; let a = lo; gaps.slice().sort((p, q) => p[0] - q[0]).forEach(g => { out.push([a, g[0]]); a = g[1]; }); out.push([a, hi]); return out; }; // [lo, hi] split around gaps
+      const chestAt = (area, x, z, o) => manualChests.push(Object.assign({ area, x, z }, o || {}));
+
+      // ---- Redrock Mine: an irregular abandoned quarry (3 m deep) whose outline is a polygon with angled corners, rasterised to 1 m cells.
+      // The same cell mask drives the floor height (gAt), the cliff-wall colliders, the ground meshes and the navigation grid, so what you see is what you collide with.
+      const QPOLY = [[-9, -30], [4, -30], [9, -26], [9, -9], [10, -6], [10, 6], [13, 7], [15, 10], [15, 28], [12, 32], [-4, 32], [-8, 28], [-8, 10], [-10, 6], [-10, -6], [-12, -10], [-12, -26]];
+      const ALCOVE = { x0: -8, x1: -2, z0: -36, z1: -30 };   // the mine entrance: a small chamber cut into the north rock face
+      const inPoly = (x, z) => { let c = false; for (let i = 0, j = QPOLY.length - 1; i < QPOLY.length; j = i++) { const [xi, zi] = QPOLY[i], [xj, zj] = QPOLY[j]; if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) c = !c; } return c; };
+      for (let iz = 0; iz < N; iz++) for (let ix = 0; ix < N; ix++) { const x = ix - HALF + 0.5, z = iz - HALF + 0.5; if (inPoly(x, z) || (x > ALCOVE.x0 && x < ALCOVE.x1 && z > ALCOVE.z0 && z < ALCOVE.z1)) qm[iz * N + ix] = 1; }
+      // ramps: stair-steps from the rim down to the floor, flanked by rails (west, north, east and south sides: four routes in / out)
+      const RAMPS = [{ ax: 'x', c: -20, from: -12, dir: 1 }, { ax: 'z', c: 2, from: -30, dir: 1 }, { ax: 'x', c: 20, from: 15, dir: -1 }, { ax: 'z', c: -2, from: 32, dir: -1 }];
+      const NSTEP = 11, RUN = 0.9, RISE = 0.25, RW = 2.5, corr = new Uint8Array(NN);
+      RAMPS.forEach(r => { // the cells between the quarry edge and 4.5 m beyond it stay open (no cliff wall) so the ramp has a mouth at rim level
+        for (let iz = 0; iz < N; iz++) for (let ix = 0; ix < N; ix++) {
+          const x = ix - HALF + 0.5, z = iz - HALF + 0.5, u = r.ax === 'x' ? x : z, w = r.ax === 'x' ? z : x;
+          if (Math.abs(w - r.c) < RW && (r.dir > 0 ? (u < r.from && u > r.from - 4.5) : (u > r.from && u < r.from + 4.5))) corr[iz * N + ix] = 1;
+        }
+      });
+      const wallc = new Uint8Array(NN); let bx0 = N, bx1 = 0, bz0 = N, bz1 = 0;
+      for (let iz = 0; iz < N; iz++) for (let ix = 0; ix < N; ix++) if (qm[iz * N + ix]) {
+        bx0 = Math.min(bx0, ix); bx1 = Math.max(bx1, ix); bz0 = Math.min(bz0, iz); bz1 = Math.max(bz1, iz);
+        for (let dz = -T; dz <= T; dz++) for (let dx = -T; dx <= T; dx++) { const jx = ix + dx, jz = iz + dz; if (dx * dx + dz * dz <= T * T + 0.5 && jx >= 0 && jz >= 0 && jx < N && jz < N && !qm[jz * N + jx] && !corr[jz * N + jx]) wallc[jz * N + jx] = 1; }
+      }
+      bx0 -= T + 1; bz0 -= T + 1; bx1 += T + 2; bz1 += T + 2;   // bounding cells of the quarry + its cliff band
+      const mergeCells = (test) => { // greedy rectangles from a cell predicate (row runs, merged downwards when identical)
+        const out = []; let open = new Map();
+        for (let iz = bz0; iz < bz1; iz++) {
+          const next = new Map(); let ix = bx0;
+          while (ix < bx1) {
+            if (!test(ix, iz)) { ix++; continue; }
+            let e = ix; while (e < bx1 && test(e, iz)) e++;
+            const key = ix + ':' + e, r = open.get(key);
+            if (r) { r.z1 = iz + 1 - HALF; next.set(key, r); } else { const nr = { x0: ix - HALF, x1: e - HALF, z0: iz - HALF, z1: iz + 1 - HALF }; out.push(nr); next.set(key, nr); }
+            ix = e;
+          }
+          open = next;
+        }
+        return out;
+      };
+      // ground: everywhere except the quarry's own cells and cliff band
+      deco(-HALF, bx0 - HALF, -0.1, 0, -HALF, HALF, SAND); deco(bx1 - HALF, HALF, -0.1, 0, -HALF, HALF, SAND);
+      deco(bx0 - HALF, bx1 - HALF, -0.1, 0, -HALF, bz0 - HALF, SAND); deco(bx0 - HALF, bx1 - HALF, -0.1, 0, bz1 - HALF, HALF, SAND);
+      mergeCells((ix, iz) => !qm[iz * N + ix] && !wallc[iz * N + ix]).forEach(r => deco(r.x0, r.x1, -0.1, 0, r.z0, r.z1, SAND));
+      mergeCells((ix, iz) => qm[iz * N + ix]).forEach(r => deco(r.x0, r.x1, FL - 0.1, FL, r.z0, r.z1, 0xa56a40));
+      mergeCells((ix, iz) => wallc[iz * N + ix]).forEach(r => { // cliff band: solid from the floor to the rim, drawn in sandstone strata (palette varies from block to block)
+        solids.push({ x0: r.x0, x1: r.x1, y0: FL, y1: 0, z0: r.z0, z1: r.z1 });
+        const k = (Math.abs(Math.floor(r.x0 * 7 + r.z0 * 13)) % 3), a = [CL[k], CL[(k + 1) % 3], CL[(k + 2) % 3]];
+        deco(r.x0, r.x1, FL, FL + 1.1, r.z0, r.z1, a[0]); deco(r.x0, r.x1, FL + 1.1, FL + 2.2, r.z0, r.z1, a[1]); deco(r.x0, r.x1, FL + 2.2, -0.35, r.z0, r.z1, a[2]); deco(r.x0, r.x1, -0.35, 0, r.z0, r.z1, CAP);
+      });
+      // ---- ramps ----
+      RAMPS.forEach(r => {
+        for (let j = 1; j <= NSTEP; j++) {
+          const a = r.from + r.dir * RUN * (j - 1), b = r.from + r.dir * RUN * j, lo = Math.min(a, b), hi = Math.max(a, b), top = -RISE * j, col = j % 2 ? 0xd4a366 : 0xc99655;
+          if (r.ax === 'x') { solidBox(lo, hi, FL, top, r.c - RW, r.c + RW, col, { st: true, nv: true }); solidBox(lo, hi, FL, top + 0.9, r.c - RW - 0.3, r.c - RW, 0xa8482a); solidBox(lo, hi, FL, top + 0.9, r.c + RW, r.c + RW + 0.3, 0xa8482a); }
+          else { solidBox(r.c - RW, r.c + RW, FL, top, lo, hi, col, { st: true, nv: true }); solidBox(r.c - RW - 0.3, r.c - RW, FL, top + 0.9, lo, hi, 0xa8482a); solidBox(r.c + RW, r.c + RW + 0.3, FL, top + 0.9, lo, hi, 0xa8482a); }
+        }
+      });
+      // ---- the road bridge keeps its place and length: deck at rim height (y = 0), piers down to the quarry floor, rails that only matter on the bridge ----
+      const BX = 14.5, BZ = 4.2;
+      solidBox(-BX, BX, -0.6, 0, -BZ, BZ, 0x9b8f80, { nv: true });
+      deco(-BX, BX, 0, 0.06, -3, 3, def.road); deco(-BX, BX, 0, 0.08, -0.12, 0.12, 0xe6d8a8); // road + centre line
+      [-6, 6].forEach(px => [-2.6, 2.6].forEach(pz => { solidBox(px - 1, px + 1, FL, -0.6, pz - 0.9, pz + 0.9, 0x8a7f72); deco(px - 1.15, px + 1.15, FL, FL + 0.4, pz - 1.05, pz + 1.05, 0x6f655a); deco(px - 1.3, px + 1.3, -1.0, -0.6, pz - 1.1, pz + 1.1, TIMBER); }));   // piers with timber capping beams
+      [-1, 1].forEach(sg => { const z0 = sg < 0 ? -BZ : BZ - 0.4, z1 = sg < 0 ? -BZ + 0.4 : BZ; solidBox(-BX, BX, 0, 1.0, z0, z1, 0x9a5a3a, { lv1: true }); for (let x = -BX + 0.5; x < BX; x += 4) deco(x - 0.2, x + 0.2, 1.0, 1.35, z0 - 0.05, z1 + 0.05, 0xc9b9a0); });
+      reserve(-BX - 1, BX + 1, -BZ - 1, BZ + 1);
+      reserve(bx0 - HALF, bx1 - HALF, bz0 - HALF, bz1 - HALF); // nothing random is scattered on the quarry or its rim
+      // minimap: quarry outline + floor, ramps, bridge, mine entrance
+      mmPolys.push({ pts: QPOLY, color: '#c58a52', stroke: '#9a4526', w: 2.6 });
+      mmRects.push({ x0: ALCOVE.x0, x1: ALCOVE.x1, z0: ALCOVE.z0, z1: ALCOVE.z1, color: '#8a5a38' }, { x0: -BX, x1: BX, z0: -BZ, z1: BZ, color: '#6b5a4a' });
+      RAMPS.forEach(r => { const L = NSTEP * RUN + 4; mmRects.push(r.ax === 'x' ? { x0: Math.min(r.from, r.from + r.dir * L), x1: Math.max(r.from, r.from + r.dir * L), z0: r.c - RW, z1: r.c + RW, color: '#e8c58a' } : { x0: r.c - RW, x1: r.c + RW, z0: Math.min(r.from, r.from + r.dir * L), z1: Math.max(r.from, r.from + r.dir * L), color: '#e8c58a' }); });
+
+      // ---- roads (the bridge carries Main Street over the canyon) ----
+      const road = (x0, x1, z0, z1, path) => { const r = { x0, x1, z0, z1 }; if (path) r.path = true; roadRects.push(r); deco(x0, x1, 0, path ? 0.03 : 0.06, z0, z1, path ? def.pathColor : def.road); };
+      road(-97, -14, -3, 3); road(14, 97, -3, 3); road(-49, -43, -97, 97); road(43, 49, -97, 97);
+      road(-30, -16, -22.5, -17.5, true); road(17, 30, 17.5, 22.5, true); road(-4.5, 0.5, 36, 46, true); road(-0.5, 4.5, -46, -36, true); // dirt paths to the ramp mouths
+
+      // ---- small helpers: instanced rocks / palms / cacti with matching colliders ----
+      const rock = (x, z, k, y) => { addProp('rock', x, z, k, y || 0); solids.push({ x0: x - 0.7 * k, x1: x + 0.7 * k, y0: y || 0, y1: (y || 0) + 0.95 * k, z0: z - 0.7 * k, z1: z + 0.7 * k }); reserve(x - 0.9 * k, x + 0.9 * k, z - 0.9 * k, z + 0.9 * k); };
+      const palm = (x, z, k) => { addProp('palm', x, z, k, 0); solids.push({ x0: x - 0.22, x1: x + 0.22, y0: 0, y1: 4.2 * k, z0: z - 0.22, z1: z + 0.22 }); reserve(x - 0.5, x + 0.5, z - 0.5, z + 0.5); treeSpots.push([x, z]); };
+      const cactus = (x, z, k) => { addProp('cactus', x, z, k, 0); solids.push({ x0: x - 0.3, x1: x + 0.3, y0: 0, y1: 2.4 * k, z0: z - 0.3, z1: z + 0.3 }); reserve(x - 0.6, x + 0.6, z - 0.6, z + 0.6); };
+      const addCar = (cx, cz, alongX, color, y0) => {
+        const y = y0 || 0, lx = alongX ? 2.2 : 1.0, lz = alongX ? 1.0 : 2.2, cabX = alongX ? 1.1 : 0.85, cabZ = alongX ? 0.85 : 1.1;
+        addBox(cx - lx, cx + lx, y + 0.3, y + 1.0, cz - lz, cz + lz, color, false); addBox(cx - cabX, cx + cabX, y + 1.0, y + 1.55, cz - cabZ, cz + cabZ, 0x9fb8c8, false); addBox(cx - lx + 0.3, cx + lx - 0.3, y, y + 0.3, cz - lz + 0.1, cz + lz - 0.1, 0x1a1a1a, false);
+        solids.push({ x0: cx - lx, x1: cx + lx, y0: y, y1: y + 1.0, z0: cz - lz, z1: cz + lz }, { x0: cx - cabX, x1: cx + cabX, y0: y + 1.0, y1: y + 1.55, z0: cz - cabZ, z1: cz + cabZ });
+        reserve(cx - lx, cx + lx, cz - lz, cz + lz);
+      };
+      // hollow shell with one open end (containers, wrecks): walls are thin solids, the interior is walkable and holds loot
+      const shell = (cx, cz, len, wid, h, alongX, openPos, col, roofCol, y0) => {
+        const t = 0.18, hl = len / 2, hw = wid / 2, y = y0 || 0, R = (a0, a1, b0, b1) => alongX ? [cx + a0, cx + a1, cz + b0, cz + b1] : [cx + b0, cx + b1, cz + a0, cz + a1];
+        const walls = [R(-hl, hl, -hw, -hw + t), R(-hl, hl, hw - t, hw), openPos > 0 ? R(-hl, -hl + t, -hw, hw) : R(hl - t, hl, -hw, hw)];
+        walls.forEach(w => solidBox(w[0], w[1], y, y + h - t, w[2], w[3], col));
+        const r = R(-hl, hl, -hw, hw); solidBox(r[0], r[1], y + h - t, y + h, r[2], r[3], roofCol || col);
+        reserve(r[0] - 0.3, r[1] + 0.3, r[2] - 0.3, r[3] + 0.3);
+        const door = openPos > 0 ? R(hl, hl + 3, -hw, hw) : R(-hl - 3, -hl, -hw, hw); clearRects.push({ x0: door[0], x1: door[1], z0: door[2], z1: door[3] });
+      };
+      const stairsAlong = (x, z, dirx, dirz, w, n, rise, run, col) => { // free-standing steps: n steps climbing from (x,z) in direction (dirx,dirz), w wide
+        for (let j = 1; j <= n; j++) { const a = j - 1, b = j; const xs = [x + dirx * run * a, x + dirx * run * b], zs = [z + dirz * run * a, z + dirz * run * b]; const ex = dirx ? 0 : w / 2, ez = dirz ? 0 : w / 2;
+          solidBox(Math.min(xs[0], xs[1]) - ex, Math.max(xs[0], xs[1]) + ex, 0, rise * j, Math.min(zs[0], zs[1]) - ez, Math.max(zs[0], zs[1]) + ez, col || 0xd2b07c, { st: true }); }
+      };
+
+      // ---- buildings (flat sandstone roofs, teal doors) ----
+      const MOTEL = { w: 20, d: 9, h: 3.2, gap: 3.2 }, GARAGE = { w: 16, d: 11, h: 4.2, gap: 6 }, SHOP = { w: 10, d: 8, h: 3, gap: 2.4 }, BARRACKS = { w: 18, d: 8, h: 3.2, gap: 2.6 };
+      const WALLS = [0xe0c394, 0xd9b985, 0xc9a173, 0xe6cfa0, 0xd4a97a], BRIGHT = [0x3fb6b0, 0xe58aa0, 0xf0c050, 0xa58bd0], ROOFS = [0xb9814f, 0xa8704a, 0xc79a62, 0x8f6b4a];
+      let wi = 0, ri = 0;
+      const place = (bdef, cx, cz, rot, wall, roof, style) => {
+        addBuilding(bdef, cx, cz, rot, wall === undefined ? WALLS[wi++ % WALLS.length] : wall, roof === undefined ? ROOFS[ri++ % ROOFS.length] : roof);
+        const b = buildings[buildings.length - 1], fw = rot & 1 ? bdef.d : bdef.w, fd = rot & 1 ? bdef.w : bdef.d, g = bdef.gap / 2, hd = bdef.d / 2, h = bdef.h;
+        reserve(cx - fw / 2, cx + fw / 2, cz - fd / 2, cz + fd / 2); clearRects.push(rectOf(cx, cz, rot, -g - 1.5, g + 1.5, hd, hd + 6));
+        decorate(b, style || 'house');
+        const L = (x0, x1, y0, y1, z0, z1, col) => { const r = rectOf(cx, cz, rot, x0, x1, z0, z1); deco(r.x0, r.x1, y0, y1, r.z0, r.z1, col); };
+        const hl = bdef === GARAGE ? h - 0.8 : h - 0.25; // teal door frame, a little proud of the trim
+        L(g, g + 0.3, 0, hl, hd + 0.1, hd + 0.19, TEAL); L(-g - 0.3, -g, 0, hl, hd + 0.1, hd + 0.19, TEAL); L(-g - 0.3, g + 0.3, hl, h - 0.05, hd + 0.1, hd + 0.19, TEAL);
+        return b;
+      };
+      const roofStairs = (b) => { // simple stairs up the building's right-hand wall to the flat roof
+        const d = b.def, hw = d.w / 2, hd = d.d / 2, top = d.h + 0.3, n = 13, run = 0.55;
+        for (let j = 1; j <= n; j++) { const lz1 = hd - 0.6 - run * (j - 1), r = rectOf(b.cx, b.cz, b.rot, hw, hw + 1.3, lz1 - run, lz1); solidBox(r.x0, r.x1, 0, top * j / n, r.z0, r.z1, 0xd2b07c, { st: true }); }
+        const r = rectOf(b.cx, b.cz, b.rot, hw, hw + 1.3, hd - 0.6 - run * n, hd - 0.6); reserve(r.x0 - 0.5, r.x1 + 0.5, r.z0 - 0.5, r.z1 + 0.5);
+      };
+      const stairBuildings = [];
+      // Dusty Junction, west bank
+      const motel = place(MOTEL, -29, -10.5, 0, 0xe6cfa0, 0xb9814f);
+      for (const lx of [-8, -5.5, 5.5, 8]) { const r = rectOf(-29, -10.5, 0, lx - 0.5, lx + 0.5, 4.62, 4.7); deco(r.x0, r.x1, 0, 2.1, r.z0, r.z1, TEAL); }
+      roofStairs(motel);
+      place(GARAGE, -59, -11, 0, 0xc9a173, 0x8f6b4a, 'warehouse');
+      const westHouses = [[-83, -10, 0], [-83, 10, 2], [-62, 10, 2], [-62, -36, 0], [-30, -40, 0], [-22, -28, 0], [-36, 32, 2], [-18, 36, 2]];
+      westHouses.forEach(([x, z, r], i) => { const b = place(HOUSE, x, z, r); if (i === 0 || i === 2) stairBuildings.push(b); });
+      stairBuildings.forEach(roofStairs);
+      // Gas station: canopy, pumps, a small shop, and the roadside dinosaur
+      solidBox(-27, -17, 3.4, 3.7, 7, 13, 0xe8e0c8); deco(-27, -17, 3.7, 3.85, 7, 7.2, 0xc0392b); deco(-27, -17, 3.7, 3.85, 12.8, 13, 0xc0392b);
+      [[-26.6, 7.4], [-17.4, 7.4], [-26.6, 12.6], [-17.4, 12.6]].forEach(([x, z]) => solidBox(x - 0.2, x + 0.2, 0, 3.4, z - 0.2, z + 0.2, 0xd8d0b8));
+      [-25.5, -18.5].forEach(x => { solidBox(x - 0.3, x + 0.3, 0, 1.4, 9.55, 10.45, 0xc0392b); deco(x - 0.25, x + 0.25, 1.0, 1.25, 9.45, 9.55, 0x222222); });
+      reserve(-28, -16, 6, 14); place(SHOP, -22, 18, 2, 0xe6cfa0, 0x3fb6b0);
+      const DG = 0x58b36a, DB = 0xe8d58a, DS = 0xe27a2b;   // roadside dinosaur (static scenery, solid)
+      [[-33.2, 8.9], [-33.2, 10.7]].forEach(([x, z]) => solidBox(x - 0.55, x + 0.55, 0, 2.4, z - 0.45, z + 0.45, DG));
+      solidBox(-36, -31, 2.2, 4.6, 8.4, 11.2, DG); deco(-35.8, -31.2, 2.2, 2.55, 8.5, 11.1, DB);
+      solidBox(-38.6, -36, 2.4, 3.8, 8.7, 10.9, DG); solidBox(-40.6, -38.6, 2.6, 3.5, 9.0, 10.6, DG); solidBox(-42.2, -40.6, 2.7, 3.3, 9.3, 10.3, DG);
+      solidBox(-31.6, -30.4, 3.6, 5.6, 9.2, 10.4, DG); solidBox(-30.8, -28.2, 4.8, 6.1, 8.8, 10.8, DG); deco(-30.7, -28.3, 4.45, 4.8, 9.0, 10.6, DB);
+      deco(-28.3, -28.2, 5.0, 5.15, 8.9, 9.7, 0xffffff); deco(-28.3, -28.2, 5.0, 5.15, 9.9, 10.7, 0xffffff); deco(-30.2, -30.0, 5.6, 5.85, 8.75, 8.85, 0x111111); deco(-30.2, -30.0, 5.6, 5.85, 10.75, 10.85, 0x111111);
+      [[-35.2, 4.6], [-34, 4.6], [-32.8, 4.6], [-37.4, 3.8], [-39.6, 3.5]].forEach(([x, y]) => deco(x - 0.2, x + 0.2, y, y + 0.45, 9.4, 10.2, DS));
+      deco(-31.2, -30.6, 3.2, 3.7, 8.1, 8.4, DG); deco(-31.2, -30.6, 3.2, 3.7, 11.2, 11.5, DG);
+      reserve(-43, -28, 7.5, 12);
+      // Water tower overlooking the junction
+      [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => solidBox(-40 + sx * 2 - 0.25, -40 + sx * 2 + 0.25, 0, 8, -27 + sz * 2 - 0.25, -27 + sz * 2 + 0.25, 0x8a6a45));
+      solidBox(-43, -37, 8, 12.5, -30, -24, 0x9aa3a8); deco(-43.2, -36.8, 12.5, 12.8, -30.2, -23.8, 0x7a8288); deco(-41.5, -38.5, 12.8, 14, -28.5, -25.5, 0x7a8288);
+      deco(-42, -38, 3, 3.2, -27.1, -26.9, 0x6a5035); deco(-40.1, -39.9, 0, 8, -29.2, -28.9, 0x6a5035); reserve(-44, -36, -31, -23);
+      // East bank of Dusty Junction
+      const eastHouses = [[24, -10, 0], [36, -10, 0], [24, 10, 2], [36, 10, 2], [24, -44, 0], [34, 30, 2], [60, -10, 0], [60, 10, 2], [78, -10, 0], [78, 10, 2]];
+      eastHouses.forEach(([x, z, r], i) => { const b = place(HOUSE, x, z, r); if (i === 1 || i === 2 || i === 6) stairBuildings.push(b); });
+      stairBuildings.slice(2).forEach(roofStairs);
+      place(OFFICE, 31, -27, 0, 0xd9b985, 0x3fb6b0);   // diner
+      // Landmark: the abandoned bus, hanging over the canyon edge (hollow, open at the rim end; its floor is steppable)
+      { const bx0 = 6, bx1 = 16, bz = -17, y0 = 0.2;
+        solidBox(bx0, bx1, y0, y0 + 0.25, bz - 1.4, bz + 1.4, 0x6a5a48, { st: true });
+        [[-1.4, -1.25], [1.25, 1.4]].forEach(([a, b]) => { solidBox(bx0, bx1, 0.45, 1.3, bz + a, bz + b, 0xe3b43a); solidBox(bx0, bx1, 2.0, 2.7, bz + a, bz + b, 0xe3b43a); for (let x = bx0 + 1.2; x < bx1; x += 2.5) solidBox(x - 0.1, x + 0.1, 1.3, 2.0, bz + a, bz + b, 0xd0a030); });
+        solidBox(bx0, bx0 + 0.18, 0.45, 2.7, bz - 1.4, bz + 1.4, 0xe3b43a); solidBox(bx0, bx1, 2.7, 2.9, bz - 1.45, bz + 1.45, 0xd9a52b);
+        for (let x = bx0 + 1.5; x < bx1 - 1; x += 2) deco(x - 0.4, x + 0.4, 0.5, 1.0, bz - 1.1, bz - 0.4, 0x7a4a3a), deco(x - 0.4, x + 0.4, 0.5, 1.0, bz + 0.4, bz + 1.1, 0x7a4a3a);
+        reserve(bx0 - 1, bx1 + 3, bz - 2.5, bz + 2.5); chestAt('Redrock Mine', 14.6, bz, { y: 0.45, noBot: true, force: true }); }
+      // Landmark: the crashed supply plane near the east edge (hollow fuselage, broken wing)
+      { const fx0 = 80, fx1 = 95, fz = 28.5;
+        shell(( fx0 + fx1) / 2, fz, fx1 - fx0, 3, 2.9, true, 1, 0xdadde0, 0xc7ccd1);
+        solidBox(fx0 - 1.5, fx0, 0.5, 2.2, fz - 1.1, fz + 1.1, 0xb9bec4); solidBox(84, 90, 1.2, 1.5, fz - 9.5, fz - 1.5, 0xc7ccd1); solidBox(86, 89, 1.2, 1.5, fz + 1.5, fz + 5, 0xc7ccd1);
+        deco(93, 95, 2.9, 6, fz - 0.1, fz + 0.1, 0xc0392b); deco(fx0, fx0 + 3, 1.1, 1.6, fz - 1.52, fz - 1.48, 0xc0392b);
+        solidBox(97, 98.4, 0, 1.2, 25, 26.4, 0x7a6a3a); solidBox(97, 98.4, 0, 1.2, 31, 32.4, 0x7a6a3a); solidBox(76, 77.6, 0, 1.4, 31, 32.6, 0x6a7a4a);
+        reserve(fx0 - 3, 99, fz - 11, fz + 7); chestAt('Dusty Junction', 93.2, fz, {}); }
+      // ---- Scrap Valley (south-west): rows of rusty cars, shipping containers, tyre stacks, a crusher ----
+      place(WAREHOUSE, -72, 50, 0, 0xa7845a, 0x6a6a6a, 'warehouse');
+      shell(-84.9, 62.5, 6.2, 2.5, 2.6, true, 1, 0x3a7a8a, 0x2f6676); shell(-76.1, 62.5, 6.2, 2.5, 2.6, true, -1, 0xb5532e, 0x9a4526);
+      shell(-62.5, 66.9, 6.2, 2.5, 2.6, false, 1, 0x8a8a3a, 0x75752f); shell(-56.5, 56.9, 6.2, 2.5, 2.6, false, -1, 0xa84a3a, 0x8f3f31);
+      deco(-88, -81.8, 2.6, 2.7, 61.3, 63.7, 0x2a5a66);
+      [[-86, 71, 1], [-80, 71, 0], [-74, 71, 1], [-68, 71, 0], [-86, 78, 0], [-79, 78, 1], [-72, 78, 0], [-65, 78, 1], [-58, 79, 0], [-52, 50, 1], [-52, 60, 0]].forEach(([x, z, a], i) => addCar(x, z, !!a, RUST[i % RUST.length]));
+      [[-70, 60], [-68.8, 60.2], [-69.5, 61.2], [-82, 54], [-81, 54.4], [-54, 66], [-53, 74], [-76, 82], [-52, 83]].forEach(([x, z]) => { solidBox(x - 0.55, x + 0.55, 0, 1.0, z - 0.55, z + 0.55, 0x1f1f22); reserve(x - 0.8, x + 0.8, z - 0.8, z + 0.8); });
+      solidBox(-62, -58, 0, 2.4, 45, 48, 0x7a7f86); solidBox(-61.5, -58.5, 2.4, 3.6, 45.3, 47.7, 0x9a5a30); solidBox(-58, -50, 1.5, 1.9, 46.2, 46.8, 0x555a60); solidBox(-62.8, -62.2, 0, 5.5, 45.2, 45.8, 0x6a6a6a); [-56, -53, -50.5].forEach(x => solidBox(x - 0.15, x + 0.15, 0, 1.5, 46.2, 46.8, 0x555a60));
+      reserve(-63, -49, 44, 49);
+      for (const [x, z] of [[-60, 62], [-72, 66], [-66, 74], [-82, 66], [-58, 82], [-88, 80]]) { solidBox(x - 0.8, x + 0.8, 0, 1.3, z - 0.8, z + 0.8, RUST[(x + z) & 3]); reserve(x - 1, x + 1, z - 1, z + 1); }
+      // ---- Redrock Outpost (north-east): fenced compound, warehouse, barracks, a modest watchtower ----
+      const barrier = (x0, x1, z0, z1) => { solidBox(x0, x1, 0, 1.15, z0, z1, 0xa8a49a); };
+      const fenceZ = (z, gaps) => segs(54, 88, gaps).forEach(([a, b]) => barrier(a, b, z - 0.3, z + 0.3)), fenceX = (x, gaps) => segs(-80, -44, gaps).forEach(([a, b]) => barrier(x - 0.3, x + 0.3, a, b));
+      fenceZ(-80, [[68, 72]]); fenceZ(-44, [[60, 64], [78, 82]]); fenceX(54, [[-64, -60]]); fenceX(88, [[-70, -66]]);
+      reserve(53, 89, -81, -43);
+      place(WAREHOUSE, 72, -66, 0, 0x9a8a6a, 0x5a6a46, 'warehouse');
+      place(BARRACKS, 65, -52, 0, 0xb59a6a, 0x5a6a46); place(HOUSE, 80, -52, 0, 0xb59a6a, 0x5a6a46);
+      // watchtower: four legs, a 5 m platform with rails, open steps on the west side (reachable, but exposed from every side)
+      [[82.3, -77.7], [85.7, -77.7], [82.3, -74.3], [85.7, -74.3]].forEach(([x, z]) => solidBox(x - 0.2, x + 0.2, 0, 4.7, z - 0.2, z + 0.2, 0x6a5a40));
+      solidBox(81.8, 86.2, 4.7, 5.0, -78.2, -73.8, 0x8a7a55); [[81.8, 86.2, -78.2, -78.0], [81.8, 86.2, -74.0, -73.8], [86.0, 86.2, -78.2, -73.8]].forEach(w => solidBox(w[0], w[1], 5.0, 5.9, w[2], w[3], 0x6a5a40));
+      stairsAlong(71.8, -76.0, 1, 0, 1.6, 20, 0.25, 0.5, 0xa89060); reserve(71, 87, -79, -73);
+      [[60, -70], [62, -58], [78, -58], [66, -76], [58, -48]].forEach(([x, z]) => { solidBox(x - 0.8, x + 0.8, 0, 1.2, z - 0.8, z + 0.8, 0x5a6a46); reserve(x - 1, x + 1, z - 1, z + 1); });
+      for (const [x0, x1, z0, z1] of [[62, 66, -40.5, -39.7], [70, 74, -40.5, -39.7], [56, 59, -74, -73.2], [83, 86, -62, -61.2]]) { solidBox(x0, x1, 0, 0.9, z0, z1, 0x8a7a55); reserve(x0, x1, z0 - 0.4, z1 + 0.4); }
+      addCar(60.5, -42, true, 0x6a7a4a); addCar(84, -57.5, false, 0x6a7a4a);
+      // ---- Oasis Springs (south-east): shallow pond (walkable), palms, colourful courtyards ----
+      deco(57, 75, 0, 0.02, 62, 74, 0x8fd9d4); deco(58, 74, 0, 0.05, 63, 73, 0x3fb3c9); reserve(56, 76, 61, 75);
+      place(HOUSE, 52, 60, 1, BRIGHT[0], 0xc79a62); place(HOUSE, 80, 60, 3, BRIGHT[1], 0xc79a62); place(HOUSE, 66, 82, 2, BRIGHT[2], 0xb9814f); place(HOUSE, 66, 54, 0, BRIGHT[3], 0xb9814f);
+      for (const [x0, x1, z0, z1] of [[58, 62, 77.3, 77.7], [70, 74, 77.3, 77.7], [58, 62, 58.3, 58.7], [70, 74, 58.3, 58.7]]) { solidBox(x0, x1, 0, 1.0, z0, z1, 0xe6cfa0); reserve(x0, x1, z0 - 0.5, z1 + 0.5); }
+      [[76, 79], [79, 79], [77.5, 76]].forEach(([x, z]) => { solidBox(x - 0.6, x + 0.6, 0, 0.8, z - 0.5, z + 0.5, 0x8a5a2b); reserve(x - 0.8, x + 0.8, z - 0.8, z + 0.8); });
+      [[75, 78.5], [80.5, 78.5], [75, 81.5], [80.5, 81.5]].forEach(([x, z]) => solidBox(x - 0.12, x + 0.12, 0, 3.0, z - 0.12, z + 0.12, 0x6a5035)); deco(74.8, 80.7, 3.0, 3.1, 78.3, 81.7, 0xe0624a); reserve(74, 82, 77, 83);
+      [[55, 62], [57, 67], [56, 73], [60, 76], [68, 76], [76, 75], [77, 70], [76, 64], [72, 59.5], [62, 59.5], [50, 70], [84, 70]].forEach(([x, z], i) => palm(x, z, 0.9 + (i % 3) * 0.12));
+      // ---- Redrock Mine contents: the mine entrance (timber-framed alcove) with rails and carts, benches, rock formations, cover ----
+      const timberFrame = (xa, xb, z, y0, y1, solidPosts) => { // two posts and a cross beam (the beam is overhead; posts optionally solid)
+        if (solidPosts) { solidBox(xa - 0.15, xa + 0.15, y0, y1, z - 0.15, z + 0.15, TIMBER); solidBox(xb - 0.15, xb + 0.15, y0, y1, z - 0.15, z + 0.15, TIMBER); } else { deco(xa - 0.15, xa + 0.15, y0, y1, z - 0.15, z + 0.15, TIMBER); deco(xb - 0.15, xb + 0.15, y0, y1, z - 0.15, z + 0.15, TIMBER); }
+        solidBox(xa - 0.3, xb + 0.3, y1 - 0.3, y1, z - 0.2, z + 0.2, 0x8a6038);
+      };
+      { // mine entrance: roof slab over the alcove (the rim above it stays walkable), timber frame at the mouth, braces, dark back wall
+        solidBox(ALCOVE.x0, ALCOVE.x1, -0.6, 0, ALCOVE.z0, ALCOVE.z1, CAP, { nv: true });
+        timberFrame(ALCOVE.x0 + 0.15, ALCOVE.x1 - 0.15, ALCOVE.z1 - 0.15, FL, FL + 2.5, false);
+        [[ALCOVE.x0 + 0.3, 1], [ALCOVE.x1 - 0.3, -1]].forEach(([x, sg]) => { deco(Math.min(x, x + 0.9 * sg), Math.max(x, x + 0.9 * sg), FL + 1.9, FL + 2.5, ALCOVE.z1 - 0.3, ALCOVE.z1 - 0.1, TIMBER); });
+        timberFrame(ALCOVE.x0 + 0.15, ALCOVE.x1 - 0.15, ALCOVE.z0 + 2.8, FL, FL + 2.4, false);   // a second support deeper inside
+        deco(ALCOVE.x0, ALCOVE.x1, FL, FL + 2.4, ALCOVE.z0, ALCOVE.z0 + 0.1, 0x3a2a1e);
+        [[-6.5, -33.4], [-3.6, -34.2]].forEach(([x, z]) => { solidBox(x - 0.55, x + 0.55, FL, FL + 1.1, z - 0.55, z + 0.55, 0x8a5a2b); deco(x - 0.57, x + 0.57, FL + 0.5, FL + 0.6, z - 0.57, z + 0.57, 0x6a4420); });   // crates inside
+        chestAt('Redrock Mine', -5.5, -34.5, {});
+      }
+      const rails = (x, z0, z1) => { // a short straight rail section with sleepers (flat decoration, nothing to trip on)
+        deco(x - 0.5, x - 0.42, FL, FL + 0.07, z0, z1, 0x5a5f66); deco(x + 0.42, x + 0.5, FL, FL + 0.07, z0, z1, 0x5a5f66);
+        for (let z = z0 + 0.3; z < z1; z += 0.9) deco(x - 0.65, x + 0.65, FL, FL + 0.04, z - 0.1, z + 0.1, TIMBER);
+      };
+      rails(-5, -35, -24); rails(-5, -21, -15.5);    // the track is broken in the middle
+      const cart = (x, z, load) => { // stationary mine cart (solid body on four wheels), optionally full of ore
+        solidBox(x - 0.62, x + 0.62, FL + 0.22, FL + 1.0, z - 0.95, z + 0.95, 0x8a4a2a); deco(x - 0.66, x + 0.66, FL + 0.9, FL + 1.0, z - 0.99, z + 0.99, 0x5a5f66);
+        [[-0.5, -0.6], [0.5, -0.6], [-0.5, 0.6], [0.5, 0.6]].forEach(([dx, dz]) => deco(x + dx - 0.1, x + dx + 0.1, FL, FL + 0.25, z + dz - 0.12, z + dz + 0.12, 0x222226));
+        if (load) deco(x - 0.5, x + 0.5, FL + 1.0, FL + 1.3, z - 0.8, z + 0.8, 0x4a4036);
+        reserve(x - 1, x + 1, z - 1.2, z + 1.2);
+      };
+      cart(-5, -27.5, true); cart(-5, -18, false);
+      // benches: two raised rock ledges (1.5 m) reachable by short stairs, a jump, or a mantle
+      const bench = (x0, x1, z0, z1, ax, dir) => { // stairs leave the bench along `ax` in direction `dir`
+        solidBox(x0, x1, FL, FL + 1.5, z0, z1, 0xc9683a, { st: true }); deco(x0, x1, FL + 1.5 - 0.15, FL + 1.5, z0, z1, CAP); // (st: the top stair steps onto it)
+        const xc = (x0 + x1) / 2, zc = (z0 + z1) / 2;
+        for (let k = 1; k <= 5; k++) {
+          const top = FL + 1.5 - 0.25 * k;
+          if (ax === 'x') { const a = dir > 0 ? x1 + 0.8 * (k - 1) : x0 - 0.8 * k; solidBox(a, a + 0.8, FL, top, zc - 1, zc + 1, 0xd4a366, { st: true }); }
+          else { const a = dir > 0 ? z1 + 0.8 * (k - 1) : z0 - 0.8 * k; solidBox(xc - 1, xc + 1, FL, top, a, a + 0.8, 0xd4a366, { st: true }); }
+        }
+        reserve(x0 - 5, x1 + 5, z0 - 5, z1 + 5);
+      };
+      bench(5.8, 8.8, -26, -22, 'z', 1); bench(8, 12, 24, 28, 'x', -1);
+      // rock formations (faceted boulders in clusters) and loose boulders
+      [[-10, -13, 1.5], [-8.8, -14.2, 1.0], [-11, -15, 0.9], [6, -12, 1.4], [7.2, -11, 0.9], [4.8, -13.4, 0.8], [-6, 12, 1.4], [-4.8, 13.4, 0.9], [-7, 14, 0.8], [11, 13, 1.3], [12.4, 12.2, 0.9], [9, 18, 1.0]].forEach(([x, z, k]) => rock(x, z, k, FL));
+      [[7.0, -24.6, 0.9], [7.9, -23.4, 0.7]].forEach(([x, z, k]) => rock(x, z, k, FL + 1.5));  // on the first bench
+      [[10, 26, 0.8]].forEach(([x, z, k]) => rock(x, z, k, FL + 1.5));
+      // cover and loot crates, timber shoring, one wreck
+      [[-8.5, -24.5], [-9.6, -23.6], [7.5, -16.5], [-3, 9.5], [6.5, 9.5], [13, 22], [-5.6, 23], [2.2, 14.5]].forEach(([x, z]) => { solidBox(x - 0.6, x + 0.6, FL, FL + 1.2, z - 0.6, z + 0.6, 0x8a5a2b); reserve(x - 0.8, x + 0.8, z - 0.8, z + 0.8); });
+      timberFrame(-1.2, 1.2, -12, FL, FL + 2.5, true); timberFrame(4.8, 7.2, 10, FL, FL + 2.5, true); timberFrame(-6.2, -3.8, 20.5, FL, FL + 2.5, true);
+      addCar(-3.5, 15.5, false, RUST[2], FL);
+      chestAt('Redrock Mine', -1.5, -1.8, {}); chestAt('Redrock Mine', 5.5, -15.5, {}); chestAt('Redrock Mine', -7.5, -11.5, {}); chestAt('Redrock Mine', 6.5, 13.5, {}); chestAt('Redrock Mine', -5.5, 19.5, {});
+
+      // ---- scatter: parked cars, crates, low walls, rocks, cacti, sparse palms ----
+      const CARC = [0xdddddd, 0xcc2222, 0x2a8a8a, 0xe0b020, 0x7a5a3a, 0x3a5a8a];
+      roadRects.filter(r => !r.path).forEach(rd => {
+        const alongX = rd.x1 - rd.x0 > rd.z1 - rd.z0;
+        for (let t = -HALF + 12; t < HALF - 12; t += mrand(16, 30)) {
+          const side = mr() < 0.5 ? -1.7 : 1.7, cx = alongX ? t : (rd.x0 + rd.x1) / 2 + side, cz = alongX ? (rd.z0 + rd.z1) / 2 + side : t;
+          const rc = { x0: cx - (alongX ? 2.2 : 1), x1: cx + (alongX ? 2.2 : 1), z0: cz - (alongX ? 1 : 2.2), z1: cz + (alongX ? 1 : 2.2) };
+          if (roadRects.some(o => o !== rd && !o.path && hit(rc, o, 1.5)) || anyHit(rc, occ, 1) || anyHit(rc, clearRects, 0)) continue;
+          addCar(cx, cz, alongX, mpick(CARC));
+        }
+      });
+      scatter(10, 2.3, 2, 0.5, (x, z) => addCar(x, z, mr() < 0.5, mpick(CARC)), 700);
+      scatter(34, 0.75, 1.5, 0.5, (x, z, rc) => { addBox(rc.x0, rc.x1, 0, 1.2, rc.z0, rc.z1, mpick([0x8a5a2b, 0xa7845a]), true); occ.push(rc); }, 1000);
+      scatter(18, 1.6, 2, 0.5, (x, z) => { const ax = mr() < 0.5, hx = ax ? 1.6 : 0.4, hz = ax ? 0.4 : 1.6; addBox(x - hx, x + hx, 0, 1.1, z - hz, z + hz, 0xcfae7c, true); occ.push({ x0: x - hx, x1: x + hx, z0: z - hz, z1: z + hz }); }, 800);
+      scatter(46, 1.0, 1.0, 0.5, (x, z) => rock(x, z, mrand(0.9, 1.9), 0), 900);
+      scatter(44, 0.8, 1.0, 0.5, (x, z) => cactus(x, z, mrand(0.8, 1.3)), 900);
+      scatter(10, 0.8, 1.5, 1.0, (x, z) => palm(x, z, mrand(0.85, 1.15)), 500);
+      // signs near the bridge and the junction (non-solid boards on posts)
+      [[-17, -5, 0xc0392b], [17, 5, 0x2a7ab0], [-42, 4.5, 0x3fb6b0], [44, -4.5, 0xe0b020]].forEach(([x, z, c]) => { solidBox(x - 0.1, x + 0.1, 0, 2.2, z - 0.1, z + 0.1, 0x6a5035); deco(x - 1.0, x + 1.0, 1.6, 2.4, z - 0.12, z + 0.12, c); });
+      // ---- distant decorative mesas (outside the playable boundary, never solid) ----
+      [[-320, -HALF - 1, -320, 320], [HALF + 1, 320, -320, 320], [-HALF - 1, HALF + 1, -320, -HALF - 1], [-HALF - 1, HALF + 1, HALF + 1, 320]].forEach(([x0, x1, z0, z1]) => deco(x0, x1, -0.8, -0.12, z0, z1, 0xcfae72)); // desert floor out to the horizon (outside the playable square only), so the mesas stand on something
+      [[-135, -70, 34, 26, 24], [-132, 38, 28, 34, 20], [-70, -138, 38, 24, 28], [48, -134, 30, 26, 22], [132, -36, 26, 38, 26], [134, 66, 32, 28, 18], [70, 136, 36, 26, 24], [-46, 138, 28, 30, 21], [-150, 110, 30, 30, 30], [150, 130, 34, 30, 28], [-160, -140, 36, 30, 32], [160, -130, 30, 36, 30]].forEach(([x, z, w, d, h]) => {
+        deco(x - w / 2, x + w / 2, -0.8, h * 0.5, z - d / 2, z + d / 2, CL[0]); deco(x - w * 0.43, x + w * 0.43, h * 0.5, h * 0.82, z - d * 0.43, z + d * 0.43, CL[1]); deco(x - w * 0.34, x + w * 0.34, h * 0.82, h, z - d * 0.34, z + d * 0.34, CAP);
+      });
+      // ---- loot spots that are placed by hand (validated against the walkable grid once it exists; `force` = hand-checked, noBot = players only) ----
+      chestAt('Scrap Valley', -85.5, 62.5, {}); chestAt('Scrap Valley', -75.5, 62.5, {}); chestAt('Scrap Valley', -62.5, 66, {}); chestAt('Scrap Valley', -56.5, 57.6, {}); chestAt('Scrap Valley', -64, 57, {}); chestAt('Scrap Valley', -74, 76, {});
+      chestAt('Redrock Outpost', 60, -62, {}); chestAt('Redrock Outpost', 84, -66, {}); chestAt('Redrock Outpost', 86.5, -70.5, {}); chestAt('Redrock Outpost', 68, -46, {});
+      chestAt('Oasis Springs', 78, 77.5, {}); chestAt('Oasis Springs', 59.5, 80.5, {}); chestAt('Oasis Springs', 66.5, 60.5, {}); chestAt('Oasis Springs', 54, 69.5, {});
+      chestAt('Dusty Junction', -57, -9, {}); chestAt('Dusty Junction', -22, 10, {}); chestAt('Dusty Junction', -24, -9, {}); chestAt('Dusty Junction', 30, -24, {}); chestAt('Dusty Junction', 30, 2, {}); chestAt('Dusty Junction', -34, -3.8, {});
+    }
     flushBoxes();
     group.visible = false;
     scene.add(group);
 
     // ----- Navigation grid: mark cells near solid things (bot radius), then find the main connected area -----
     const blocked = new Uint8Array(NN), comp = new Int32Array(NN).fill(-1);
+    let blocked1 = null, link1 = null; // optional second layer: a road bridge over cells that are floor-level in layer 0
+    if (def.deck) {
+      blocked1 = new Uint8Array(NN).fill(1); link1 = new Uint8Array(NN);
+      const dk = def.deck;
+      for (let iz = Math.floor(dk.z0 + HALF); iz < Math.ceil(dk.z1 + HALF); iz++) for (let ix = Math.floor(dk.x0 + HALF); ix < Math.ceil(dk.x1 + HALF); ix++) blocked1[iz * N + ix] = 0;
+    }
     for (const s of solids) {
-      if (s.y0 > 1.5) continue;
+      const pf = qm && qm[cellOf((s.x0 + s.x1) / 2, (s.z0 + s.z1) / 2)] ? qFloor : 0; // floor under the solid (the quarry floor is lower)
+      if (s.nv || (s.y0 - pf > 1.5 && !s.lv1)) continue; // nv: ramps / bridge deck (walkable); lv1: things standing ON the bridge
+      const tgt = s.lv1 ? blocked1 : blocked;
       const ix0 = Math.max(0, Math.floor(s.x0 - 0.45 + HALF)), ix1 = Math.min(N - 1, Math.floor(s.x1 + 0.45 + HALF));
       const iz0 = Math.max(0, Math.floor(s.z0 - 0.45 + HALF)), iz1 = Math.min(N - 1, Math.floor(s.z1 + 0.45 + HALF));
       for (let iz = iz0; iz <= iz1; iz++) for (let ix = ix0; ix <= ix1; ix++) {
         const cx = ix - HALF + 0.5, cz = iz - HALF + 0.5;
         const dx = Math.max(s.x0 - cx, 0, cx - s.x1), dz = Math.max(s.z0 - cz, 0, cz - s.z1);
-        if (dx * dx + dz * dz < 0.2025) blocked[iz * N + ix] = 1;
+        if (dx * dx + dz * dz < 0.2025) tgt[iz * N + ix] = 1;
+      }
+    }
+    if (def.deck) { // bridge cells that touch free ground at either end can be entered / left
+      const dk = def.deck;
+      for (let iz = Math.floor(dk.z0 + HALF); iz < Math.ceil(dk.z1 + HALF); iz++) for (let ix = Math.floor(dk.x0 + HALF); ix < Math.ceil(dk.x1 + HALF); ix++) {
+        const x = ix - HALF + 0.5, c = iz * N + ix;
+        if ((x < dk.x0 + dk.linkW || x > dk.x1 - dk.linkW) && !blocked[c] && !blocked1[c]) link1[c] = 1;
       }
     }
     let mainComp = -1, bestSize = 0, nComp = 0;
@@ -1082,23 +1420,33 @@
       if (okSpot(x, z) && !chestOutdoor.some(q => Math.hypot(q.x - x, q.z - z) < 9)) chestOutdoor.push({ x, z });
     }
     const roofCtr = roofs.map(r => [(r.x0 + r.x1) / 2, (r.z0 + r.z1) / 2]);
+    if (def.id === 2) { // Dustfall: fixed chest quotas per named area (Dusty Junction is the richest)
+      const quota = { 'Dusty Junction': 9, 'Scrap Valley': 5, 'Redrock Outpost': 5, 'Oasis Springs': 4, 'Redrock Mine': 5 }, lists = {};
+      Object.keys(quota).forEach(k => { lists[k] = []; });
+      const areaOf = (x, z) => { let best = null, bd = 1e9; for (const q of def.pois) { const d = Math.hypot(x - q.x, z - q.z); if (d < q.r * 1.25 && d < bd) { bd = d; best = q.name; } } return best; };
+      chestInterior.forEach(c => { const a = areaOf(c.x, c.z); if (a && lists[a]) lists[a].push(c); });
+      chestRegions.forEach(m => { if (m.force || okSpot(m.x, m.z)) lists[m.area].push(m); else def.droppedChests = (def.droppedChests || 0) + 1; });
+      chestPlan = Object.keys(quota).map(k => ({ area: k, n: quota[k], spots: lists[k] }));
+    }
 
     // ----- Minimap terrain layer (drawn once per map) -----
     const mmBase = document.createElement('canvas'); mmBase.width = 180; mmBase.height = 180;
     const drawMMBase = () => {
       const g = mmBase.getContext('2d'), S = 180 / (2 * HALF), X = v => (v + HALF) * S;
       g.fillStyle = def.mm.floor; g.fillRect(0, 0, 180, 180);
+      mmRects.forEach(r => { g.fillStyle = r.color; g.fillRect(X(r.x0), X(r.z0), (r.x1 - r.x0) * S, (r.z1 - r.z0) * S); });
+      mmPolys.forEach(q => { g.fillStyle = q.color; g.beginPath(); q.pts.forEach((v, i) => { if (i) g.lineTo(X(v[0]), X(v[1])); else g.moveTo(X(v[0]), X(v[1])); }); g.closePath(); g.fill(); if (q.stroke) { g.strokeStyle = q.stroke; g.lineWidth = q.w || 1; g.stroke(); } });
       roadRects.forEach(r => { g.fillStyle = r.path ? def.mm.path : def.mm.road; g.fillRect(X(r.x0), X(r.z0), (r.x1 - r.x0) * S, (r.z1 - r.z0) * S); });
       g.fillStyle = def.mm.tree;
       treeSpots.forEach(t => { g.beginPath(); g.arc(X(t[0]), X(t[1]), 1.1, 0, Math.PI * 2); g.fill(); });
       g.fillStyle = def.mm.roof; g.strokeStyle = '#333'; g.lineWidth = 0.8;
       roofs.forEach(r => { g.fillRect(X(r.x0), X(r.z0), (r.x1 - r.x0) * S, (r.z1 - r.z0) * S); g.strokeRect(X(r.x0), X(r.z0), (r.x1 - r.x0) * S, (r.z1 - r.z0) * S); });
       g.font = '9px ' + FONT_STACK; g.textAlign = 'center'; g.lineWidth = 2.5; g.strokeStyle = 'rgba(0,0,0,0.85)'; g.fillStyle = '#fff';
-      (def.pois || []).forEach(q => { const hw = g.measureText(q.name).width / 2, lx = clamp(X(q.x), hw + 2, 178 - hw); g.strokeText(q.name, lx, X(q.z) + 3); g.fillText(q.name, lx, X(q.z) + 3); }); // named places
+      (def.pois || []).filter(q => q.label !== false).forEach(q => { const hw = g.measureText(q.name).width / 2, lx = clamp(X(q.x), hw + 2, 178 - hw); g.strokeText(q.name, lx, X(q.z) + 3); g.fillText(q.name, lx, X(q.z) + 3); }); // named places
       g.textAlign = 'left';
     };
     drawMMBase();
-    return { def, group, solids, roofs, roadRects, treeSpots, roofCenters: roofCtr, blocked, comp, mainComp, chestInterior, chestOutdoor, mmBase, buildings, redrawMM: drawMMBase, solidGrid: buildSolidGrid(solids) };
+    return { def, group, solids, roofs, roadRects, treeSpots, roofCenters: roofCtr, blocked, blocked1, link1, deckR: def.deckOn || null, qmask: qm, qFloor, chestPlan, comp, mainComp, chestInterior, chestOutdoor, mmBase, buildings, redrawMM: drawMMBase, solidGrid: buildSolidGrid(solids) };
   }
   // Big pale moon that follows the camera (so it stays at a fixed place in the sky); only on the Halloween map.
   const moon = new THREE.Mesh(new THREE.SphereGeometry(40, 20, 14), new THREE.MeshBasicMaterial({ color: 0xfff2c0, fog: false }));
@@ -1124,7 +1472,7 @@
     if (curMap && curMap !== m) { curMap.group.visible = false; releaseMapBuffers(curMap); }
     curMap = m; m.group.visible = true;
     solidGrid = m.solidGrid; solids = m.solids; roofs = m.roofs; roadRects = m.roadRects; treeSpots = m.treeSpots; roofCenters = m.roofCenters;
-    blocked = m.blocked; comp = m.comp; mainComp = m.mainComp;
+    blocked = m.blocked; comp = m.comp; mainComp = m.mainComp; qmask = m.qmask; qFloor = m.qFloor; blocked1 = m.blocked1; link1 = m.link1; deckR = m.deckR;
     const d = m.def;
     scene.background.setHex(d.sky);
     scene.fog = d.fog ? new THREE.Fog(d.fog[0], d.fog[1], d.fog[2]) : null;
@@ -1221,7 +1569,7 @@
         m.rotation.z = -tilt; m.position.set(0.5 * len * Math.sin(tilt), 0.5 * len * Math.cos(tilt), 0); sub.add(m); root.add(sub);
       };
       const blob = (r, col, x, y, z, sy, ry) => add(new THREE.IcosahedronGeometry(r, 0), col, x, y, z, sy, ry);
-      fn({ trunk, branch, blob, add });
+      fn({ trunk, branch, blob, add, root });
       root.updateMatrixWorld(true); out.push(bakeColored(root));
     };
     if (kind === 'day') {
@@ -1235,6 +1583,26 @@
         t.add(new THREE.ConeGeometry(1.6, 1.6, 6, 1, true), 0x1f5a3a, 0, 2.6, 0); t.add(new THREE.ConeGeometry(1.25, 1.5, 6, 1, true), 0x266a42, 0, 3.6, 0, 0, 0.5); t.add(new THREE.ConeGeometry(0.9, 1.4, 6, 1, true), 0x2f7a4a, 0, 4.6, 0); });
       build(t => { t.trunk(0.16, 0.34, 2.6, 0x6b4a2a); t.branch(0.9, 1.8, 1.2, 0.9, 0x6b4a2a); t.branch(3.8, 2.3, 1.1, 0.9, 0x6b4a2a);
         t.blob(1.3, 0x3d7a2c, 0, 3.3, 0, 0.8, 0.2); t.blob(1.0, 0x538f35, 0.9, 3.0, 0.4, 0.8, 1.0); t.blob(1.0, 0x6aa63f, 0.05, 4.2, 0.1, 0.85, 1.7); });
+    } else if (kind === 'palm') { // slim curved-looking trunk with a crown of drooping fronds
+      const palm = (h, lean, tint) => build(t => {
+        t.trunk(0.13, 0.24, h, 0x8a6a45, 6); t.add(new THREE.CylinderGeometry(0.2, 0.2, 0.14, 6), 0x6a4e30, 0, h * 0.4, 0); t.add(new THREE.CylinderGeometry(0.19, 0.19, 0.14, 6), 0x6a4e30, 0, h * 0.7, 0);
+        for (let i = 0; i < 7; i++) {
+          const g = new THREE.Group(); g.rotation.y = i * 0.9 + lean; g.position.y = h - 0.05;
+          const m = new THREE.Mesh(new THREE.ConeGeometry(0.34, 2.5, 4), treeMat); m.userData.col = i % 2 ? tint : 0x3f8a3a; m.scale.z = 0.3; m.rotation.z = -1.35 - (i % 3) * 0.18; m.position.set(1.05, -0.1 - (i % 3) * 0.12, 0); g.add(m); t.root.add(g);
+        }
+        t.blob(0.28, 0x6a4a2a, 0.12, h - 0.15, 0.05, 1, 0); t.blob(0.2, 0x7a5636, -0.1, h - 0.3, -0.08, 1, 1);
+      });
+      palm(5.2, 0.2, 0x56a84a); palm(4.2, 1.1, 0x4a9a44);
+    } else if (kind === 'cactus') {
+      const cactus = (h, arms) => build(t => {
+        const G = 0x4f8f4a, G2 = 0x3f7a3d;
+        t.add(new THREE.CylinderGeometry(0.26, 0.3, h, 7), G, 0, h / 2, 0); t.add(new THREE.SphereGeometry(0.26, 7, 5), G, 0, h, 0);
+        arms.forEach(([sx, y, len]) => { t.add(new THREE.CylinderGeometry(0.15, 0.15, Math.abs(sx) * 0.55 + 0.2, 6), G2, sx * 0.3, y, 0).rotation.z = Math.PI / 2; t.add(new THREE.CylinderGeometry(0.14, 0.16, len, 6), G2, sx * 0.55, y + len / 2, 0); t.add(new THREE.SphereGeometry(0.14, 6, 4), G2, sx * 0.55, y + len, 0); });
+      });
+      cactus(2.8, [[1, 1.2, 0.9], [-1, 1.7, 0.7]]); cactus(1.8, [[-1, 0.9, 0.6]]);
+    } else if (kind === 'rock') { // faceted boulders in sandstone / rust tones
+      const rock = (c1, c2, sy) => build(t => { t.blob(1.0, c1, 0, 0.55, 0, sy, 0.3); t.blob(0.62, c2, 0.75, 0.3, 0.2, sy * 0.9, 1.1); t.blob(0.5, c2, -0.55, 0.28, -0.3, sy, 2.0); });
+      rock(0xb8683a, 0xa05830, 0.8); rock(0xc98f58, 0xb67a46, 0.95); rock(0x9c5a38, 0x8a4c2e, 0.7);
     } else { // bare, eerie trees (scaled to height / 5)
       build(t => { t.trunk(0.1, 0.2, 4.5, 0x2b211d, 5); t.branch(0.3, 3.0, 1.9, 0.75, 0x2b211d, 0.07); t.branch(3.4, 3.4, 1.7, 0.8, 0x2b211d, 0.06); t.branch(1.9, 4.2, 1.1, 0.7, 0x241b18, 0.045); t.branch(5.0, 4.0, 1.0, 0.9, 0x241b18, 0.04); });
       build(t => { t.trunk(0.1, 0.19, 5.0, 0x2b211d, 5); t.branch(1.2, 2.4, 1.6, 1.0, 0x2b211d, 0.06); t.branch(4.2, 3.2, 1.8, 0.85, 0x2b211d, 0.06); t.branch(2.7, 4.0, 1.4, 0.7, 0x241b18, 0.05); t.branch(0.1, 4.6, 0.9, 0.9, 0x241b18, 0.035); });
@@ -1690,7 +2058,7 @@
     return true;
   }
   function setWeapon(c, id) {
-    c.weapon = id; c.reloadT = 0; // switching guns cancels a reload
+    c.weapon = id; cancelReload(c); // switching guns cancels a reload (shells already loaded stay loaded)
     if (c.isPlayer) { GUNS.forEach((g, k) => { g.visible = k === id; }); flash.position.set(0, FLASH_Y[id], FLASH_Z[id]); equipT = EQUIP_TIME; if (id !== W.SNIPER) scoped = false; }
   }
   function selectSlot(c, i) {
@@ -1698,12 +2066,12 @@
     if (v === null || v === undefined) return false;
     c.useT = 0; if (c.grap && i !== c.sel) releaseGrapple(c, false);
     if (isGun(v)) { c.active = i; c.sel = i; setWeapon(c, v); }
-    else { c.sel = i; c.reloadT = 0; if (c.isPlayer) scoped = false; }
+    else { c.sel = i; cancelReload(c); if (c.isPlayer) scoped = false; }
     return true;
   }
   function resetLoadout(c) {
     c.slots = [W.PISTOL, null, null, null, null]; c.cnt = [0, 0, 0, 0, 0]; c.mag = [WEAPONS[W.PISTOL].mag, 0, 0, 0, 0];
-    c.reloadT = 0; c.active = 0; c.sel = 0; c.useT = 0; c.healT = rand(1, 2); setWeapon(c, W.PISTOL);
+    cancelReload(c); c.active = 0; c.sel = 0; c.useT = 0; c.healT = rand(1, 2); setWeapon(c, W.PISTOL);
     c.gCd = 0; c.jetpack = false; c.fuel = 0; c.spin = 0; c.heat = 0; c.overheated = false;
   }
   // Decides whether this contestant fires this frame; handles cooldown, minigun spin-up and overheating.
@@ -1711,9 +2079,14 @@
     if (state !== 'playing' || !player.alive || player.state !== 'ground' || player.weapon !== W.SNIPER || !isGun(player.slots[player.sel]) || player.reloadT > 0) return;
     scoped = !scoped; sfx('scope');
   }
+  // Shell-by-shell guns (shotgun): `reload` is the time from empty to full, split evenly over the magazine (SHELL_TIME per shell, opening / closing motion included).
+  // reloadT = time left in the whole reload; shellP = progress inside the current shell; a shell is added to the magazine when its insertion finishes.
+  const SHELL_AT = 0.85;
+  const cancelReload = c => { c.reloadT = 0; c.shellP = 0; c.shellDone = false; c.reloadTot = 0; };
   function startReload(c) {
     const w = WEAPONS[c.weapon];
     if (!w.mag || c.reloadT > 0 || c.mag[c.active] >= w.mag) return false;
+    if (w.shells) { c.shellP = 0; c.shellDone = false; c.reloadT = c.reloadTot = (w.mag - c.mag[c.active]) * (w.reload / w.mag); sfx('reload', c.isPlayer ? 0.5 : distVol(c) * 0.5); if (c.isPlayer) scoped = false; return true; }
     c.reloadT = w.reload; sfx('reload', c.isPlayer ? 1 : distVol(c)); if (c.isPlayer) scoped = false; // reloading leaves the scope
     return true;
   }
@@ -1721,7 +2094,16 @@
     const w = WEAPONS[c.weapon];
     c.fireCd -= dt;
     if (w.mag) { // magazine guns: empty means reload; ammo reserves are unlimited
-      if (c.reloadT > 0) {
+      if (c.reloadT > 0 && w.shells) {
+        if (want && c.mag[c.active] > 0 && c.fireCd <= 0) cancelReload(c); // a loaded shell can always be fired: the rest of the reload is abandoned (the shell in hand is not lost, it simply isn't inserted)
+        else {
+          const ST = w.reload / w.mag; c.reloadT -= dt; c.shellP += dt;
+          if (!c.shellDone && c.shellP >= ST * SHELL_AT) { c.shellDone = true; if (c.mag[c.active] < w.mag) c.mag[c.active]++; sfx('shell', c.isPlayer ? 1 : distVol(c)); }
+          if (c.shellP >= ST) { c.shellP -= ST; c.shellDone = false; if (c.mag[c.active] >= w.mag) { cancelReload(c); if (c.isPlayer) sfx('reloaded'); } }
+          if (c.reloadT <= 0) { cancelReload(c); if (c.isPlayer) sfx('reloaded'); }
+          if (c.reloadT > 0) return false;
+        }
+      } else if (c.reloadT > 0) {
         c.reloadT -= dt;
         if (w.spin) c.spin = Math.max(0, c.spin - dt / 0.4); // barrels spin down while the belt is replaced
         c.heat = Math.max(0, c.heat - HEAT_COOL * dt);
@@ -1775,7 +2157,7 @@
   function swapSlots(c, a, b) {
     [c.slots[a], c.slots[b]] = [c.slots[b], c.slots[a]]; [c.cnt[a], c.cnt[b]] = [c.cnt[b], c.cnt[a]]; [c.mag[a], c.mag[b]] = [c.mag[b], c.mag[a]];
     const fix = x => x === a ? b : x === b ? a : x;
-    c.sel = fix(c.sel); c.active = fix(c.active); c.reloadT = 0; c.useT = 0;
+    c.sel = fix(c.sel); c.active = fix(c.active); cancelReload(c); c.useT = 0;
   }
   function dropSlot(c, i) {
     const v = c.slots[i];
@@ -1846,12 +2228,16 @@
   function placeChests() {
     clearLoot();
     const inside = shuffle(curMap.chestInterior.slice()), outside = shuffle(curMap.chestOutdoor.slice());
-    const spots = inside.slice(0, Math.min(inside.length, 18));
+    let spots = inside.slice(0, Math.min(inside.length, 18));
+    if (curMap.chestPlan) { // hand-made maps: a quota of chests per named area, chosen from that area's valid spots
+      spots = [];
+      for (const area of curMap.chestPlan) shuffle(area.spots.slice()).slice(0, area.n).forEach(q => spots.push(q));
+    }
     for (const o of outside) { if (spots.length >= CHEST_COUNT) break; if (!spots.some(q => Math.hypot(q.x - o.x, q.z - o.z) < 8)) spots.push(o); }
     chests.forEach((ch, i) => {
       const sp = spots[i]; if (!sp) return;
       ch.x = sp.x; ch.z = sp.z; ch.active = true; ch.opened = false;
-      ch.group.position.set(sp.x, 0, sp.z); ch.group.rotation.y = Math.floor(Math.random() * 4) * Math.PI / 2; ch.group.visible = true;
+      ch.noBot = !!sp.noBot; ch.y = sp.y !== undefined ? sp.y : gAt(sp.x, sp.z); ch.group.position.set(sp.x, ch.y, sp.z); ch.group.rotation.y = Math.floor(Math.random() * 4) * Math.PI / 2; ch.group.visible = true;
     });
   }
   // Extra loot lying on the floor: shield potions, grenades and weapons, spread over reachable ground (indoors and out).
@@ -1867,17 +2253,17 @@
       const x = rand(-HALF + 5, HALF - 5), z = rand(-HALF + 5, HALF - 5);
       if (walkable(x, z) && roofTopAt(x, z) === 0 && far(x, z, tries < 1500 ? 7 : 3)) spots.push([x, z]);
     }
-    want.forEach((w, i) => { if (spots[i]) spawnPickup(w[0], w[1], spots[i][0], 0, spots[i][1]); });
+    want.forEach((w, i) => { if (spots[i]) spawnPickup(w[0], w[1], spots[i][0], gAt(spots[i][0], spots[i][1]), spots[i][1]); });
   }
   // Opens once (flag set first, so a repeat call can never duplicate loot); drops exactly one weapon, sometimes a medkit too.
   function openChest(ch, opener) {
     if (!ch.active || ch.opened) return [];
     ch.opened = true; ch.lid.rotation.x = -1.3;
     let dx = opener.x - ch.x, dz = opener.z - ch.z; const d = Math.hypot(dx, dz) || 1; dx /= d; dz /= d;
-    const out = [spawnPickup('weapon', CHEST_WEAPONS[(Math.random() * CHEST_WEAPONS.length) | 0], ch.x + dx * 1.1, 0, ch.z + dz * 1.1)];
-    if (Math.random() < MEDKIT_CHANCE) out.push(spawnPickup('medkit', 0, ch.x + dx * 0.6 - dz * 1.0, 0, ch.z + dz * 0.6 + dx * 1.0));
+    const out = [spawnPickup('weapon', CHEST_WEAPONS[(Math.random() * CHEST_WEAPONS.length) | 0], ch.x + dx * 1.1, ch.y || 0, ch.z + dz * 1.1)];
+    if (Math.random() < MEDKIT_CHANCE) out.push(spawnPickup('medkit', 0, ch.x + dx * 0.6 - dz * 1.0, ch.y || 0, ch.z + dz * 0.6 + dx * 1.0));
     let r = Math.random() * (CHEST_UTILITY.none + CHEST_UTILITY.shock + CHEST_UTILITY.grapple); // optional utility: shockwave grenade or grapple gun
-    if ((r -= CHEST_UTILITY.none) >= 0) out.push(spawnPickup(r < CHEST_UTILITY.shock ? 'shock' : 'grapple', 0, ch.x + dx * 0.6 + dz * 1.0, 0, ch.z + dz * 0.6 - dx * 1.0));
+    if ((r -= CHEST_UTILITY.none) >= 0) out.push(spawnPickup(r < CHEST_UTILITY.shock ? 'shock' : 'grapple', 0, ch.x + dx * 0.6 + dz * 1.0, ch.y || 0, ch.z + dz * 0.6 - dx * 1.0));
     return out.filter(Boolean);
   }
   // smart = bot logic (only takes what is an upgrade)
@@ -1951,7 +2337,8 @@
       else if (m === g.y - (s.y0 - R)) { g.y = s.y0 - R; g.vy = -Math.abs(g.vy) * 0.3; }
       else { g.y = s.y1 + R; g.vy = Math.abs(g.vy) * 0.35; g.vx *= 0.75; g.vz *= 0.75; if (g.vy < 1.2) g.vy = 0; }
     }
-    if (g.y < R) { g.y = R; if (g.vy < 0) { g.vy = -g.vy * 0.35; g.vx *= 0.7; g.vz *= 0.7; if (g.vy < 1.2) g.vy = 0; } }
+    const gy0 = gAt(g.x, g.z);
+    if (g.y < gy0 + R) { g.y = gy0 + R; if (g.vy < 0) { g.vy = -g.vy * 0.35; g.vx *= 0.7; g.vz *= 0.7; if (g.vy < 1.2) g.vy = 0; } }
     if (g.vy === 0) { const f = Math.max(0, 1 - 4 * h); g.vx *= f; g.vz *= f; } // rolling friction once resting
   }
   function clearLine(ax, ay, az, bx, by, bz) { // no solid between the two points?
@@ -2037,7 +2424,7 @@
       if (hd < 1.1) dot = Math.max(dot, 0.9); // standing right next to it counts as looking at it
       if (dot > bs) { bs = dot; best = { kind, ref }; }
     };
-    for (const ch of chests) if (ch.active && !ch.opened) test('chest', ch, ch.x, 0.5, ch.z, LOOT_RANGE);
+    for (const ch of chests) if (ch.active && !ch.opened) test('chest', ch, ch.x, (ch.y || 0) + 0.5, ch.z, LOOT_RANGE);
     for (const pk of pickups) if (pk.active) test('pickup', pk, pk.x, pk.y + 0.4, pk.z, LOOT_RANGE);
     for (const dp of drops) if (dp.state === 'closed' || dp.state === 'open') test('drop', dp, dp.x, dp.y + 0.8, dp.z, LOOT_RANGE + 0.4);
     return best;
@@ -2192,6 +2579,7 @@
     for (let it = 0; it < 2; it++) for (const s of nearSolids(c.x, c.z)) {
       if (c.x < s.x0 - BODY_R || c.x > s.x1 + BODY_R || c.z < s.z0 - BODY_R || c.z > s.z1 + BODY_R) continue;
       if (c.y >= s.y1 - 0.05 || c.y + bh <= s.y0) continue;
+      if (s.st && !c.jumping && !c.mantle && c.y >= s.y1 - STEP_H - 0.05) continue; // a stair the walker is about to step onto
       const px = clamp(c.x, s.x0, s.x1), pz = clamp(c.z, s.z0, s.z1);
       const dx = c.x - px, dz = c.z - pz, d2 = dx * dx + dz * dz;
       if (d2 >= BODY_R * BODY_R) continue;
@@ -2210,11 +2598,13 @@
   }
 
   // Highest solid top at or below yRef under the contestant (ground = 0): cars, crates, roofs, walls... anything solid can be stood on.
-  function surfaceBelow(c, yRef) {
-    let sup = 0;
+  function surfaceBelow(c, yRef, grounded) { // grounded: stairs / ramps (flagged st) within STEP_H above the feet count as support
+    let sup = gAt(c.x, c.z);
     for (const s of nearSolids(c.x, c.z)) {
-      if (s.y1 > yRef + 0.05 || s.y1 <= sup) continue;
-      if (c.x < s.x0 - 0.15 || c.x > s.x1 + 0.15 || c.z < s.z0 - 0.15 || c.z > s.z1 + 0.15) continue;
+      const st = grounded && s.st;
+      if (s.y1 > yRef + (st ? STEP_H : 0) + 0.05 || s.y1 <= sup) continue;
+      const m = st ? 0.35 : 0.15;
+      if (c.x < s.x0 - m || c.x > s.x1 + m || c.z < s.z0 - m || c.z > s.z1 + m) continue;
       sup = s.y1;
     }
     return sup;
@@ -2233,9 +2623,9 @@
     if (c.mantle) return;
     const bh = c.bh || BODY_H;
     if (!c.jumping) {
-      const sup = surfaceBelow(c, c.y);
-      if (c.y > sup + 0.02) { c.jumping = true; c.vy = 0; } // stepped off an edge: start falling
-      else { c.y = sup; return; }
+      const sup = surfaceBelow(c, c.y, true);
+      if (c.y > sup + STEP_H) { c.jumping = true; c.vy = 0; } // stepped off an edge: start falling
+      else { c.y = sup; return; } // (a drop of at most STEP_H is a step down, so walking down stairs / ramps is smooth)
     }
     const prevY = c.y;
     c.vy -= GRAVITY * dt; c.y += c.vy * dt;
@@ -2303,7 +2693,7 @@
     }
     c.x = clamp(c.x, -HALF + 1, HALF - 1); c.z = clamp(c.z, -HALF + 1, HALF - 1);
     c.y -= GLIDE_FALL * dt;
-    const surf = Math.max(roofTopAt(c.x, c.z), surfaceBelow(c, c.y + 0.5));
+    const roofY = roofTopAt(c.x, c.z), sb = surfaceBelow(c, c.y + 0.5), surf = roofY > 0 ? Math.max(roofY, sb) : sb; // (sb includes the canyon floor)
     if (c.y <= surf || c.glideT > GLIDE_CAP) {
       c.y = surf; c.state = 'ground';
       sfx('land', c.isPlayer ? 1 : distVol(c));
@@ -2357,7 +2747,7 @@
     pathBudget--;
     const arrived = !b.path || b.pi >= b.path.length;
     if (type === 'safe' || type === 'loot' || type === 'cover' || type === 'pursue' || !b.dest || arrived) b.dest = pickDest(b, type);
-    b.path = findPath(b.x, b.z, b.dest.x, b.dest.z); b.pi = 0;
+    b.path = findPath(b.x, b.z, b.dest.x, b.dest.z, b.y); b.pi = 0;
     b.repathT = b.y > 0.3 ? 0.25 : rand(1.2, 2);
     if (!b.path) b.repathT = 0.5;
   }
@@ -2422,7 +2812,7 @@
     const ox = b.x, oy = b.y + 1.5, oz = b.z;
     _d.set(t.x - ox, t.y + (t.bh || BODY_H) * 0.61 - oy, t.z - oz).normalize();
     const dist = Math.hypot(t.x - ox, t.y + (t.bh || BODY_H) * 0.61 - oy, t.z - oz);
-    const err = botP.err * clamp(12 / dist, 0.18, 1); // angular error shrinks with distance, so far shots still land; Champion / Legendary have none (weapon spread still applies)
+    const err = botP.err * clamp(12 / dist, 0.18, 1); // angular error shrinks with distance, so far shots still land; tuned so each rank's hit rate is ~30% below the pre-v1.1 profile (see changelog)
     if (err > 0) perturb(_d, b.weapon === W.SNIPER ? err * 0.4 : err);
     fire(b, ox, oy, oz, _d, ox + _d.x * 0.6, oy - 0.3 + _d.y * 0.6, oz + _d.z * 0.6);
   }
@@ -2431,7 +2821,7 @@
     const weak = b.slots.includes(null) || minGunRating(b) < 4;
     let best = null, bd = 80 * 80;
     const consider = (kind, ref, x, z) => { const d = (x - b.x) * (x - b.x) + (z - b.z) * (z - b.z); if (d < bd) { bd = d; best = { kind, ref, x, z }; } };
-    if (weak) for (const ch of chests) if (ch.active && !ch.opened) consider('chest', ch, ch.x, ch.z);
+    if (weak) for (const ch of chests) if (ch.active && !ch.opened && !ch.noBot) consider('chest', ch, ch.x, ch.z);
     for (const pk of pickups) {
       if (!pk.active) continue;
       if (pk.kind === 'weapon' ? botWantsWeapon(b, pk.id) : pk.kind === 'shock' || pk.kind === 'grapple' ? false : invRoom(b, pk.kind)) consider('pickup', pk, pk.x, pk.z);
@@ -2588,7 +2978,7 @@
   function updateGrapple(p, dt) {
     const g = p.grap, bh = p.bh || BODY_H; g.t += dt;
     if (!clearLine(p.x, p.y + eyeHeight(p), p.z, g.ax + g.nx * 0.08, g.ay + g.ny * 0.08, g.az + g.nz * 0.08)) { releaseGrapple(p, false); return; } // rope path blocked
-    const tx = g.ax + g.nx * 0.6, tz = g.az + g.nz * 0.6, ty = g.ny > 0.5 ? g.ay : g.ny < -0.5 ? Math.max(0, g.ay - bh - 0.1) : Math.max(0, g.ay - 1.1);
+    const tx = g.ax + g.nx * 0.6, tz = g.az + g.nz * 0.6, gy = gAt(tx, tz), ty = g.ny > 0.5 ? g.ay : g.ny < -0.5 ? Math.max(gy, g.ay - bh - 0.1) : Math.max(gy, g.ay - 1.1);
     const dx = tx - p.x, dy = ty - p.y, dz = tz - p.z, dist = Math.hypot(dx, dy, dz);
     if (dist < 0.5 || g.t > GRAPPLE_MAX_T) { releaseGrapple(p, true); return; }
     g.sp = Math.min(GRAPPLE_SPEED, g.sp + GRAPPLE_ACCEL * dt);
@@ -2629,7 +3019,7 @@
   function shockExplode(g) {
     g.active = false; g.mesh.visible = false;
     const cx = g.x, cy = g.y + 0.3, cz = g.z, fx = shockFx.find(q => !q.active) || shockFx[0];
-    fx.active = true; fx.t = 0; fx.sph.position.set(cx, cy, cz); fx.ring.position.set(cx, Math.max(0.08, g.y + 0.1), cz); fx.sph.visible = fx.ring.visible = true;
+    fx.active = true; fx.t = 0; fx.sph.position.set(cx, cy, cz); fx.ring.position.set(cx, Math.max(gAt(cx, cz) + 0.08, g.y + 0.1), cz); fx.sph.visible = fx.ring.visible = true;
     sfx('shock', Math.max(distVol({ x: cx, z: cz }), 0.2));
     for (const c of contestants) {
       if (!c.alive || c.state !== 'ground') continue;
@@ -2712,9 +3102,9 @@
     if (!tp) camera.position.set(p.x, p.y + (p.state === 'plane' ? 0.6 : eyeHeight(p)), p.z);
     if (!tpActive()) tpDist = 3.2;
     tpShown = tp;
-    camera.rotation.y = p.yaw + camYaw; camera.rotation.x = pitch + camKick;
+    camera.rotation.y = p.yaw + camYaw; camera.rotation.x = pitch + camKick - (tp && p.state === 'glide' ? 0.14 : 0);
     view.visible = p.state === 'ground' && !zoom && !tp; updateTpModel(dt);
-    gameWings.visible = p.state === 'glide' && !!pass.eq.glider;
+    gameWings.visible = p.state === 'glide' && !!pass.eq.glider && !tp; // (third person draws the wings on the body)
     if (p.state === 'ground' && !isGun(p.slots[p.sel])) heldVisual(p, p.slots[p.sel]);
     if (p.state !== 'ground') return;
     const held = p.slots[p.sel];
@@ -2737,6 +3127,12 @@
     P.sup = p < 0.14 ? null : p < 0.34 ? lerp3(S, at(0), t1) : p < 0.72 ? at(f) : p < 0.9 ? lerp3(at(0), S, t5) : null;
     P.tag[m.tag] = { o: [o[0] * f, o[1] * f, o[2] * f], v: !(p >= 0.48 && p < 0.52) };
   }
+  let _shEnv = 0;
+  function relProg(c, w) { // animation progress of the current reload (-1 = none). Shell guns: progress inside the current shell + a smooth tilt in / out
+    if (!(c.reloadT > 0) || !w.reload) return -1;
+    if (w.shells) { _shEnv = Math.min(1, Math.max(0, (c.reloadTot - c.reloadT) / 0.15)) * Math.min(1, Math.max(0, c.reloadT / 0.1 + 0.2)); return Math.min(0.999, c.shellP / (w.reload / w.mag)); }
+    return 1 - c.reloadT / w.reload;
+  }
   function reloadPose(id, p, P) { // fills P: gun offset (gp) / rotation (gr), hand overrides (grip, sup) and animated-part transforms (tag)
     P.gp = [0, 0, 0]; P.gr = [0, 0, 0]; P.sup = null; P.grip = null; P.tag = {};
     if (p < 0) return;
@@ -2746,16 +3142,15 @@
     else if (id === W.SMG) { P.gr = [0.2 * env, 0.1 * env, 0.32 * env]; P.gp = [-0.12 * env, 0.05 * env, -0.04 * env]; magSwap(P, def, p); }
     else if (id === W.MINIGUN) { P.gr = [0.1 * env, 0.08 * env, 0.14 * env]; P.gp = [-0.1 * env, 0.05 * env, -0.03 * env]; magSwap(P, def, p); }
     else if (id === W.SHOTGUN) { // five shells into the loading port, then rack the pump
-      P.gr = [0.22 * env, 0, -0.45 * env]; P.gp = [-0.12 * env, 0.06 * env, -0.05 * env];
-      const S = def.hands.s.p, port = def.port, src = def.shellSrc;
-      if (p >= 0.12 && p < 0.8) {
-        const k = Math.max(0, Math.min(4, Math.floor((p - 0.14) / 0.13))), s0 = 0.14 + 0.13 * k, a = ease(seg(p, s0, s0 + 0.065)), b = ease(seg(p, s0 + 0.065, s0 + 0.125));
-        const pos = p < 0.14 ? lerp3(S, src, ease(seg(p, 0.12, 0.14))) : b > 0 ? lerp3(src, port, b) : lerp3(k === 0 ? S : port, src, a);
-        P.sup = pos; if ((a > 0.5 || b > 0) && b < 1) P.tag.shell = { o: [pos[0], pos[1] + 0.02, pos[2] - 0.02], v: true };
-      } else if (p >= 0.8) {
-        const z = def.pumpTravel * ease(seg(p, 0.86, 0.92)) * (1 - ease(seg(p, 0.93, 0.99))), back = lerp3(port, S, ease(seg(p, 0.8, 0.86)));
-        P.sup = [back[0], back[1], back[2] + z]; P.tag.pump = { o: [0, 0, z], v: true };
-      }
+      // one shell per cycle (p = progress inside the cycle): support hand -> shell source, picks a shell up, carries it to the loading port, pushes it in, returns
+      const e = _shEnv;
+      P.gr = [0.22 * e, 0, -0.45 * e]; P.gp = [-0.12 * e, 0.06 * e, -0.05 * e];
+      const S = def.hands.s.p, port = def.port, src = def.shellSrc, a = ease(seg(p, 0, 0.3)), b = ease(seg(p, 0.3, 0.68)), c = ease(seg(p, 0.68, 0.85)), d = ease(seg(p, 0.85, 1));
+      let pos = lerp3(S, src, a);
+      if (b > 0) pos = lerp3(src, port, b);
+      if (c > 0) pos = [port[0], port[1], port[2] - 0.02 * Math.sin(c * Math.PI)];
+      if (d > 0) pos = lerp3(port, S, d);
+      P.sup = pos; if (a > 0.6 && p < 0.84) P.tag.shell = { o: [pos[0], pos[1] + 0.02, pos[2] - 0.02], v: true };
     } else if (id === W.SNIPER) { // open the bolt, drop a round in, close the bolt
       P.gr = [0.1 * env, 0.05 * env, 0.2 * env]; P.gp = [-0.12 * env, 0.05 * env, -0.04 * env];
       const open = ease(seg(p, 0.06, 0.2)) * (1 - ease(seg(p, 0.74, 0.88))), back = ease(seg(p, 0.2, 0.34)) * (1 - ease(seg(p, 0.6, 0.74))), bz = def.bolt[2] + 0.09 * back;
@@ -2792,7 +3187,7 @@
     handR.visible = handL.visible = sleeveR.visible = sleeveL.visible = held;
     if (!held) return;
     equipT = Math.max(0, equipT - dt);
-    reloadPose(id, !grapHeld && p.reloadT > 0 && w.reload ? 1 - p.reloadT / w.reload : -1, _P);
+    reloadPose(id, grapHeld ? -1 : relProg(p, w), _P);
     const am = REDUCED_MOTION ? 0.35 : 1, eq = ease(equipT / EQUIP_TIME) * (REDUCED_MOTION ? 0.4 : 1);
     gunRoot.position.set(_P.gp[0] * am, _P.gp[1] * am - eq * 0.2, _P.gp[2] * am);
     gunRoot.rotation.x = _P.gr[0] * am + eq * 0.55; gunRoot.rotation.y = _P.gr[1] * am; gunRoot.rotation.z = _P.gr[2] * am;
@@ -2885,7 +3280,7 @@
   // ---- Audio (synthesized with WebAudio; no files) ----
   let actx = null, master = null, noiseBuf = null, drone = null;
   const lastPlay = {};
-  const SFX_COOL = { hit: 60, hurt: 100, hurtS: 90, hurtH: 90, shbreak: 400, storm: 700, botdown: 40, step: 120, thrust: 110 };
+  const SFX_COOL = { shell: 120, hit: 60, hurt: 100, hurtS: 90, hurtH: 90, shbreak: 400, storm: 700, botdown: 40, step: 120, thrust: 110 };
   function initAudio() {
     if (!actx) {
       try {
@@ -2939,6 +3334,7 @@
     step: () => noise(0.05, 0.18, 700, 'lowpass', 300),
     usestart: () => { tone(300, 0.08, 'sine', 0.15, 420); tone(380, 0.08, 'sine', 0.15, 520, 0.12); },
     reload: v => { noise(0.05, 0.25 * v, 1800, 'bandpass', 800); tone(180, 0.05, 'square', 0.18 * v, 120, 0.25); tone(260, 0.05, 'square', 0.18 * v, null, 0.9); },
+    shell: v => { tone(300, 0.03, 'square', 0.16 * v, 200); noise(0.03, 0.14 * v, 2200, 'bandpass'); tone(520, 0.04, 'square', 0.12 * v, null, 0.05); },
     reloaded: () => { tone(420, 0.04, 'square', 0.2); tone(640, 0.06, 'square', 0.2, null, 0.06); },
     switch: () => { tone(300, 0.04, 'square', 0.15); tone(500, 0.05, 'square', 0.15, null, 0.05); },
     scope: () => tone(700, 0.05, 'sine', 0.15, 350),
@@ -3018,7 +3414,7 @@
   function spawnDrop(dp) {
     for (let tries = 0; tries < 600; tries++) { // reachable open ground inside the safe zone, clear of roofs and obstacles
       const x = rand(-HALF + 14, HALF - 14), z = rand(-HALF + 14, HALF - 14);
-      if (Math.hypot(x, z) > Math.max(zoneR * 0.8, 12) || !walkable(x, z) || roofTopAt(x, z) !== 0) continue;
+      if (Math.hypot(x, z) > Math.max(zoneR * 0.8, 12) || !walkable(x, z) || roofTopAt(x, z) !== 0 || gAt(x, z) !== 0) continue;
       let clear = true;
       for (let a = 0; a < 8 && clear; a++) if (blocked[cellOf(x + Math.cos(a * 0.785) * 3, z + Math.sin(a * 0.785) * 3)]) clear = false;
       if (clear) { dp.x = x; dp.z = z; break; }
@@ -3354,14 +3750,33 @@
   const tpGunHolder = new THREE.Group(); tpGunHolder.position.set(0.15, 1.36, -0.3); TPM.upper.add(tpGunHolder);
   const TP_RT = GUN_DEFS.map((def, id) => { const rt = buildGun(def, 'fp'); rt.g.scale.set(def.scale, def.scale, def.scale); rt.g.visible = false; tpGunHolder.add(rt.g); return rt; }), TP_GUNS = TP_RT.map(r => r.g);
   const tpFlash = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.1), new THREE.MeshBasicMaterial({ color: 0xffdd55 })); tpFlash.visible = false; tpGunHolder.add(tpFlash);
-  let tpYaw = 0, tpWalk = 0, tpPx = 0, tpPz = 0, tpDist = 3.2;
+  let tpYaw = 0, tpWalk = 0, tpPx = 0, tpPz = 0, tpDist = 3.2, tpGl = 0; // tpGl: 0 = standing, 1 = hanging from the glider (eased)
+  // Glider for the third-person body: a striped canopy over the head (or the equipped Bat Wings) with two ropes down to the hand grips. Children of the body root, so it turns with the character.
+  const tpGlider = new THREE.Group(), tpCanopy = new THREE.Group(), tpBat = new THREE.Group(), HAND_R = CAN_IK ? new THREE.Vector3() : null, HAND_L = CAN_IK ? new THREE.Vector3() : null, REST_R = CAN_IK ? new THREE.Vector3() : null, REST_L = CAN_IK ? new THREE.Vector3() : null, _tgR = CAN_IK ? new THREE.Vector3() : null, _tgL = CAN_IK ? new THREE.Vector3() : null;
+  if (CAN_IK) {
+    const sR = TPM.armR.position, sL = TPM.armL.position;
+    HAND_R.set(sR.x + 0.07, sR.y + 0.55, sR.z - 0.03); HAND_L.set(sL.x - 0.07, sL.y + 0.55, sL.z - 0.03); REST_R.set(sR.x + 0.02, sR.y - 0.55, sR.z); REST_L.set(sL.x - 0.02, sL.y - 0.55, sL.z);
+    const top = 3.15, rope = (a, b) => { const d = new THREE.Vector3().subVectors(b, a), len = d.length(), m = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.02, len), mat(0x2a2a30)); m.position.copy(a).addScaledVector(d, 0.5); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), d.divideScalar(len)); return m; };
+    tpCanopy.add(box3(3.2, 0.12, 2.0, 0xe0762a, 0, top, 0), box3(0.5, 0.125, 2.02, 0xf3efe3, -0.8, top, 0), box3(0.5, 0.125, 2.02, 0xf3efe3, 0.8, top, 0));
+    [-1, 1].forEach(sd => { const w = box3(0.9, 0.1, 1.8, 0xc9611f, 1.95 * sd, top - 0.28, 0); w.rotation.z = -0.5 * sd; tpCanopy.add(w); });
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => tpCanopy.add(rope(new THREE.Vector3(1.1 * sx, top - 0.02, 0.7 * sz), sx < 0 ? HAND_L : HAND_R)));
+    [-1, 1].forEach(sd => { // Bat Wings (cosmetic): the same wings as the first-person view, spread overhead and held by the same ropes
+      const w = new THREE.Group();
+      w.add(box3(1.3, 0.05, 0.8, 0x3a1f5e, 0.65 * sd, 0, 0), box3(0.06, 0.06, 0.9, 0x6a3fc0, 0.15 * sd, 0.03, 0), box3(0.06, 0.06, 0.9, 0x6a3fc0, 0.65 * sd, 0.03, 0), box3(0.06, 0.06, 0.9, 0x6a3fc0, 1.15 * sd, 0.03, 0));
+      w.scale.set(1.5, 1, 1.5); w.position.set(0.1 * sd, top - 0.1, 0); w.rotation.z = 0.12 * sd; tpBat.add(w);
+    });
+    tpBat.add(box3(0.12, 0.12, 1.2, 0x6a3fc0, 0, top - 0.1, 0));
+    [[-1], [1]].forEach(([sx]) => tpBat.add(rope(new THREE.Vector3(0.12 * sx, top - 0.1, 0), sx < 0 ? HAND_L : HAND_R)));
+    [-1, 1].forEach(sd => TPM.upper.add(box3(0.07, 0.06, 0.2, 0x2a2a30, (sd < 0 ? HAND_L : HAND_R).x, (sd < 0 ? HAND_L : HAND_R).y, (sd < 0 ? HAND_L : HAND_R).z))); // grips
+    tpGlider.add(tpCanopy, tpBat); tpGlider.visible = false; TPM.root.add(tpGlider);
+  }
   const tpEyes = TPM.head.children.filter(m => m.userData.role === 'eye'), _tv = CAN_IK ? new THREE.Vector3() : null;
   function applyTpCosmetics() {
     const sk = SKIN_BY_ID[progress.equipped]; paint(tpMats, sk);
     TPX.bones.visible = TPX.skull.visible = !!sk.bone; TPX.pumpkin.visible = !!sk.pumpkin; TPM.headMesh.visible = !sk.pumpkin; TPM.hair.visible = TPM.tail.visible = !sk.pumpkin && sk.hair !== 0;
     tpEyes.forEach(e => { e.visible = !sk.pumpkin && !sk.bone; }); TPX.pack.visible = !!pass.eq.backpack; TPX.wings.visible = false;
   }
-  const tpActive = () => camMode === 'third' && player.state === 'ground' && player.alive && !(scoped && player.weapon === W.SNIPER); // scoping borrows the first-person view
+  const tpActive = () => camMode === 'third' && (player.state === 'ground' || player.state === 'glide') && player.alive && !(scoped && player.weapon === W.SNIPER); // scoping borrows the first-person view
   function updateTpModel(dt) {
     const p = player, show = tpShown && CAN_IK;
     tpRoot.visible = show;
@@ -3369,36 +3784,46 @@
     tpRoot.position.set(p.x, p.y, p.z);
     let d = p.yaw - tpYaw; d = Math.atan2(Math.sin(d), Math.cos(d)); tpYaw += d * (1 - Math.exp(-14 * dt)); TPM.root.rotation.y = tpYaw; // the body turns smoothly toward where you aim
     const mvd = Math.hypot(p.x - tpPx, p.z - tpPz), sp = mvd / Math.max(dt, 0.001), ch = p.ch || 0; tpPx = p.x; tpPz = p.z;
-    let sw = 0; if (!p.jumping && sp > 0.4) { tpWalk += mvd * 4.2; sw = Math.sin(tpWalk) * Math.min(0.75, sp * 0.13) * (1 - 0.5 * ch); }
+    const gliding = p.state === 'glide';
+    tpGl += ((gliding ? 1 : 0) - tpGl) * (1 - Math.exp(-9 * dt)); const gl = tpGl < 0.02 ? 0 : tpGl;
+    tpGlider.visible = gliding; tpCanopy.visible = !pass.eq.glider; tpBat.visible = !!pass.eq.glider;
+    TPM.root.rotation.z = gliding ? Math.sin(swayT * 1.4) * 0.035 : 0; // a gentle sway under the canopy
+    let sw = 0; if (!p.jumping && !gliding && sp > 0.4) { tpWalk += mvd * 4.2; sw = Math.sin(tpWalk) * Math.min(0.75, sp * 0.13) * (1 - 0.5 * ch); }
     TPM.upper.position.y = TPM.lower.position.y = -0.3 * ch; // crouch: lower the hips, bend the legs
-    TPM.legL.rotation.x = sw + ch * 1.0 + (p.jumping ? 0.3 : 0); TPM.legR.rotation.x = -sw + ch * 1.0 + (p.jumping ? -0.2 : 0); TPM.kneeL.rotation.x = -ch * 1.6 - (p.jumping ? 0.5 : 0); TPM.kneeR.rotation.x = -ch * 1.6 - (p.jumping ? 0.3 : 0);
+    TPM.legL.rotation.x = (sw + ch * 1.0 + (p.jumping ? 0.3 : 0)) * (1 - gl) + gl * 0.1; TPM.legR.rotation.x = (-sw + ch * 1.0 + (p.jumping ? -0.2 : 0)) * (1 - gl) + gl * 0.28; TPM.kneeL.rotation.x = (-ch * 1.6 - (p.jumping ? 0.5 : 0)) * (1 - gl) - gl * 0.5; TPM.kneeR.rotation.x = (-ch * 1.6 - (p.jumping ? 0.3 : 0)) * (1 - gl) - gl * 0.7; // hanging legs while gliding
     TPM.head.rotation.x = clamp(pitch * 0.6, -0.6, 0.6); TPM.body.scale.y = 1 + Math.sin(swayT * 1.6) * 0.006;
     const held = p.slots[p.sel], gun = isGun(held), grap = held === 'grapple', id = grap ? 6 : p.weapon, def = GUN_DEFS[id], w = WEAPONS[id] || {};
-    TP_GUNS.forEach((g, k) => { g.visible = (gun || grap) && k === id; });
-    if (!gun && !grap) { tpFlash.visible = false; TPM.armR.quaternion.set(0, 0, 0, 1); TPM.armL.quaternion.set(0, 0, 0, 1); TPM.elbowR.quaternion.set(0, 0, 0, 1); TPM.elbowL.quaternion.set(0, 0, 0, 1); return; }
-    reloadPose(id, !grap && p.reloadT > 0 && w.reload ? 1 - p.reloadT / w.reload : -1, _TP);
-    tpGunHolder.position.set(0.15 + _TP.gp[0] * 0.5, 1.36 + _TP.gp[1] * 0.5, -0.3 + _TP.gp[2] * 0.5); tpGunHolder.rotation.x = clamp(pitch * 0.7, -0.7, 0.7) + _TP.gr[0]; tpGunHolder.rotation.y = _TP.gr[1]; tpGunHolder.rotation.z = _TP.gr[2];
-    const rt = TP_RT[id]; tpGunHolder.updateMatrix(); rt.g.updateMatrix();
-    const gp = _TP.grip || def.hands.g.p, su = _TP.sup || def.hands.s.p;
-    solveArm(TPM.armR, TPM.elbowR, _tv.set(gp[0], gp[1], gp[2]).applyMatrix4(rt.g.matrix).applyMatrix4(tpGunHolder.matrix), POLE_R);
-    solveArm(TPM.armL, TPM.elbowL, _tv.set(su[0], su[1], su[2]).applyMatrix4(rt.g.matrix).applyMatrix4(tpGunHolder.matrix), POLE_L);
-    applyGunTags(rt, def, _TP, p.spin, dt);
-    tpFlash.visible = flashTimer > 0 && gun; tpFlash.position.set(0, def.muzzle[1] * def.scale, def.muzzle[2] * def.scale - 0.04);
+    const glideNow = gl > 0.5, haveGun = (gun || grap) && gl < 1;
+    TP_GUNS.forEach((g, k) => { g.visible = !glideNow && (gun || grap) && k === id; });
+    if (!haveGun && gl === 0) { tpFlash.visible = false; TPM.armR.quaternion.set(0, 0, 0, 1); TPM.armL.quaternion.set(0, 0, 0, 1); TPM.elbowR.quaternion.set(0, 0, 0, 1); TPM.elbowL.quaternion.set(0, 0, 0, 1); return; }
+    const rt = TP_RT[id];
+    if (haveGun) {
+      reloadPose(id, grap ? -1 : relProg(p, w), _TP);
+      tpGunHolder.position.set(0.15 + _TP.gp[0] * 0.5, 1.36 + _TP.gp[1] * 0.5, -0.3 + _TP.gp[2] * 0.5); tpGunHolder.rotation.x = clamp(pitch * 0.7, -0.7, 0.7) + _TP.gr[0]; tpGunHolder.rotation.y = _TP.gr[1]; tpGunHolder.rotation.z = _TP.gr[2];
+      tpGunHolder.updateMatrix(); rt.g.updateMatrix();
+      const gp = _TP.grip || def.hands.g.p, su = _TP.sup || def.hands.s.p;
+      _tgR.set(gp[0], gp[1], gp[2]).applyMatrix4(rt.g.matrix).applyMatrix4(tpGunHolder.matrix); _tgL.set(su[0], su[1], su[2]).applyMatrix4(rt.g.matrix).applyMatrix4(tpGunHolder.matrix);
+    } else { _tgR.copy(REST_R); _tgL.copy(REST_L); } // no gun in hand: relaxed arms
+    if (gl > 0) { _tgR.lerp(HAND_R, gl); _tgL.lerp(HAND_L, gl); } // glide: both hands on the grips
+    solveArm(TPM.armR, TPM.elbowR, _tgR, POLE_R); solveArm(TPM.armL, TPM.elbowL, _tgL, POLE_L);
+    if (haveGun && !glideNow) { applyGunTags(rt, def, _TP, p.spin, dt); tpFlash.visible = flashTimer > 0 && gun; tpFlash.position.set(0, def.muzzle[1] * def.scale, def.muzzle[2] * def.scale - 0.04); } else tpFlash.visible = false;
   }
   // Camera behind and slightly above the player's shoulder, pulled in so it never ends up inside a wall, car, roof or the ground.
   function tpCamera(p, dt) {
     const yaw = p.yaw + camYaw, pt = pitch + camKick, cp = Math.cos(pt), fx = -Math.sin(yaw) * cp, fy = Math.sin(pt), fz = -Math.cos(yaw) * cp, rx = Math.cos(yaw), rz = -Math.sin(yaw);
-    const ux = -rz * fy * 0 + 0, uy = 1, px = p.x, py = p.y + eyeHeight(p) + 0.05, pz = p.z;
-    let dx = -fx * 3.2 + rx * 0.75, dy = -fy * 3.2 + 0.25 * uy, dz = -fz * 3.2 + rz * 0.75; const len = Math.hypot(dx, dy, dz); dx /= len; dy /= len; dz /= len;
+    const ux = -rz * fy * 0 + 0, uy = 1, px = p.x, py = p.y + (p.state === 'glide' ? 1.5 : eyeHeight(p) + 0.05), pz = p.z;
+    const gl = p.state === 'glide', back = gl ? 5.4 : 3.2, side = gl ? 0 : 0.75, up = gl ? 1.7 : 0.25; // gliding: further back and higher, centred on the character, so the ground ahead stays visible
+    let dx = -fx * back + rx * side, dy = -fy * back + up * uy, dz = -fz * back + rz * side; const len = Math.hypot(dx, dy, dz); dx /= len; dy /= len; dz /= len;
     let hit = len; const m = 0.3;
     for (const list of [nearSolids(px, pz), nearSolids(px + dx * len, pz + dz * len)]) for (const s of list) {
       const t = rayBox(px, py, pz, dx, dy, dz, s.x0 - m, s.x1 + m, s.y0 - m, s.y1 + m, s.z0 - m, s.z1 + m);
       if (t >= 0 && t < hit) hit = t;
     }
-    if (dy < 0) { const tg = (py - 0.25) / -dy; if (tg < hit) hit = tg; } // above the ground
+    const gnd = Math.max(gAt(px, pz), gAt(px + dx * len, pz + dz * len));
+    if (dy < 0) { const tg = (py - (gnd + 0.25)) / -dy; if (tg < hit) hit = tg; } // above the ground (or the canyon floor)
     const target = Math.max(0.35, hit - 0.05);
     tpDist = target < tpDist ? target : tpDist + (target - tpDist) * (1 - Math.exp(-6 * dt)); // pulls in instantly, eases back out
-    camera.position.set(px + dx * tpDist, Math.max(0.2, py + dy * tpDist), pz + dz * tpDist);
+    camera.position.set(px + dx * tpDist, Math.max(gAt(px + dx * tpDist, pz + dz * tpDist) + 0.2, py + dy * tpDist), pz + dz * tpDist);
   }
   function toggleView() {
     camMode = camMode === 'third' ? 'first' : 'third'; settings.view = camMode; saveJSON('br_settings', settings);
@@ -3628,7 +4053,7 @@
     initAudio(); sfx('click'); Object.assign(stats, DEFAULT_STATS); saveJSON('br_stats', stats); syncLobby(); });
   // ---- Map rotation: alternates each time a match actually starts; opening menus never advances it ----
   const rotation = loadJSON('br_rotation', { next: 0 });
-  if (rotation.next !== 0 && rotation.next !== 1) rotation.next = 0;
+  if (!(rotation.next >= 0 && rotation.next < MAP_DEFS.length) || rotation.next % 1 !== 0) rotation.next = 0;
   const mapCard = $('mapCard'), mapArt = $('mapArt'), mapName = $('mapName');
   const MAP_ART_MEADOW = `<svg viewBox="0 0 240 70" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="mgS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fb4ea"/><stop offset="1" stop-color="#d4e9f6"/></linearGradient></defs>
 <rect width="240" height="70" fill="url(#mgS)"/><circle cx="196" cy="16" r="8" fill="#fff3a8"/><path d="M0 46 Q60 30 120 44 T240 40 V70 H0Z" fill="#6aa457"/><path d="M0 54 Q80 44 160 54 T240 50 V70 H0Z" fill="#4e8a3e"/>
@@ -3640,9 +4065,18 @@
 <path d="M120 62 L122 40 M122 48 L112 40 M122 44 L131 36 M122 52 L132 48" stroke="#0d0a10" stroke-width="2.2" fill="none"/>
 <rect x="146" y="48" width="7" height="11" rx="3" fill="#7a7f96"/><rect x="160" y="50" width="7" height="9" rx="3" fill="#6a6e84"/><rect x="174" y="47" width="7" height="12" rx="3" fill="#7a7f96"/>
 <circle cx="208" cy="58" r="5" fill="#ff8a1a"/><circle cx="222" cy="60" r="4" fill="#ff8a1a"/><rect x="207" y="51" width="2" height="3" fill="#3a6a2a"/></svg>`; // lightweight inline previews that tell the two maps apart
+  const MAP_ART_DUST = `<svg viewBox="0 0 240 70" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="dgS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a90dc"/><stop offset="1" stop-color="#cfe6f5"/></linearGradient></defs>
+<rect width="240" height="70" fill="url(#dgS)"/><circle cx="204" cy="15" r="8" fill="#fff6c8"/>
+<polygon points="10,44 22,24 50,24 60,44" fill="#b5532e"/><polygon points="22,24 50,24 46,19 26,19" fill="#cf9a62"/><polygon points="150,44 164,28 196,28 212,44" fill="#c9683a"/><polygon points="164,28 196,28 190,23 170,23" fill="#cf9a62"/>
+<rect y="44" width="240" height="26" fill="#d9b878"/><path d="M96 44 L144 44 L156 70 L84 70Z" fill="#a8482a"/><path d="M104 44 L136 44 L142 70 L98 70Z" fill="#c9683a"/><path d="M110 44 L130 44 L132 70 L108 70Z" fill="#c79a62"/>
+<rect x="84" y="41" width="72" height="5" fill="#8a7458"/><rect x="84" y="40" width="72" height="1.5" fill="#9a5a3a"/><rect x="96" y="46" width="4" height="12" fill="#8a7f72"/><rect x="140" y="46" width="4" height="12" fill="#8a7f72"/>
+<rect x="24" y="36" width="34" height="14" fill="#e0c394"/><rect x="21" y="34" width="40" height="3" fill="#b9814f"/><rect x="36" y="41" width="8" height="9" fill="#22a39b"/><rect x="28" y="40" width="5" height="5" fill="#8fb4d0"/>
+<rect x="170" y="38" width="28" height="12" fill="#e58aa0"/><rect x="168" y="36" width="32" height="3" fill="#c79a62"/><rect x="180" y="42" width="7" height="8" fill="#22a39b"/>
+<rect x="212" y="30" width="2" height="20" fill="#7a5a36"/><path d="M213 30 Q205 24 198 30 M213 30 Q221 24 228 30 M213 30 Q213 22 213 17" stroke="#3f8a3a" stroke-width="2.4" fill="none"/>
+<rect x="64" y="34" width="14" height="6" rx="2" fill="#58b36a"/><rect x="73" y="28" width="7" height="8" fill="#58b36a"/></svg>`; // lightweight inline preview of the desert canyon
   function refreshMapCard() {
     const d = MAP_DEFS[rotation.next];
-    mapArt.innerHTML = d.id === 0 ? MAP_ART_MEADOW : MAP_ART_HAUNT; mapName.textContent = d.name.toUpperCase();
+    mapArt.innerHTML = d.id === 0 ? MAP_ART_MEADOW : d.id === 2 ? MAP_ART_DUST : MAP_ART_HAUNT; mapName.textContent = d.name.toUpperCase();
     mapCard.style.borderColor = d.accent;
   }
   // ---- Ranked progression (points saved locally; coins are separate and never spent on rank) ----
@@ -3659,13 +4093,13 @@
   const BOT_PROFILES = {
     quick: { name: 'Normal', err: 0.15, rmin: 0.6, rmax: 1.2, sight: 55, sightPistol: 20, track: Infinity, aggr: [0.25, 0.65], fight: 7, cover: 0, pursue: 0, pause: [0.8, 1.6], strafe: [1, 2.5] },
     ranks: [
-      { name: 'Bronze', err: 0.22, rmin: 0.9, rmax: 1.7, sight: 40, sightPistol: 15, track: 2.2, aggr: [0.15, 0.45], fight: 5, cover: 0.1, pursue: 0, pause: [1.0, 1.9], strafe: [1.5, 3] },
-      { name: 'Silver', err: 0.17, rmin: 0.7, rmax: 1.4, sight: 46, sightPistol: 18, track: 3.0, aggr: [0.25, 0.55], fight: 6, cover: 0.2, pursue: 0, pause: [0.9, 1.7], strafe: [1.2, 2.8] },
-      { name: 'Gold', err: 0.13, rmin: 0.55, rmax: 1.1, sight: 52, sightPistol: 20, track: 4.2, aggr: [0.3, 0.6], fight: 7, cover: 0.3, pursue: 0, pause: [0.8, 1.5], strafe: [1, 2.5] },
-      { name: 'Platinum', err: 0.09, rmin: 0.42, rmax: 0.85, sight: 60, sightPistol: 22, track: 5.5, aggr: [0.4, 0.7], fight: 8, cover: 0.45, pursue: 1.5, pause: [0.7, 1.3], strafe: [0.9, 2.2] },
-      { name: 'Diamond', err: 0.05, rmin: 0.32, rmax: 0.65, sight: 70, sightPistol: 26, track: 7.0, aggr: [0.5, 0.8], fight: 9, cover: 0.6, pursue: 2.5, pause: [0.55, 1.1], strafe: [0.8, 2.0] },
-      { name: 'Champion', err: 0, rmin: 0.22, rmax: 0.45, sight: 85, sightPistol: 30, track: 10, aggr: [0.6, 0.85], fight: 10, cover: 0.7, pursue: 2.5, pause: [0.45, 0.9], strafe: [0.7, 1.8] },
-      { name: 'Legendary', err: 0, rmin: 0.14, rmax: 0.3, sight: 100, sightPistol: 34, track: 16, aggr: [0.75, 0.95], fight: 12, cover: 0.9, pursue: 4, pause: [0.3, 0.7], strafe: [0.5, 1.4] }
+      { name: 'Bronze', err: 0.283, rmin: 0.9, rmax: 1.7, sight: 40, sightPistol: 15, track: 2.2, aggr: [0.15, 0.45], fight: 5, cover: 0.1, pursue: 0, pause: [1.0, 1.9], strafe: [1.5, 3] },
+      { name: 'Silver', err: 0.227, rmin: 0.7, rmax: 1.4, sight: 46, sightPistol: 18, track: 3.0, aggr: [0.25, 0.55], fight: 6, cover: 0.2, pursue: 0, pause: [0.9, 1.7], strafe: [1.2, 2.8] },
+      { name: 'Gold', err: 0.181, rmin: 0.55, rmax: 1.1, sight: 52, sightPistol: 20, track: 4.2, aggr: [0.3, 0.6], fight: 7, cover: 0.3, pursue: 0, pause: [0.8, 1.5], strafe: [1, 2.5] },
+      { name: 'Platinum', err: 0.137, rmin: 0.42, rmax: 0.85, sight: 60, sightPistol: 22, track: 5.5, aggr: [0.4, 0.7], fight: 8, cover: 0.45, pursue: 1.5, pause: [0.7, 1.3], strafe: [0.9, 2.2] },
+      { name: 'Diamond', err: 0.09, rmin: 0.32, rmax: 0.65, sight: 70, sightPistol: 26, track: 7.0, aggr: [0.5, 0.8], fight: 9, cover: 0.6, pursue: 2.5, pause: [0.55, 1.1], strafe: [0.8, 2.0] },
+      { name: 'Champion', err: 0.07, rmin: 0.3, rmax: 0.55, sight: 85, sightPistol: 30, track: 8.5, aggr: [0.6, 0.85], fight: 10, cover: 0.7, pursue: 2.5, pause: [0.45, 0.9], strafe: [0.7, 1.8] },
+      { name: 'Legendary', err: 0.054, rmin: 0.22, rmax: 0.4, sight: 100, sightPistol: 34, track: 12, aggr: [0.75, 0.95], fight: 12, cover: 0.9, pursue: 4, pause: [0.3, 0.7], strafe: [0.5, 1.4] }
     ]
   };
   let botP = BOT_PROFILES.quick; // the profile the CURRENT match was started with (snapshot in beginMatch)
@@ -3710,7 +4144,7 @@
   function onMatchStart() { // first time the match is really running (pointer lock granted)
     if (match.started) return;
     match.started = true;
-    rotation.next = 1 - match.mapId; saveJSON('br_rotation', rotation); refreshMapCard();
+    rotation.next = (match.mapId + 1) % MAP_DEFS.length; saveJSON('br_rotation', rotation); refreshMapCard();
     if (match.ranked) { // pay the entry fee exactly once; points never go below zero
       match.entryPaid = Math.min(match.entryCost, ranked.points);
       ranked.points -= match.entryPaid; saveRanked(); refreshRankUI();
@@ -3888,7 +4322,7 @@
       el.classList.toggle('src', invOpen && invFrom === i);
       el.classList.toggle('empty', id === null);
       const w = gun ? WEAPONS[id] : null;
-      setText(el.querySelector('.ammo'), id === null ? '' : !gun ? '×' + p.cnt[i] : w.mag ? (p.active === i && p.reloadT > 0 ? '…' : String(p.mag[i])) : '∞');
+      setText(el.querySelector('.ammo'), id === null ? '' : !gun ? '×' + p.cnt[i] : w.mag ? (p.active === i && p.reloadT > 0 && !w.shells ? '…' : String(p.mag[i])) : '∞');
     });
     fuelMeter.style.display = p.jetpack ? 'block' : 'none';
     fuelFill.style.width = Math.max(0, Math.min(100, p.fuel)) + '%';
