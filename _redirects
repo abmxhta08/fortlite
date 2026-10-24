@@ -1,0 +1,2 @@
+# Netlify: forward /sb/* to the Supabase project so the game only ever talks to this site (school filters often block supabase.co)
+/sb/*  https://xbdotysbdgxkteswznbs.supabase.co/:splat  200
