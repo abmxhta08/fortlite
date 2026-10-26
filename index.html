@@ -473,6 +473,7 @@
   #lobby .coins { display: flex; align-items: center; }
   #lobby[data-tab="board"] #tab-board { display: block; }
   #lobby .lb-mine { color: #ffd24a; font-size: 18px; letter-spacing: 0.06em; margin-bottom: 8px; min-height: 22px; } #lobby .lb-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; } #lobby .lb-table th, #lobby .lb-table td { text-align: left; padding: 6px 10px; font-size: 16px; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.1); } #lobby .lb-table th { color: #36e0ff; font-weight: 400; } #lobby .lb-table td:first-child, #lobby .lb-table th:first-child { width: 48px; color: #9fd0ff; } #lobby .lb-table td:last-child, #lobby .lb-table th:last-child { text-align: right; } #lobby .lb-table tr.me td { background: rgba(54,224,255,0.18); color: #fff; }
+  #lobby .lb-tabs { display: flex; gap: 8px; margin-bottom: 10px; } #lobby .lb-tabs button { padding: 7px 22px; font-family: inherit; font-size: 17px; letter-spacing: 0.1em; color: #cfe0f2; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; cursor: pointer; } #lobby .lb-tabs button:hover { background: rgba(255,255,255,0.16); } #lobby .lb-tabs button.on { background: #fff; color: #08122a; border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan); }
   #lobby .acct-st { color: #7dffa0; font-size: 14px; }
   #auth { position: fixed; inset: 0; z-index: 55; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); font-family: var(--font); color: #fff; } #auth[hidden] { display: none; }
   #auth .au-box { width: min(420px, 92vw); max-height: 94vh; overflow-y: auto; box-sizing: border-box; padding: 20px 24px 18px; background: linear-gradient(160deg, rgba(8,32,96,0.96), rgba(4,16,52,0.96)); border: 2px solid rgba(120,200,255,0.5); border-radius: 18px; box-shadow: 0 16px 60px rgba(0,0,0,0.55); }
@@ -647,6 +648,7 @@
   <div id="lkStage" aria-hidden="true"><div class="lk-guns" id="lkGuns"></div><button id="lkReset" type="button">RESET VIEW</button></div>
   <section class="tabpanel" id="tab-board">
     <h2>LEADERBOARD</h2>
+    <div class="lb-tabs" role="tablist"><button type="button" id="lbTabRank" class="on" role="tab" aria-selected="true">RANKED</button><button type="button" id="lbTabDuel" role="tab" aria-selected="false">DUELS</button></div>
     <div id="lbMine" class="lb-mine"></div>
     <table id="lbTable" class="lb-table"></table>
     <button class="small" id="lbRefresh" type="button">REFRESH</button>
@@ -669,7 +671,7 @@
       <li>Shield potions (blue) add up to 100 shield; medkits come out of chests.</li>
       <li>Four supply drops land each match (every ~30 s once the storm starts). Press E to open one — it holds a jetpack, sniper or minigun. Jetpack: hold Space while airborne. Sniper: right-click or Q toggles the scope.</li>
       <li><b>New skins:</b> Raven Developer and Sergeant Trubin are the two featured Item Shop skins; Samurai Riley, Pablo and Luke are in the regular catalog (10 coins each). Previously sold skins Crimson, Arctic, Jungle, Midnight and Golden were retired: owners keep them, nobody can buy them.</li>
-      <li><b>1v1 Duel:</b> the <b>1V1 DUEL</b> button in the lobby opens a room: CREATE ROOM gives a 4-letter code to share, or type a friend's code and JOIN. Press READY when both players are in; after a 3-second countdown it is first to 3 round wins in a walled Meadow Mall arena (no chests, no storm). Both players spawn on opposite sides with an assault rifle, a shotgun, 2 shield potions and full health and shield. Pausing does not stop the match. If your network blocks live connections, use SCHOOL-FRIENDLY ROOM (a slower connection; its codes start with a digit). Duels give no coins or ranked points.</li>
+      <li><b>1v1 Duel:</b> the <b>1V1 DUEL</b> button in the lobby opens a room: CREATE ROOM gives a 4-letter code to share, or type a friend's code and JOIN. Press READY when both players are in; after a 3-second countdown it is first to 3 round wins in a walled Meadow Mall arena (no chests, no storm). Both players spawn on opposite sides with an assault rifle, a shotgun, 2 shield potions and full health and shield. Pausing does not stop the match. If your network blocks live connections, use SCHOOL-FRIENDLY ROOM (a slower connection; its codes start with a digit). Duels give no coins or ranked points; duel wins count for the DUELS tab of the LEADERBOARD (log in to appear).</li>
       <li><b>Accounts &amp; leaderboard:</b> optionally create an account (email + password, with a username) to save your coins, skins, battle pass and ranked points online and appear on the LEADERBOARD tab. You can always play as a guest; guest progress stays on this device and is added to your account the first time you log in.</li>
       <li><b>Locker:</b> the LOCKER tab shows what you own in five slots (outfit, back bling, glider, contrail, weapon wrap). Click an item to preview it, then EQUIP; choose NONE / DEFAULT to remove one. Items earned from the Battle Pass or bought in the Item Shop all appear there.</li>
       <li><b>Pumpkin RPG</b> (chest find, 15% of chests): one slow rocket per magazine, R to reload from 3 spare rockets, a 5.5 m blast for 120 damage that walls block and that also hurts you.</li>
@@ -5503,7 +5505,7 @@
 
   // ---- Lobby: settings + career stats (saved in localStorage when available) ----
   const DEFAULT_SETTINGS = { name: 'Player', bots: BOT_COUNT, difficulty: 'normal', sens: 1, fov: 75, vol: 0.6, gfx: 'low', view: 'first' };
-  const DEFAULT_STATS = { wins: 0, played: 0, draws: 0, kills: 0, best: 0 };
+  const DEFAULT_STATS = { wins: 0, played: 0, draws: 0, kills: 0, best: 0, duelWins: 0 };
   function loadJSON(key, def) { try { return Object.assign({}, def, JSON.parse(localStorage.getItem(key))); } catch (e) { return Object.assign({}, def); } }
   function saveJSON(key, v) { if (key === 'br_stats' || key === 'br_ranked') cloudQueue(); try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } }
   const settings = loadJSON('br_settings', DEFAULT_SETTINGS);
@@ -6700,6 +6702,7 @@
     clearTimeout(DUEL.endTimer); clearTimeout(DUEL.nextTimer); DUEL.endTimer = 0;
     DUEL.phase = 'over'; DUEL.freeze = false; DUEL.meReady = DUEL.oppReady = false;
     clearInputs(); state = 'over'; sfx(win ? 'win' : 'lose');
+    if (win && !why) { stats.duelWins = (stats.duelWins | 0) + 1; saveJSON('br_stats', stats); } // a real duel win (not an opponent walking out) counts for the duels leaderboard
     const nm = DUEL.opp ? DUEL.opp.name : DUEL.c.name;
     showOverlay(why ? 'OPPONENT LEFT' : win ? 'VICTORY' : 'DEFEAT', (why ? why + '\n' : '') + 'You ' + DUEL.score[0] + ' - ' + DUEL.score[1] + ' ' + nm + '  (first to ' + DUEL_WINS + ' rounds)\nEliminations: ' + player.kills, DUEL.opp ? 'Rematch' : 'Back to lobby');
     if (document.pointerLockElement) document.exitPointerLock();
@@ -6733,7 +6736,7 @@
     const owned = uni(cp.owned, lp.owned), eqv = typeof cp.equipped === 'string' && owned.includes(cp.equipped) ? cp.equipped : (typeof lp.equipped === 'string' ? lp.equipped : 'recruit');
     const bestOf = (a, b) => a && b ? Math.min(a, b) : (a || b || 0);
     return { v: 1, progress: { coins: f(cp.coins, lp.coins), owned, equipped: eqv }, pass: { xp: Math.max(num(cs.xp), num(ls.xp)), claimed: uni(cs.claimed, ls.claimed), eq: Object.assign({}, ls.eq || {}, cs.eq || {}) },
-      stats: { wins: f(ct.wins, lt.wins), played: f(ct.played, lt.played), draws: f(ct.draws, lt.draws), kills: f(ct.kills, lt.kills), best: bestOf(num(ct.best), num(lt.best)) }, ranked: { points: Math.max(num((c.ranked || {}).points), num((l.ranked || {}).points)) } };
+      stats: { wins: f(ct.wins, lt.wins), played: f(ct.played, lt.played), draws: f(ct.draws, lt.draws), kills: f(ct.kills, lt.kills), best: bestOf(num(ct.best), num(lt.best)), duelWins: f(ct.duelWins, lt.duelWins) }, ranked: { points: Math.max(num((c.ranked || {}).points), num((l.ranked || {}).points)) } };
   }
   function applyLive() { // re-reads the saved data through the game's own validating loaders and updates the running game in place (no page reload, so this can never loop)
     const np = loadProgress(), pp = loadPass(), ns = loadJSON('br_stats', DEFAULT_STATS), nr = loadRanked();
@@ -6756,16 +6759,19 @@
     if (CL.busy) { CL.timer = setTimeout(cloudPush, 1500); return; }
     CL.busy = true; const ts = new Date().toISOString();
     try {
-      const body = { progress: cloudSnap(), wins: num(stats.wins), updated_at: ts }; if (!CL.noRankCol) body.rank_points = num(ranked.points);
+      const body = { progress: cloudSnap(), wins: num(stats.wins), updated_at: ts }; if (!CL.noRankCol) body.rank_points = num(ranked.points); if (!CL.noDuelCol) body.duel_wins = num(stats.duelWins);
       let r = await CL.sb.from('profiles').update(body).eq('id', CL.user.id);
-      if (r.error && /rank_points/i.test(r.error.message || '')) { CL.noRankCol = true; delete body.rank_points; r = await CL.sb.from('profiles').update(body).eq('id', CL.user.id); }   // the column has not been added yet: keep saving everything else
+      for (let k = 0; k < 2 && r.error; k++) { // a leaderboard column has not been added yet: keep saving everything else
+        const m = r.error.message || ''; if (/rank_points/i.test(m)) { CL.noRankCol = true; delete body.rank_points; } else if (/duel_wins/i.test(m)) { CL.noDuelCol = true; delete body.duel_wins; } else break;
+        r = await CL.sb.from('profiles').update(body).eq('id', CL.user.id);
+      }
       if (r.error) throw r.error; CL.dirty = false; lsDel('br_cloud_dirty'); lsSet('br_cloud_ts', ts); acctRender('saved'); }
     catch (e) { acctRender('offline'); CL.timer = setTimeout(cloudPush, 30000); }
     CL.busy = false;
   }
   window.addEventListener('pagehide', () => { // last-chance save when the tab closes (a keep-alive request can finish after the page is gone)
     if (!CL || !CL.user || !CL.dirty || !CL.session) return;
-    try { fetch(SB_URL + '/rest/v1/profiles?id=eq.' + encodeURIComponent(CL.user.id), { method: 'PATCH', keepalive: true, headers: { apikey: SB_KEY, Authorization: 'Bearer ' + CL.session.access_token, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(Object.assign({ progress: cloudSnap(), wins: num(stats.wins), updated_at: new Date().toISOString() }, CL.noRankCol ? {} : { rank_points: num(ranked.points) })) }); } catch (e) { /* best effort */ }
+    try { fetch(SB_URL + '/rest/v1/profiles?id=eq.' + encodeURIComponent(CL.user.id), { method: 'PATCH', keepalive: true, headers: { apikey: SB_KEY, Authorization: 'Bearer ' + CL.session.access_token, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(Object.assign({ progress: cloudSnap(), wins: num(stats.wins), updated_at: new Date().toISOString() }, (CL.noRankCol ? {} : { rank_points: num(ranked.points) }), CL.noDuelCol ? {} : { duel_wins: num(stats.duelWins) })) }); } catch (e) { /* best effort */ }
   });
   window.addEventListener('online', () => { if (CL && CL.user && lsGet('br_cloud_dirty')) cloudQueue(); });
   async function cloudSync() { // after sign-in / on load with a saved session: pull the account's data and reconcile it with this device
@@ -6792,6 +6798,7 @@
     if (settings.name === 'Player' && CL.username) { settings.name = CL.username.slice(0, 12); saveJSON('br_settings', settings); player.name = settings.name; }
     if (!CL.noRankCol && row && row.rank_points !== undefined && num(row.rank_points) !== num(ranked.points)) cloudQueue();   // keep the leaderboard column in step (older rows have 0)
     if (row && row.rank_points === undefined) CL.noRankCol = true;
+    if (!CL.noDuelCol && row && row.duel_wins !== undefined && num(row.duel_wins) !== num(stats.duelWins)) cloudQueue(); if (row && row.duel_wins === undefined) CL.noDuelCol = true;   // (same for the duel leaderboard column)
     acctRender('saved');
   }
   // ---- account UI: the nav chip, the Settings section and the login / sign-up popup ----
@@ -6878,20 +6885,34 @@
   document.addEventListener('click', e => { if (e.target.id === 'acctIn') authOpen('login'); else if (e.target.id === 'acctOut') cloudLogout(); });
   acctRender();
   // ---- Leaderboard tab: top players by wins, plus your own rank ----
-  let lbT = 0;
+  let lbT = 0, lbMode = 'rank', lbShown = '';
   async function lbLoad(force) {
     const tb = $('lbTable'), mine = $('lbMine'); if (!tb) return;
     if (!CL.sb) { tb.innerHTML = ''; mine.textContent = 'The leaderboard needs an internet connection.'; return; }
-    if (!force && Date.now() - lbT < 15000 && tb.rows.length) return; lbT = Date.now(); mine.textContent = 'Loading...';
+    if (!force && lbShown === lbMode && Date.now() - lbT < 15000 && tb.rows.length) return; lbT = Date.now(); lbShown = lbMode; mine.textContent = 'Loading...';
+    const duel = lbMode === 'duel', col = duel ? 'duel_wins' : 'rank_points';
     try {
-      const r = await CL.sb.from('profiles').select('username,rank_points').gt('rank_points', 0).order('rank_points', { ascending: false }).limit(50);
-      if (r.error) { tb.innerHTML = ''; mine.textContent = /rank_points/i.test(r.error.message || '') ? 'The leaderboard is not set up yet (the rank_points column is missing in the database).' : 'Could not load the leaderboard.'; return; }
-      const me = CL.username, rk = pts => RANKS[rankOf(pts)] || RANKS[0], rc = pts => rk(pts).color || '#cd7f32';
-      tb.innerHTML = '<tr><th>#</th><th>Player</th><th>Rank</th><th>Points</th></tr>' + (r.data.length ? r.data.map((p, i) => '<tr' + (me && p.username === me ? ' class="me"' : '') + '><td>' + (i + 1) + '</td><td>' + esc(p.username) + '</td><td style="color:' + rc(num(p.rank_points)) + '">' + esc(rk(num(p.rank_points)).name.toUpperCase()) + '</td><td>' + num(p.rank_points) + '</td></tr>').join('') : '<tr><td colspan="4">No ranked players yet - win ranked matches to appear!</td></tr>');
-      if (CL.user) { const w = num(ranked.points); if (w > 0) { const c = await CL.sb.from('profiles').select('id', { count: 'exact', head: true }).gt('rank_points', w); mine.textContent = c.error ? '' : 'YOUR RANK: #' + ((c.count || 0) + 1) + ' \u2022 ' + rk(w).name.toUpperCase() + ' \u2022 ' + w + ' pts'; } else mine.textContent = 'Earn ranked points (Ranked mode) to get on the board.'; }
-      else mine.textContent = 'Log in to appear on the leaderboard.';
+      // every player with points, fetched a page at a time (the server caps one request at 1000 rows)
+      const r = { data: [], error: null };
+      for (let from = 0; from < 20000; from += 1000) {
+        const pg = await CL.sb.from('profiles').select('username,' + col).gt(col, 0).order(col, { ascending: false }).order('username').range(from, from + 999);
+        if (pg.error) { r.error = pg.error; break; }
+        r.data.push(...pg.data); if (pg.data.length < 1000) break;
+      }
+      if (lbMode !== (duel ? 'duel' : 'rank')) return;   // the player switched tabs while this was loading
+      if (r.error) { tb.innerHTML = ''; mine.textContent = new RegExp(col, 'i').test(r.error.message || '') ? 'This leaderboard is not set up yet (the ' + col + ' column is missing in the database).' : 'Could not load the leaderboard.'; return; }
+      const me = CL.username, rk = pts => RANKS[rankOf(pts)] || RANKS[0], rc = pts => rk(pts).color || '#cd7f32', mark = p => me && p.username === me ? ' class="me"' : '';
+      if (duel) tb.innerHTML = '<tr><th>#</th><th>Player</th><th>Duel wins</th></tr>' + (r.data.length ? r.data.map((p, i) => '<tr' + mark(p) + '><td>' + (i + 1) + '</td><td>' + esc(p.username) + '</td><td>' + num(p.duel_wins) + '</td></tr>').join('') : '<tr><td colspan="3">No duel wins yet - win a 1v1 duel to be the first!</td></tr>');
+      else tb.innerHTML = '<tr><th>#</th><th>Player</th><th>Rank</th><th>Points</th></tr>' + (r.data.length ? r.data.map((p, i) => '<tr' + mark(p) + '><td>' + (i + 1) + '</td><td>' + esc(p.username) + '</td><td style="color:' + rc(num(p.rank_points)) + '">' + esc(rk(num(p.rank_points)).name.toUpperCase()) + '</td><td>' + num(p.rank_points) + '</td></tr>').join('') : '<tr><td colspan="4">No ranked players yet - win ranked matches to appear!</td></tr>');
+      if (CL.user) {
+        const w = duel ? num(stats.duelWins) : num(ranked.points);
+        if (w > 0) { const c = await CL.sb.from('profiles').select('id', { count: 'exact', head: true }).gt(col, w); if (lbMode === (duel ? 'duel' : 'rank')) mine.textContent = c.error ? '' : 'YOUR RANK: #' + ((c.count || 0) + 1) + ' \u2022 ' + (duel ? w + (w === 1 ? ' duel win' : ' duel wins') : rk(w).name.toUpperCase() + ' \u2022 ' + w + ' pts'); }
+        else mine.textContent = duel ? 'Win a 1v1 duel to get on the board.' : 'Earn ranked points (Ranked mode) to get on the board.';
+      } else mine.textContent = 'Log in to appear on the leaderboard.';
     } catch (e) { mine.textContent = 'Could not load the leaderboard - check your connection.'; }
   }
+  function lbSwitch(mode) { if (lbMode === mode) return; lbMode = mode; $('lbTabRank').classList.toggle('on', mode === 'rank'); $('lbTabDuel').classList.toggle('on', mode === 'duel'); $('lbTabRank').setAttribute('aria-selected', mode === 'rank'); $('lbTabDuel').setAttribute('aria-selected', mode === 'duel'); $('lbTable').innerHTML = ''; lbLoad(true); }
+  $('lbTabRank').addEventListener('click', () => { sfx('click'); lbSwitch('rank'); }); $('lbTabDuel').addEventListener('click', () => { sfx('click'); lbSwitch('duel'); });
   $('lbRefresh').addEventListener('click', () => { sfx('click'); lbLoad(true); });
   // ---- Startup UPDATE / NEWS popup: announcements (currently one page: 1v1 multiplayer) that must be viewed in order (once per page load, nothing is persisted) ----
   const newsEl = $('news'), newsPages = [...newsEl.querySelectorAll('.nw-page')], newsDots = [...newsEl.querySelectorAll('.nw-dots i')], newsPrev = $('newsPrev'), newsNext = $('newsNext'), newsPlay = $('newsPlay'), newsShopBtn = $('newsShop'), newsActions = $('newsActions'), newsCount = $('newsCount');
