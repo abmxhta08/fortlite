@@ -1,5 +1,38 @@
 # FortLite changelog
 
+## v1.4 "Incoming" (pre-Season 2)
+
+### Meteors
+- **Meadow Town:** two large low-poly meteors hang in the sky, one above **Meadow Mall** (0, 0) and one above **Skyline Square** (-76.5, 76.5). The two places are about 108 m apart, so each gets its own rock instead of one shared one. Each has a glowing purple/blue core showing through dents in the rock, a halo, a pooled flame tail (one instanced mesh of 16 particles plus a soft cone) pointing up and back along its approach path, a slow spin, and a soft additive glow decal on the ground below (no light, no shadow). Mall rock: radius 11 m at y = 62; Skyline rock: radius 8.5 m at y = 56. Everything (rock, halo, tail) stays within +-100 m of the map centre (checked: the solid parts and tails reach at most 89 m, the soft halo 96.9 m).
+- **Haunted Hollow:** a smaller meteor streaks across the night sky (-52, 82, -46).
+- Purely visual: no collision, no damage, no impact yet. Never culled, never in fog (materials ignore it), never casting shadows; drawn after the sky dome so it cannot vanish behind it.
+- **Sky fix:** the camera's far plane was 450 m but the sky dome (r = 520 m) and the moon (482 m away) are further, so both were clipped around the middle of the view (a pale patch of bare background when you looked up). Far plane is now 600 m.
+
+### Meteor showers
+- **Meadow Town, Haunted Hollow and Dustfall Canyon** each have a shower of 14-18 small rocks streaking down along the same path as the big ones and burning out just above the ground, then restarting. Every path ends inside the map (impact points within 76 m of the centre) and every start and flame tail stays within 91 m, so none of them looks like it will miss. One shared set of instanced meshes draws a whole shower (4 draw calls).
+- The two big Meadow rocks now sit farther back along their approach paths (mall rock at (31, 50, -22), Skyline Square rock at (-40, 46, 47)), so they read as about to hit; the glow on the ground stays under the impact points. Hollow's medium rock is falling toward the crater and Dustfall has one medium rock too. The `aimRock(...)` helper in the map definitions places a rock on a path ending at any x / z.
+
+### Haunted Hollow: floating island and crater
+- **Hollow Manor** (the middle landmark) now stands on a floating island: a 46 x 47 m slab centred at (10, -3.5) with its walkable top at y = 14, a 5 m thick body, a jagged tapering rock underside (the lowest solid face is 3.8 m above the ground), glowing crystal veins and eight small floating rock fragments around it. House, garden, fence, trees, pumpkins, graves, signs, the cellar (sunk into the island) and all 11 chest spots moved up with it unchanged. Its chests are players-only (`noBot`), like the other upper-floor chests.
+- **Crater** under it: a disc of radius 23.5 m (centre 10, -3.5) lowered 3 m, ringed by a 2 m rock wall, with three 4 m wide stair ramps (west-south-west, east-north-east, south-south-east; 11 steps of 0.25 m), nine glowing meteor shards on the floor and scorched, glowing-cracked rocks around the rim. Roads are trimmed where they would cross it. It reuses the quarry mechanism of Dustfall (`qmask`), so players and bots walk in and out.
+- **Launch pads** (players only): three glowing plates 4.5-5 m outside the island's rim, north (-8, -31.5), west (-17.5, -3.5) and east (38, -3.5), each with arrow chevrons, four corner posts and a thin beacon. Stepping on one launches you (horizontal 4.5 m/s toward the island, vertical 25.5 m/s); without touching the keys you land on top of the island (checked by simulation with the game's own physics: landing about 9 m inside the rim at y = 14 on all three), and WASD steers in the air. Walk off the edge to fall; gliding onto the island also works.
+- **Bots:** they never target the island (landing spots exclude it, with a 3 m margin) and a gliding bot that would touch down on it slides off toward its landing spot and keeps gliding. The crater has real nav cells (ramps are walkable and connected), so bots path in and out and walk under the island; in simulated 7-minute matches none froze, spun or stacked below it (those that gathered in the pit were at the final safe-zone point). The old upstairs walking layer of the manor was removed; supply drops and random floor loot never land on the island.
+- **Storm:** unchanged; the island and crater are inside the map and the circle logic, so a final circle over the manor is playable either on top or below.
+- The rest of the map is unchanged: every solid more than 44 m from the manor is identical to v1.3 (the random layout does not shift).
+
+### News popup
+- The startup popup is now one page, **"v1.4: The Meteor"**, with a "Follow @Fortlite2026" line at the very top, a render of the in-game meteor, the two changes and "Season 2 is coming soon...", and a single **CLOSE** button (Esc also closes it). It shows automatically the first time the game opens on v1.4 (remembered in `localStorage` key `fl_news_seen`) and can be reopened from the new **NEWS** button in the lobby. It replaces the v1.3 multiplayer page; the login prompt still follows it for logged-out players.
+- The lobby's version button and tag say v1.4 and its panel has a v1.4 entry above the v1.3 notes.
+
+### Lobby meteor
+- The same meteor (same geometry and materials) hangs 15 m behind the hero, always behind every character, skin and Locker preview, slowly turning with a pulsing halo and a faint flickering purple light. It is hidden while skin thumbnails are rendered.
+
+### Earlier in this version
+- **Shotgun:** right-click or **Q** now tightens the crosshair to half size and cuts the spread by 30% (no screen zoom).
+
+### Notes
+- Graphics presets are only Low and High in this game; meteors are identical on both (High adds shadows, which they never cast).
+
 ## v1.3
 
 ### Five new POIs
