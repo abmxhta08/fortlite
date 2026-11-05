@@ -339,6 +339,13 @@
   #feed .frow.mine { background: rgba(150,115,10,0.7); border-left-color: #ffd24a; font-weight: bold; }
   #feed .frow.dead { background: rgba(150,30,30,0.65); border-left-color: #ff5a5a; }
   #feed .frow svg { height: 12px; width: 30px; fill: #fff; vertical-align: middle; margin: 0 4px; }
+  #teamHud { position: fixed; top: 76px; left: 16px; min-width: 200px; padding: 7px 11px; border-radius: 9px; background: rgba(5,12,28,0.62); border: 1px solid rgba(54,224,255,0.5); font-size: 14px; font-weight: 800; letter-spacing: 0.04em; text-shadow: 0 0 4px #000; display: none; pointer-events: none; visibility: hidden; }
+  #teamHud .tn { display: flex; justify-content: space-between; gap: 10px; } #teamHud .tn small { font-weight: 700; color: #ffd24a; } #teamHud .tb { height: 7px; border-radius: 4px; background: rgba(255,255,255,0.15); margin-top: 4px; overflow: hidden; } #teamHud .tb i { display: block; height: 100%; }
+  #tmTag { position: fixed; left: 0; top: 0; transform: translate(-50%, -100%); color: #8fe8ff; font-size: 14px; font-weight: 800; letter-spacing: 0.05em; text-shadow: 0 0 4px #000, 0 0 8px #000; pointer-events: none; display: none; visibility: hidden; white-space: nowrap; }
+  #revBar { position: fixed; left: 50%; bottom: 200px; transform: translateX(-50%); width: 280px; padding: 6px 10px; border-radius: 10px; background: rgba(5,12,28,0.75); border: 1px solid #36e0ff; text-align: center; font-size: 15px; font-weight: 800; letter-spacing: 0.05em; display: none; visibility: hidden; pointer-events: none; }
+  #revBar i { display: block; height: 8px; border-radius: 4px; background: #36e0ff; width: 0; margin-bottom: 5px; }
+  #downMsg { position: fixed; left: 50%; top: 18%; transform: translateX(-50%); font-size: 26px; font-weight: 900; letter-spacing: 0.08em; color: #ff5a4a; text-shadow: 0 0 6px #000, 0 2px 0 #000; text-align: center; display: none; visibility: hidden; pointer-events: none; white-space: pre; }
+  #perf { position: fixed; top: 14px; right: 208px; padding: 4px 10px; border-radius: 8px; background: rgba(5,12,28,0.6); font-size: 14px; font-weight: 800; letter-spacing: 0.06em; text-shadow: 0 0 4px #000; display: none; pointer-events: none; white-space: nowrap; } #perf b { font-weight: 800; }
   #minimap { position: fixed; top: 12px; right: 16px; width: 180px; height: 180px; border: 2px solid #36e0ff; border-radius: 10px; background: rgba(5,12,28,0.6); display: none; pointer-events: none; }
   #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
   #overlay h1 { margin: 0 0 12px; font-size: 40px; }
@@ -493,7 +500,15 @@
   #auth .au-guest { width: 100%; padding: 9px; border: 2px solid rgba(255,255,255,0.4); border-radius: 10px; background: transparent; color: #fff; font-size: 16px; letter-spacing: 0.08em; cursor: pointer; font-family: inherit; } #auth .au-guest:hover { background: #fff; color: #08122a; }
   #auth .au-note { margin: 10px 0 0; color: #9fb7d0; font-size: 12px; line-height: 1.35; letter-spacing: 0.02em; }
   #auth button:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
-  #duelBtn { display: block; width: 100%; margin-top: 10px; padding: 8px 0 6px; background: transparent; color: #fff; border: 2px solid var(--cyan); border-radius: 8px; font-family: inherit; font-size: 24px; letter-spacing: 0.1em; cursor: pointer; } #duelBtn:hover { background: var(--cyan); color: #08122a; }
+  #partyPanel { display: none; position: absolute; left: 24px; bottom: 24px; width: 290px; box-sizing: border-box; padding: 16px 18px; background: rgba(5,12,28,0.82); border: 1px solid rgba(94,226,122,0.5); border-radius: 14px; }
+  #lobby[data-tab="play"].inparty #partyPanel { display: block; } #lobby.inparty .modepanel { display: none !important; } #lobby.inparty .status { display: none !important; }
+  #partyPanel h1 { margin: 0 0 6px; font-size: 24px; letter-spacing: 0.08em; } #partyPanel .pp-code { display: flex; align-items: center; gap: 8px; font-size: 30px; letter-spacing: 0.22em; color: #ffd24a; } #partyPanel .pp-st { font-size: 12px; letter-spacing: 0.1em; color: #9fb0c4; margin: 2px 0 8px; } #partyPanel .pp-st.ok { color: #5ee27a; } #partyPanel .pp-st.bad { color: #ff6b6b; }
+  #partyPanel .pp-sub { font-size: 12px; letter-spacing: 0.14em; color: #9fb7d0; margin: 6px 0 4px; } #partyPanel .pp-modes { display: flex; gap: 8px; } #partyPanel .pp-note { font-size: 12px; color: #9fb7d0; margin: 6px 0 10px; min-height: 16px; }
+  #partyPanel button { font-family: inherit; letter-spacing: 0.08em; border-radius: 8px; border: 2px solid var(--cyan); background: #12233f; color: #fff; cursor: pointer; font-size: 17px; padding: 8px 10px; } #partyPanel button:disabled { opacity: 0.45; cursor: default; }
+  #partyPanel .pp-modes button { flex: 1; } #partyPanel .pp-modes button.on { background: var(--cyan); color: #04121f; } #partyPanel .pp-copy { font-size: 13px; padding: 4px 8px; } #partyPanel .pp-btns { display: flex; gap: 8px; } #partyPanel .pp-btns button { flex: 1; }
+  #partyPanel #ppReady.on { background: #1e7a3a; border-color: #5ee27a; } #partyPanel #ppGo { background: #ffd400; color: #111; border-color: #b39600; font-weight: 900; width: 100%; margin-top: 8px; font-size: 24px; letter-spacing: 0.15em; } #partyPanel #ppLeave { width: 100%; margin-top: 8px; font-size: 14px; border-color: #7a2c2c; }
+  #ptags { position: absolute; inset: 0; pointer-events: none; display: none; z-index: 3; } #ptags .ptag { position: absolute; transform: translate(-50%, -100%); text-align: center; white-space: nowrap; font-family: var(--font); color: #fff; text-shadow: 0 2px 6px #000; } #ptags .ptag b { display: block; font-size: 22px; letter-spacing: 0.04em; padding: 2px 14px; border-bottom: 2px dotted rgba(255,255,255,0.7); } #ptags .ptag span { display: block; font-size: 16px; letter-spacing: 0.05em; } #ptags .rd { color: #5ee27a; } #ptags .nr { color: #ff6b73; }
+  #duelBtn { display: none !important; } #duelBtnOld { display: block; width: 100%; margin-top: 10px; padding: 8px 0 6px; background: transparent; color: #fff; border: 2px solid var(--cyan); border-radius: 8px; font-family: inherit; font-size: 24px; letter-spacing: 0.1em; cursor: pointer; } #duelBtn:hover { background: var(--cyan); color: #08122a; }
   #duel { position: fixed; inset: 0; z-index: 55; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); font-family: var(--font); color: #fff; } #duel[hidden], #duel [hidden] { display: none !important; }
   #duel .du-box { width: min(420px, 92vw); max-height: 94vh; overflow-y: auto; box-sizing: border-box; padding: 20px 24px 18px; background: linear-gradient(160deg, rgba(8,32,96,0.96), rgba(4,16,52,0.96)); border: 2px solid rgba(120,200,255,0.5); border-radius: 18px; box-shadow: 0 16px 60px rgba(0,0,0,0.55); }
   #duel .du-tag { display: inline-block; background: #ffd400; color: #111; padding: 3px 12px; border-radius: 8px; font-size: 14px; letter-spacing: 0.12em; } #duel h2 { margin: 10px 0 12px; font-size: 32px; letter-spacing: 0.08em; color: #36e0ff; font-weight: 400; }
@@ -521,12 +536,17 @@
   #lobby .tabs button { color: #ffe2bc; } #lobby .tabs button.active { color: #3a1c08; box-shadow: 0 2px 0 var(--cyan); }
   #lobby .newsbtn { border-color: rgba(255,176,74,0.85); color: #ffb04a; background: rgba(40,20,8,0.85); } #lobby .newsbtn:hover { background: rgba(255,176,74,0.18); }
   #lobby .brand { text-shadow: 0 0 14px rgba(255,176,74,0.55); } #lobby .rk-bar i { background: linear-gradient(90deg, #e07a1c, var(--cyan)); }
-  #lobby .rcol .onl { position: static; width: auto; top: auto; left: auto; }
+  #lobby .rcol .onl { position: relative; width: auto; top: auto; left: auto; }
+  #lobby .onl.on { pointer-events: auto; cursor: pointer; } #lobby .onl.on:hover { background: rgba(10,26,52,0.92); }
+  #lobby .onl .onlist { display: none; position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 30; max-height: 240px; overflow-y: auto; padding: 8px 12px; border-radius: 12px; border: 2px solid rgba(94,226,122,0.45); background: rgba(5,12,28,0.96); color: #dfeee3; font-size: 14px; font-weight: 700; letter-spacing: 1px; text-align: left; cursor: default; }
+  #lobby .onl.open .onlist { display: block; } #lobby .onlist div { padding: 3px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } #lobby .onlist .you { color: #ffd24a; } #lobby .onlist .more { color: #8fa3b8; font-weight: 600; font-size: 12px; letter-spacing: 0; }
 </style>
 </head>
 <body>
 <div id="hud"></div>
 <canvas id="minimap" width="180" height="180"></canvas>
+<div id="perf" aria-hidden="true"></div>
+<div id="teamHud"></div><div id="tmTag"></div><div id="revBar"><i></i><span></span></div><div id="downMsg"></div>
 <div id="kills">Eliminations: <b id="kc">0</b></div>
 <div id="banner"></div>
 <div id="dropInd"><span class="arrow" id="dropArrow">▲</span> <span id="dropText"></span></div>
@@ -631,6 +651,17 @@
     <button type="button" id="duelBtn">1V1 DUEL</button>
     <small>Last contestant standing wins.</small>
   </div>
+  <div id="partyPanel">
+    <h1>ONLINE LOBBY</h1>
+    <div class="pp-code"><span id="ppCode"></span><button type="button" class="pp-copy" id="ppCopy">COPY</button></div>
+    <div class="pp-st" id="ppStat"></div>
+    <div class="pp-sub">GAME MODE</div>
+    <div class="pp-modes" id="ppModes"><button type="button" id="ppDuos" data-m="duosOnline">DUOS</button><button type="button" id="ppDuel2" data-m="duel">1V1</button></div>
+    <div class="pp-note" id="ppNote"></div>
+    <div class="pp-btns"><button type="button" id="ppReady">READY</button></div>
+    <button type="button" id="ppGo" disabled>START</button>
+    <button type="button" id="ppLeave">LEAVE PARTY</button>
+  </div>
   <div class="rankcard" id="rankCard">
     <div class="badge" id="rankBadge"><b id="rankLetter">B</b></div>
     <div class="rk-info">
@@ -651,12 +682,12 @@
     <div class="mc-art" id="mapArt"></div>
     <div class="mc-name" id="mapName"></div>
   </div>
-  <div class="onl" id="onlBadge"></div>
+  <div class="onl" id="onlBadge" role="button" tabindex="0" aria-expanded="false" title="Click to see who is online"><span id="onlTxt"></span><div class="onlist" id="onlList"></div></div>
   </div>
   <div class="pcard" id="pCard"><span class="pi" id="pCardIcon"></span><div><b id="pCardName"></b><small id="pCardTitle"></small></div></div>
   <section class="pass" id="tab-pass">
     <div class="p-bg"><i class="pk" style="left:4%"></i><i class="pk" style="left:11%;transform:scale(0.75)"></i><i class="gs" style="left:19%"></i><i class="pk" style="right:36%;transform:scale(0.85)"></i><i class="gs" style="right:31%"></i><i class="pk" style="right:27%"></i></div>
-    <div class="p-head"><div class="p-title">SEASON 2: <b>FALLEN</b> <span style="color:#ffd9a0;font-size:0.6em;letter-spacing:0.08em">· LEGENDARY: STARFALL (TIER 20)</span></div><div class="p-lvl" id="pLevel"></div><div class="p-xp"><i id="pXpBar"></i><span id="pXpText"></span></div></div>
+    <div class="p-head"><div class="p-title">SEASON 2: <b>FALLEN</b> <span style="color:#ffd9a0;font-size:0.6em;letter-spacing:0.08em">· LEGENDARY: STARFALL (TIER 24)</span></div><div class="p-lvl" id="pLevel"></div><div class="p-xp"><i id="pXpBar"></i><span id="pXpText"></span></div></div>
     <div class="p-center" id="pCenter"></div>
     <div class="p-detail" id="pDetail"></div>
     <div class="p-track" id="pTrack"></div>
@@ -694,11 +725,11 @@
       <li>Shield potions (blue) add up to 100 shield; medkits come out of chests.</li>
       <li>Four supply drops land each match (every ~30 s once the storm starts). Press E to open one — it holds a jetpack, sniper or minigun. Jetpack: hold Space while airborne. Sniper: right-click or Q toggles the scope.</li>
       <li><b>New skins:</b> Raven Developer and Sergeant Trubin are the two featured Item Shop skins; Samurai Riley, Pablo and Luke are in the regular catalog (10 coins each). Previously sold skins Crimson, Arctic, Jungle, Midnight and Golden were retired: owners keep them, nobody can buy them.</li>
-      <li><b>1v1 Duel:</b> the <b>1V1 DUEL</b> button in the lobby opens a room: CREATE ROOM gives a 4-letter code to share, or type a friend's code and JOIN. Press READY when both players are in; after a 3-second countdown it is first to 3 round wins in a walled Meadow Mall arena (no chests, no storm). Both players spawn on opposite sides with an assault rifle, a shotgun, 2 shield potions and full health and shield. Pausing does not stop the match. If your network blocks live connections, use SCHOOL-FRIENDLY ROOM (a slower connection; its codes start with a digit). Duels give no coins or ranked points; duel wins count for the DUELS tab of the LEADERBOARD (log in to appear).</li>
+      <li><b>1v1 Duel:</b> the <b>ONLINE LOBBY</b> button opens a lobby: CREATE LOBBY gives a code to share, or type a friend's code and JOIN. When both players are in, the host picks <b>1v1 Duel</b> or <b>Duos</b>; press READY and START; after a 3-second countdown it is first to 3 round wins in a walled Meadow Mall arena (no chests, no storm). Both players spawn on opposite sides with an assault rifle, a shotgun, 2 shield potions and full health and shield. Pausing does not stop the match. If your network blocks live connections, use SCHOOL-FRIENDLY ROOM (a slower connection; its codes start with a digit). Duels give no coins or ranked points; duel wins count for the DUELS tab of the LEADERBOARD (log in to appear).</li>
       <li><b>Accounts &amp; leaderboard:</b> optionally create an account (email + password, with a username) to save your coins, skins, battle pass and ranked points online and appear on the LEADERBOARD tab. You can always play as a guest; guest progress stays on this device and is added to your account the first time you log in.</li>
       <li><b>Locker:</b> the LOCKER tab shows what you own in five slots (outfit, back bling, glider, contrail, weapon wrap). Click an item to preview it, then EQUIP; choose NONE / DEFAULT to remove one. Items earned from the Battle Pass or bought in the Item Shop all appear there.</li>
       <li><b>Pumpkin RPG</b> (chest find, 15% of chests): one slow rocket per magazine, R to reload from 3 spare rockets, a 5.5 m blast for 120 damage that walls block and that also hurts you.</li>
-      <li><b>Item Shop:</b> the SKINS page is now the ITEM SHOP (the Loadout page is gone): spend coins on character skins, and click any skin to preview it for free. Weapon wraps, gliders, contrails and back blings are Battle Pass rewards. Wins still award 1 coin.</li>
+      <li><b>Item Shop:</b> the SKINS page is now the ITEM SHOP (the Loadout page is gone): spend coins on character skins, and click any skin to preview it for free. Weapon wraps, gliders, contrails and back blings are Battle Pass rewards. Wins no longer award coins: coins come from Battle Pass tiers 5, 10, 15, 20, 25 (3 coins each).</li>
       <li><b>Third-person gliding:</b> glide in either camera (V switches while gliding); in third person your character hangs beneath the glider, hands on its handles.</li>
       <li><b>Shotgun:</b> now reloads one shell at a time (same total time from empty). Each shell is loaded immediately, and you can fire as soon as one is in.</li>
       <li><b>Movement:</b> Space jumps (about 1.7 m — enough to hop onto cars, crates and low ledges; a ledge up to ~2 m is climbed automatically) • <b>C</b> toggles crouch (slower, smaller target, you can't stand up under a low ceiling) • <b>V</b> switches first / third person (also in Settings).</li>
@@ -711,7 +742,7 @@
       <li><b>Meadow Town</b> has <b>Mallfall Crater</b> in the middle (the old mall site: a crater with the Meteor Research Lab) and <b>Meadow Pitch</b>, a soccer field with goals, bleachers, benches and an equipment shed, to the east. <b>Harvest Hollow</b> has <b>Shattered Isle</b>: the floating island where Hollow Manor stood, with a research camp in the crater below. <b>Dustfall Canyon</b> has <b>Dustfall Speedway</b>, a dirt race track with pit garage, bleachers and a low jump, north of the mine. The safe zone no longer always ends in the middle of Meadow Town and Harvest Hollow.</li>
       <li><b>Harvest Hollow's floating island:</b> Shattered Isle floats on a rock island high above a crater. Step on a glowing <b>launch pad</b> (north, west or east of the island) to be thrown up onto it, or glide in; hold a direction in the air to steer. Walk off the edge to fall back down. The crater below has three stair ramps and glowing meteor shards. Bots never land on the island (they glide to the ground beside it) and never loot its chests.</li>
       <li>Stay inside the shrinking zone — the storm hurts everyone.</li>
-      <li>Last contestant standing wins 1 coin (Quick Match or Ranked).</li>
+      <li>Winning a <b>Ranked</b> match gives 1 coin (Quick Match, Duos and Duels give none). The Battle Pass also gives 3 coins at tiers 5, 10, 15, 20 and 25.</li>
       <li><b>Ranked:</b> each elimination +5 • 1st +30 • 2nd–5th +15 • 6th–10th +5 • 11th–25th +0. A rank-based entry fee is paid when the match starts (Bronze 0, Silver 5, Gold 10, Platinum 15, Diamond 20, Champion 25, Legendary 30). Ranks: Bronze 0, Silver 100, Gold 250, Platinum 500, Diamond 800, Champion 1,200, Legendary 5,000 points. Bots get sharper with every division (faster reactions, steadier aim, longer sight, smarter use of cover) but have the same health and damage as everyone, and even Legendary bots miss. Quick Match never changes your points.</li>
     </ul>
   </section>
@@ -728,13 +759,22 @@
     <h3>CAREER</h3>
     <div id="stats"></div>
     <button class="small" id="resetStats">Reset stats</button>
+    <div class="row"><label for="inOffline">Appear offline (your name is hidden in the online list)</label><input type="checkbox" id="inOffline"></div>
   </section>
-  <button class="verbtn" id="verBtn">v2.0 UPDATE</button>
+  <button class="verbtn" id="verBtn">v2.1 UPDATE</button>
   <button class="newsbtn" id="newsBtn" type="button">NEWS</button>
-  <div class="vtag">FORTLITE v2.0</div>
+  <div class="vtag">FORTLITE v2.1</div>
   <div id="rankPanel"><div class="vbox"><h2>RANK PROGRESSION</h2><div class="vsub" id="rpSub"></div><div class="rtrack" id="rpTrack"></div><table id="rpTable"></table><button id="rpClose">CLOSE</button></div></div>
   <div id="verPanel"><div class="vbox">
-    <h2>WHAT'S NEW IN v2.0</h2><div class="vsub">FORTLITE VERSION 2.0 — SEASON 2: THE METEORS HAVE LANDED</div>
+    <h2>WHAT'S NEW IN v2.1</h2><div class="vsub">FORTLITE VERSION 2.1</div>
+    <ul>
+      <li><b>Duos (online):</b> press <b>ONLINE LOBBY</b>, create a lobby and send the code to a friend (or enter theirs). Once you are both in, the host picks <b>Duos</b> or <b>1v1 Duel</b>; ready up and START. In Duos you and your partner are one team against 17 bot duos on a random map. Lethal damage knocks you down for 30 seconds: hold <b>F</b> next to a downed teammate for 5 seconds to revive them. No friendly fire; if you are out you spectate your teammate (you see their items and their shots). Last team standing wins.</li>
+      <li><b>Lobby:</b> your party now stands together in the main lobby, with Ready / Not Ready above each player. After a match you both return to the same party. On networks that block live connections (some school Chromebooks) create a <b>SCHOOL-FRIENDLY LOBBY</b> instead.</li>
+      <li><b>Hand Cannon nerfed:</b> bots can still pick it up, but their Hand Cannon shots always miss for now.</li>
+      <li><b>Coins:</b> a win gives 1 coin in <b>Ranked</b> only. The Battle Pass now has 25 tiers: tiers 5, 10, 15, 20 and 25 give 3 coins each, and the Starfall skin moved to tier 24.</li>
+      <li><b>Also new:</b> a live list of who is online (with an Appear offline setting), an FPS and ping readout in matches, and shadows on by default (turn them off in Settings). An online match keeps running while you pause. Fixed: logging in now loads your saved progress, and Log out really logs you out.</li>
+    </ul>
+    <h2 style="margin-top:16px">v2.0</h2><div class="vsub">SEASON 2: THE METEORS HAVE LANDED</div>
     <ul>
       <li><b>Mallfall Crater (Meadow Town):</b> the big meteor wiped out Meadow Mall. A 3 m deep crater with four stair-ramps now holds the <b>Meteor Research Lab</b> (two storeys, a dome round a glowing meteor core, a scaffold tower, generators). <b>Skyfall Pit</b> replaces Skyline Square: a fenced dig site with a crane, cabins and a watch platform.</li>
       <li><b>Junction Crater (Dustfall Canyon):</b> the meteor hit the middle of the map and replaced Redrock Mine and the road bridge. The <b>Excavation Site</b> has a drilling rig, a conveyor ramp, mine carts, cabins and a fenced shard pile; buildings that stood too close are gone.</li>
@@ -751,7 +791,7 @@
       <li><b>News:</b> the v1.4 announcement shows once; the new <b>NEWS</b> button in the lobby opens it again.</li>
       <li style="list-style:none;margin-top:8px;color:#9fb7d0"><b>— v1.3 —</b></li>
       <li><b>Five new landmarks:</b> <b>Eclipse Observatory</b>, <b>Dreadrail Depot</b> and <b>Cursed Quarry</b> in Harvest Hollow; <b>Skyline Square</b> (a small downtown with a clock tower) and <b>Maplewood Academy</b> (a school campus) in Meadow Town. Plus six corner landmarks added earlier this version, and Hollow's graveyard now stands well away from Hollow Manor.</li>
-      <li><b>1v1 Duel (online):</b> press <b>1V1 DUEL</b> in the lobby, create a room and send the 4-letter code to a friend (or enter theirs). First to 3 round wins in a walled Meadow Mall arena; both players start with an assault rifle, a shotgun, 2 shield potions and full health and shield. No chests, no storm, no coins or ranked points.</li>
+      <li><b>1v1 Duel (online):</b> press <b>ONLINE LOBBY</b>, create a lobby and send the code to a friend (or enter theirs); once both of you are in, the host picks 1v1 Duel. First to 3 round wins in a walled Meadow Mall arena; both players start with an assault rifle, a shotgun, 2 shield potions and full health and shield. No chests, no storm, no coins or ranked points.</li>
       <li><b>Accounts:</b> optional login with online saves and a wins LEADERBOARD (guests still play as before).</li>
       <li><b>Locker:</b> a new tab where you preview and equip your outfit, back bling, glider, contrail and weapon wrap (nothing is charged, and it only shows what you own).</li>
       <li><b>Skins:</b> new <b>Raven Developer</b> and a redesigned <b>Sergeant Trubin</b> are the only two featured skins (25 and 10 coins). Samurai Riley, Pablo and Luke stay in the regular shop.</li>
@@ -784,7 +824,6 @@
     </ul>
     <button id="verClose">CLOSE</button>
   </div></div>
-  <a class="creator" href="https://www.instagram.com/abmxhta" target="_blank" rel="noopener noreferrer">Created by <b>@abmxhta</b></a>
   <div id="toast"></div>
 </div>
 <div id="auth" role="dialog" aria-modal="true" aria-labelledby="authTitle" hidden>
@@ -826,14 +865,12 @@
     <div class="nw-follow">Follow <b>@Fortlite2026</b></div>
     <div class="nw-top"><span class="nw-tag">UPDATE / NEWS</span></div>
     <div class="nw-pages" id="newsPages">
-      <section class="nw-page on" data-p="0" aria-label="Version 2.0: Season 2 FALLEN">
-        <div class="nw-title" id="newsTitle">v2.0: Season 2 FALLEN</div>
+      <section class="nw-page on" data-p="0" aria-label="Version 2.1">
+        <div class="nw-title" id="newsTitle">v2.1</div>
         <div class="nw-shots big">
-          <figure><img id="newsCannon" alt="The Hand Cannon" hidden><figcaption>Hand Cannon</figcaption></figure>
-          <figure><img id="newsTrojan" alt="The Trojan skin" hidden><figcaption>Trojan skin</figcaption></figure>
-          <figure><img id="newsCrater" alt="Mallfall Crater in Meadow Town" hidden><figcaption>Mallfall Crater</figcaption></figure>
+          <figure><img id="newsDuos" alt="Two characters in the lobby" hidden><figcaption>DUOS MODE</figcaption></figure>
+          <figure><img id="newsCannon" alt="The Hand Cannon" hidden><figcaption>HAND CANNON NERFED</figcaption></figure>
         </div>
-        <div class="nw-soon">Duos coming soon...</div>
       </section>
     </div>
     <div class="nw-actions show" id="newsActions"><button type="button" id="newsPlay">CLOSE</button></div>
@@ -857,6 +894,7 @@
   // DIRECTOR MODE (developer only): the URL flag ?director opens the trailer shot recorder. Nothing is ever written to storage and the online services stay off while it runs.
   const DIRECTOR = /[?&]director(?:[=&#]|$)/.test(location.search);
   if (DIRECTOR) { try { Storage.prototype.setItem = function () {}; Storage.prototype.removeItem = function () {}; } catch (e) { /* nothing to block */ } }
+  const DBG_DUOS = /[?&]duosdebug(?:[=&#]|$)/.test(location.search);   // developer-only: starts a local Duos match against bot duos with a bot teammate (no menu leads here)
   var DIR = null; // set while a director shot is running (the normal loop then stays out of the way)
   var CL = null; // online account state (set up by the accounts section; null until then)
   // ---- Constants ----
@@ -3779,7 +3817,7 @@
   fillGeo.translate(0.5, 0, 0);
   const barBgMat = new THREE.MeshBasicMaterial({ color: 0x000000 }), barFillMat = new THREE.MeshBasicMaterial({ color: 0x33dd55 });
   const contestants = [];
-  for (let i = 0; i < TOTAL; i++) {
+  function makeContestant(i) {
     const c = { id: i, isPlayer: i === 0, name: i === 0 ? 'You' : 'Bot ' + i, mesh: null, canopy: null, get grenades() { return invCount(this, 'grenade'); } };
     if (i > 0) {
       const m = mat(BOT_COLORS[i - 1]);
@@ -3799,6 +3837,7 @@
     }
     contestants.push(c);
   }
+  for (let i = 0; i < TOTAL; i++) makeContestant(i);
   const player = contestants[0];
   const bots = contestants.slice(1);
   // Cheap contact shadows: one instanced dark disc under every bot (no shadow-casting lights needed)
@@ -3807,6 +3846,23 @@
     blobGeo = new THREE.CircleGeometry(0.55, 10); blobGeo.rotateX(-Math.PI / 2);
     blobs = new THREE.InstancedMesh(blobGeo, new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.3, depthWrite: false }), BOT_COUNT);
     blobs.frustumCulled = false; blobs.renderOrder = 2; scene.add(blobs);
+  }
+  // Game modes as data: slot counts, teams, bot counts, minimum players and maps all come from here (add a mode = add an entry).
+  // contestants = humans + botTeams * teamSize (solos: 1 + 24 = 25, duel: 2, duos: 2 + 17 * 2 = 36)
+  const MODES = {
+    solos: { id: 'solos', label: 'SOLO', online: false, humans: 1, humanTeams: 1, teamSize: 1, botTeams: TOTAL - 1, minPlayers: 1, maps: [0, 1, 2] },
+    duel: { id: 'duel', label: '1V1 DUEL', online: true, humans: 2, humanTeams: 2, teamSize: 1, botTeams: 0, minPlayers: 2, maps: [0] },
+    duosOnline: { id: 'duosOnline', label: 'DUOS', online: true, humans: 2, humanTeams: 1, teamSize: 2, botTeams: 17, minPlayers: 2, maps: [0, 1, 2], downs: true, reviveSec: 5, bleedSec: 30, downHp: 40, reviveHp: 40,
+      sendHz: 12, botHz: 6, farHz: 2.5, nearDist: 55, lowFps: 30 }
+  };
+  const modeBots = m => m.botTeams * m.teamSize, modeContestants = m => m.humans + modeBots(m);
+  let MODE = MODES.solos;
+  function ensureContestants(n) { // the extra bots for a bigger mode are built the first time that mode is played (Solos never pays for them)
+    while (contestants.length < n) {
+      const i = contestants.length; BOT_COLORS.push(new THREE.Color().setHSL(((i - 1) * 0.61803) % 1, 0.85, 0.55).getHex());
+      makeContestant(i); bots.push(contestants[i]);
+    }
+    if (blobs && blobs.count < bots.length) { scene.remove(blobs); blobs = new THREE.InstancedMesh(blobGeo, blobs.material, bots.length); blobs.frustumCulled = false; blobs.renderOrder = 2; scene.add(blobs); }
   }
   const _bm = CAN_IK ? new THREE.Matrix4() : null, _bq = CAN_IK ? new THREE.Quaternion() : null, _bp = CAN_IK ? new THREE.Vector3() : null, _bs = CAN_IK ? new THREE.Vector3() : null;
   function updateBlobs() {
@@ -3824,9 +3880,9 @@
   const fuelMeter = $('fuelMeter'), fuelFill = $('fuelFill'), heatMeter = $('heatMeter'), heatFill = $('heatFill'), heatLabel = $('heatLabel');
   const feedEl = $('feed'), feedRows = [$('f0'), $('f1'), $('f2'), $('f3'), $('f4')];
   const killsEl = $('kills'), kcEl = $('kc'), bannerEl = $('banner'), dropInd = $('dropInd'), dropArrow = $('dropArrow'), dropText = $('dropText');
-  const mmCanvas = $('minimap'), mmCtx = mmCanvas.getContext('2d');
+  const mmCanvas = $('minimap'), mmCtx = mmCanvas.getContext('2d'), perfEl = $('perf'), teamHud = $('teamHud'), tmTag = $('tmTag'), revBar = $('revBar'), downMsg = $('downMsg');
   const hitmarkEl = $('hitmark'), elimEl = $('elim'), elimName = $('elimName'), medalEl = $('medal'), medalName = $('medalName'), medalSub = $('medalSub');
-  const hudEls = [dirBox, breakEl, hurtSEl, hud, zoneEl, locEl, crouchInd, promptEl, noticeEl, crosshair, hitmarkEl, elimEl, medalEl, healthBar, killsEl, bannerEl, dropInd, mmCanvas, hurtEl, dmgEl, feedEl];
+  const hudEls = [dirBox, breakEl, hurtSEl, hud, zoneEl, locEl, crouchInd, promptEl, noticeEl, crosshair, hitmarkEl, elimEl, medalEl, healthBar, killsEl, bannerEl, dropInd, mmCanvas, perfEl, teamHud, tmTag, revBar, downMsg, hurtEl, dmgEl, feedEl];
   function setText(el, s) { if (el._t !== s) { el._t = s; el.textContent = s; } }
 
   let state = 'lobby'; // lobby | playing | paused | over
@@ -3919,7 +3975,8 @@
     finalTwoShown = false; shrinkAnnounced = false; stepT = 0; warnT = 0; resetDrops(); setDrone(false);
     tickDeaths.length = 0; clearEffects(); resetMedals();
     plane.visible = true;
-    const spots = landingSpots(TOTAL - 1), names = botNames(TOTAL - 1);
+    const NC = modeContestants(MODE); ensureContestants(NC);
+    const spots = landingSpots(NC - 1), names = botNames(NC - 1);
     contestants.forEach((c, i) => {
       if (i > 0) c.name = names[i - 1];
       c.hp = MAX_HEALTH; c.shield = 0; c.alive = true; c.state = 'plane'; c.x = ROUTE_X0; c.y = PLANE_ALT; c.z = 0;
@@ -3929,16 +3986,16 @@
       if (c.mesh) c.mesh.rotation.x = 0;
       resetLoadout(c);
       if (!c.isPlayer) {
-        const sp = spots[i - 1];
+        const sp = spots[i - 1] || [0, 0];   // (a mode with fewer contestants leaves the extra bots out of the match)
         c.tx = sp[0] + rand(-1.5, 1.5); c.tz = sp[1] + rand(-1.5, 1.5); c.tTop = roofTopAt(c.tx, c.tz);
-        c.jumpAt = 1.0 + (i - 1) * 0.6 + Math.random() * 0.3; // staggered exits across the route
+        c.jumpAt = 1.0 + (i - 1) * Math.min(0.6, 17 / (NC - 1)) + Math.random() * 0.3; // staggered exits across the route
         c.mesh.visible = false; c.canopy.visible = false;
         resetAI(c);
         c.lootT = rand(0.5, 2.5); c.loot = null;
-        if (i > settings.bots) { c.alive = false; c.state = 'none'; }
+        if (i >= NC) { c.alive = false; c.state = 'none'; }
       }
     });
-    total = 1 + settings.bots;
+    total = NC; assignTeams();
     pitch = -0.15;
     aim = null;
     placeChests(); placeGroundLoot();
@@ -4205,7 +4262,14 @@
     }
   }
   // Opens once (flag set first, so a repeat call can never duplicate loot); drops exactly one weapon, sometimes a medkit too.
-  function openChest(ch, opener) {
+  function openChest(ch, opener) { // online: the contents come from the shared seed + the chest number, so both machines see the same loot
+    if (ch.active && !ch.opened && ONLINE.on) {
+      const idx = chests.indexOf(ch), old = Math.random; Math.random = mulberry32((ONLINE.seed ^ ((idx + 1) * 2654435761)) >>> 0);
+      try { const out = openChestInner(ch, opener); out.forEach((pk, k) => { pk.uid = 'c' + idx + '_' + k; }); NETH.chestOpened(ch); return out; } finally { Math.random = old; }
+    }
+    return openChestInner(ch, opener);
+  }
+  function openChestInner(ch, opener) {
     if (!ch.active || ch.opened) return [];
     ch.opened = true; ch.lid.rotation.x = -1.3;
     let dx = opener.x - ch.x, dz = opener.z - ch.z; const d = Math.hypot(dx, dz) || 1; dx /= d; dz /= d;
@@ -4217,6 +4281,11 @@
   }
   // smart = bot logic (only takes what is an upgrade)
   function takePickup(c, pk, smart) {
+    const was = pk.active, r = takePickupLocal(c, pk, smart);
+    if (r && was && ONLINE.on && !c.netCtl) NETH.picked(pk);
+    return r;
+  }
+  function takePickupLocal(c, pk, smart) {
     if (!pk.active) return false;
     if (pk.kind === 'weapon') {
       if (smart && !botWantsWeapon(c, pk.id)) return false;
@@ -4503,6 +4572,7 @@
     const w = WEAPONS[c.weapon];
     let hitAny = false;
     if (DUEL.on && c.isPlayer) duelSendShot(c.weapon, ox, oy, oz, dir);
+    if (ONLINE.on && !c.netCtl && (c.isPlayer || (ONLINE.host && c.id >= 2)) && NETH.shot) NETH.shot(c, ox, oy, oz, dir, sx, sy, sz);
     if (w.rocket) { sfx(w.sfx, c.isPlayer ? 1 : distVol(c)); launchRocket(c, ox, oy, oz, dir, sx, sy, sz); return false; }
     sfx(w.sfx, c.isPlayer ? 1 : distVol(c));
     let moving = false; if (w.moveSpread) { const t = performance.now(), o = c._ml; moving = !!c.jumping || (o && t - o.t < 1500 && Math.hypot(c.x - o.x, c.z - o.z) > 0.6); c._ml = { t, x: c.x, z: c.z }; }   // (Hand Cannon: wide spread while moving or jumping)
@@ -4535,16 +4605,81 @@
       else if (v === 'grapple') out.push(['grapple', 0, t.cnt[i]]);
       else if (v) for (let k = 0; k < t.cnt[i]; k++) out.push([v, 0]);
     });
+    const dropped = [];
     out.forEach((o, i) => {
       const a = i * 1.7 + Math.random(), r = 0.7 + (i > 5 ? 0.5 : 0);
       const pk = spawnPickup(o[0], o[1], t.x + Math.cos(a) * r, t.y, t.z + Math.sin(a) * r, o[2]);
+      if (pk) { pk.uid = 'd' + ONLINE.slot + '_' + (ONLINE.uidN++); dropped.push(pk); }
       if (pk && o[0] === 'weapon') pk.life = DROPPED_GUN_LIFE; // only guns dropped by an eliminated contestant expire; medkits, shields, grenades and all other loot stay
     });
+    if (NETH.dropped) NETH.dropped(dropped);
     t.slots = [null, null, null, null, null]; t.cnt = [0, 0, 0, 0, 0];
   }
+  // ---- Teams: no friendly fire, downed / revive, bleed-out, spectate. Solos and duels are teams of one and behave exactly as before; Duos (MODE.downs) uses all of it. ----
+  const sameTeam = (a, b) => !!a && !!b && a.teamId !== undefined && a.teamId === b.teamId;
+  const matesOf = c => contestants.filter(m => m !== c && m.teamId === c.teamId && m.state !== 'none');
+  const TEAM = { place: {}, spectate: false, endRows: null, teams: 0 }, NETH = {};   // NETH: hooks the online layer fills in (reviveStart, reviveCancel, reviveDone, downed)
+  function assignTeams() { // team ids, bot partners and shared landings (called at the end of resetGame)
+    const NC = modeContestants(MODE), H = MODE.humans;
+    contestants.forEach((c, i) => {
+      if (c.netCtl) c.remote = false; c.netCtl = false; c.snapReady = false;
+      c.downed = false; c.downT = 0; c.noDown = false; c.reviveP = 0; c.partner = null; c.remoteHuman = false; c.pitch = 0;
+      if (c.mesh) c.mesh.rotation.x = 0;
+      c.teamId = i >= NC ? 1000 + i : MODE.teamSize === 1 ? i : i < H ? Math.floor(i / (H / MODE.humanTeams)) : MODE.humanTeams + Math.floor((i - H) / MODE.teamSize);
+    });
+    TEAM.place = {}; TEAM.spectate = false; TEAM.teams = new Set(contestants.slice(0, NC).map(c => c.teamId)).size;
+    if (MODE.teamSize > 1) contestants.slice(0, NC).forEach(c => { c.partner = matesOf(c)[0] || null; if (c.partner && !c.isPlayer && !c.remote && c.partner.id < c.id && !c.partner.isPlayer && c.partner.tx !== undefined) { c.tx = c.partner.tx + rand(-3, 3); c.tz = c.partner.tz + rand(-3, 3); c.tTop = roofTopAt(c.tx, c.tz); } });
+  }
+  function goDown(t, by, wpn) { // lethal damage in a duo: go down if a teammate can still revive you, otherwise the whole team is out
+    if (t.downed || t.noDown) return false;
+    const mates = matesOf(t).filter(m => m.alive), up = mates.filter(m => !m.downed);
+    if (!up.length) { mates.filter(m => m.downed).forEach(m => { m.downed = false; m.noDown = true; damage(m, 1e4, by, wpn, false, null); }); return false; }
+    t.downed = true; t.downT = MODE.bleedSec; t.hp = MODE.downHp; t.shield = 0; t.reviveP = 0; t.target = null; t.loot = null;
+    t.grap = null; t.launched = false; t.lvx = t.lvz = 0; t.mantle = null;
+    if (t.isPlayer) { scoped = false; firing = false; fbClear(); t.crouchWant = true; notify('YOU ARE DOWN: your teammate can revive you', 4); }
+    else if (t.mesh) t.mesh.rotation.x = -1.2;
+    if (up.some(m => m.isPlayer)) notify(t.name + ' is down: hold F next to them to revive', 4);
+    if (by && by.isPlayer && !t.isPlayer && !sameTeam(by, t)) { notify('Knocked ' + t.name + ' — finish them before their partner revives them', 3); hitmarkT = 0.3; hitKind = 'body'; sfx('hit'); }
+    if (NETH.downed) NETH.downed(t);
+    return true;
+  }
+  function reviveDone(m, by) {
+    if (!m.downed) return;
+    m.downed = false; m.hp = MODE.reviveHp; m.reviveP = 0; m.noDown = false; m.bh = BODY_H;
+    if (m.isPlayer) { m.crouchWant = false; notify('You were revived by ' + (by ? by.name : 'your teammate'), 3); sfx('pickup'); } else if (m.mesh) m.mesh.rotation.x = 0;
+    if (by && by.isPlayer) { notify('Revived ' + m.name, 2.5); sfx('pickup'); }
+    if (NETH.reviveDone && by && (by.isPlayer || !m.remoteHuman)) NETH.reviveDone(m, by);
+  }
+  const REV = { t: 0, tgt: null };
+  function teamTick(dt) {
+    if (!MODE.downs) return;
+    for (const c of contestants) {
+      if (!c.alive || !c.downed || c.remoteHuman) continue;   // (a remote human's bleed-out is decided by their own game)
+      c.downT -= dt;
+      if (c.downT <= 0) { c.downed = false; c.noDown = true; damage(c, 1e4, null, undefined, false, null); }   // bled out
+    }
+    const p = player; let tgt = null;
+    if (ONLINE.on && ONLINE.revActive && p.downed) contestants[1].reviveP = Math.min(MODE.reviveSec, contestants[1].reviveP + dt);
+    if (p.alive && !p.downed && p.state === 'ground' && keys.KeyF) {
+      let bd = 2.6; for (const m of matesOf(p)) { const d = Math.hypot(m.x - p.x, m.z - p.z); if (m.alive && m.downed && d < bd && Math.abs(m.y - p.y) < 2) { bd = d; tgt = m; } }
+    }
+    if (tgt !== REV.tgt) { if (REV.tgt && NETH.reviveCancel) NETH.reviveCancel(REV.tgt); REV.tgt = tgt; REV.t = 0; if (tgt && NETH.reviveStart) NETH.reviveStart(tgt); }
+    if (tgt) { REV.t += dt; if (REV.t >= MODE.reviveSec) { const m = tgt; REV.tgt = null; REV.t = 0; reviveDone(m, p); } }
+  }
+  function spectateCam() { // chase camera behind the living teammate (you were eliminated, they were not)
+    const m = matesOf(player).find(x => x.alive); if (!m) return;
+    const fx = -Math.sin(m.yaw), fz = -Math.cos(m.yaw);
+    camera.position.set(m.x - fx * 3.6, m.y + 2.2, m.z - fz * 3.6); camera.lookAt(m.x, m.y + 1.3, m.z); view.visible = false;
+  }
   function damage(t, amt, by, wpn, head, src) {
-    if ((state !== 'playing' && !(DUEL.on && state === 'paused' && t.isPlayer)) || !t.alive || t.state !== 'ground') return; // combat only exists during an active match (a paused duellist can still be hit)
+    if ((state !== 'playing' && !(DUEL.on && state === 'paused' && t.isPlayer) && !(ONLINE.on && state === 'paused')) || !t.alive || t.state !== 'ground') return; // combat only exists during an active match (a paused duellist can still be hit)
     if (DUEL.on && !DUEL.force && DUEL.phase !== 'fight') return; // duel: nobody can be hurt during the countdown or between rounds
+    if (by && by !== t && sameTeam(by, t)) return;   // no friendly fire (bullets, grenades, explosions: everything comes through here)
+    if (ONLINE.on && t.netCtl) { // owned by the other machine: only its owner applies the damage
+      if (t.remoteHuman) { if (by && by.id >= 2 && !by.netCtl) NETH.hitHuman(t, amt, by, wpn, head); }
+      else if (by && by.isPlayer) { NETH.hitBot(t, amt, by, wpn, head); sfx(head ? 'headshot' : 'hit'); hitmarkT = 0.2; hitKind = head ? 'head' : 'body'; t.barT = BAR_TIME; if (t.bar) { t.popDmg = (t.popDmg || 0) + amt; t.popPlayer = true; if (head) t.popHead = true; } }
+      return;
+    }
     const raw = amt; let shLost = 0;
     if (t.shield > 0) { const ab = Math.min(t.shield, amt); t.shield -= ab; amt -= ab; shLost = ab; }
     const hpBefore = t.hp; t.hp -= amt;
@@ -4561,9 +4696,11 @@
     if (by && t.isPlayer && (amt + shLost) > 0) { dmgPending += amt + shLost; fb.lastSh = amt <= 0; }
     if (by && by.isPlayer && !t.isPlayer && t.hp > 0) { sfx(head ? 'headshot' : 'hit'); hitmarkT = 0.2; hitKind = head ? 'head' : 'body'; }
     if (t.hp > 0) return;
-    t.hp = 0; t.alive = false; t.state = 'dead'; if (t.isPlayer) { scoped = false; fbClear(); } t.grap = null; t.launched = false; t.lvx = 0; t.lvz = 0; t.mantle = null;
+    if (MODE.downs && goDown(t, by, wpn)) return;   // duo: down, not out
+    t.downed = false; t.hp = 0; t.alive = false; t.state = 'dead'; if (t.isPlayer) { scoped = false; fbClear(); } t.grap = null; t.launched = false; t.lvx = 0; t.lvz = 0; t.mantle = null;
     if (t.mesh) { t.dying = true; t.deadT = 0; } // body tips over, then is hidden (see update)
     tickDeaths.push(t);
+    if (NETH.elim) NETH.elim(t, by, wpn);
     if (DUEL.on) duelDied(t);
     if (!t.isPlayer) sfx('botdown', distVol(t));
     dropGear(t);
@@ -4749,6 +4886,7 @@
   function pickDest(b, type) {
     if (type === 'loot') return { x: b.loot.x, z: b.loot.z, y: (b.loot.ref && b.loot.ref.y) || 0 };
     if (type === 'cover') return b.coverSpot || { x: b.x, z: b.z };
+    if (type === 'mate') return b.partner ? { x: b.partner.x, z: b.partner.z, y: b.partner.y } : { x: b.x, z: b.z };
     if (type === 'pursue') return b.lastSeen || { x: b.x, z: b.z };
     if (type === 'safe') {
       const d = zDist(b.x, b.z) || 1, k = Math.min(zoneR * 0.5, d) / d;
@@ -4770,7 +4908,7 @@
     if (pathBudget <= 0) { b.repathT = 0.05 + Math.random() * 0.1; return; }
     pathBudget--;
     const arrived = !b.path || b.pi >= b.path.length;
-    if (type === 'safe' || type === 'loot' || type === 'cover' || type === 'pursue' || !b.dest || arrived) b.dest = pickDest(b, type);
+    if (type === 'safe' || type === 'loot' || type === 'cover' || type === 'pursue' || type === 'mate' || !b.dest || arrived) b.dest = pickDest(b, type);
     b.path = findPath(b.x, b.z, b.dest.x, b.dest.z, b.y, b.dest.y || 0); b.pi = 0;
     b.repathT = b.y > 0.3 ? 0.25 : rand(1.2, 2);
     if (!b.path) b.repathT = 0.5;
@@ -4802,16 +4940,26 @@
     for (let i = 0; i < Math.min(4, cands.length); i++) if (!los(t, { x: cands[i].x, y: b.y, z: cands[i].z, bh: BODY_H })) return cands[i];
     return null;
   }
+  const teamWants = b => { const m = b.partner; return m.downed || Math.hypot(m.x - b.x, m.z - b.z) > (b.loot ? 38 : 18); };
+  function teamMove(b, dt) {
+    const m = b.partner, d = Math.hypot(m.x - b.x, m.z - b.z);
+    if (m.downed) {
+      if (d < 1.8) { b.reviveP = (b.reviveP || 0) + dt; if (b.reviveP >= MODE.reviveSec) { b.reviveP = 0; reviveDone(m, b); } return false; }
+      ensureDest(b, 'mate'); return follow(b);
+    }
+    b.reviveP = 0; ensureDest(b, 'mate'); return follow(b);
+  }
   function scan(b) {
     // Pistol-only bots ignore far-away fights and keep looting; geared bots notice targets from farther away.
     const geared = maxGunRating(b) >= 3, sight = geared ? botP.sight : botP.sightPistol;
     let best = null, bd = sight * sight;
     for (const c of contestants) {
-      if (c === b || !c.alive || c.state !== 'ground') continue;
+      if (c === b || !c.alive || c.state !== 'ground' || sameTeam(b, c)) continue;   // (never their own partner)
       if (c.id === b.ignoreId && b.ignoreT > 0 && !(c.id === b.revengeId && b.revengeT > 0)) continue; // chose to avoid this one for a while
       const dx = c.x - b.x, dz = c.z - b.z, d2 = dx * dx + dz * dz;
       if (d2 < bd && los(b, c)) { best = c; bd = d2; }
     }
+    { const pt = b.partner && b.partner.target; if (!best && pt && pt.alive && pt.state === 'ground' && !sameTeam(b, pt)) { const dx = pt.x - b.x, dz = pt.z - b.z, d2 = dx * dx + dz * dz; if (d2 < bd && los(b, pt)) { best = pt; bd = d2; } } }   // partners share targets
     if (best && best !== b.target && !(best.id === b.revengeId && b.revengeT > 0) && Math.random() > b.aggr) { // not every sighting becomes a fight
       b.ignoreId = best.id; b.ignoreT = rand(6, 12); best = null;
     }
@@ -4840,8 +4988,9 @@
     const ox = b.x, oy = b.y + 1.5, oz = b.z;
     _d.set(t.x - ox, t.y + (t.bh || BODY_H) * 0.61 - oy, t.z - oz).normalize();
     const dist = Math.hypot(t.x - ox, t.y + (t.bh || BODY_H) * 0.61 - oy, t.z - oz);
-    const err = botP.err * clamp(12 / dist, 0.18, 1); // angular error shrinks with distance, so far shots still land; tuned so each rank's hit rate is ~30% below the pre-v1.1 profile (see changelog)
-    if (err > 0) perturb(_d, b.weapon === W.SNIPER ? err * 0.4 : b.weapon === W.PISTOL ? err * BOT_PROFILES.pistolErrMult : err);
+    const err = (b.weapon === W.CANNON ? BOT_PROFILES.cannonErr : botP.err) * clamp(12 / dist, 0.18, 1); // angular error shrinks with distance, so far shots still land; tuned so each rank's hit rate is ~30% below the pre-v1.1 profile (see changelog)
+    if (b.weapon === W.CANNON && BOT_PROFILES.cannonMiss) { _r.crossVectors(_d, UP).normalize(); _d.addScaledVector(_r, (Math.random() < 0.5 ? -1 : 1) * 3 / Math.max(dist, 1)).normalize(); }   // the shot goes 3 m wide of the target (at any distance): it can never hit them
+    else if (err > 0) perturb(_d, b.weapon === W.SNIPER ? err * 0.4 : b.weapon === W.PISTOL ? err * BOT_PROFILES.pistolErrMult : err);
     fire(b, ox, oy, oz, _d, ox + _d.x * 0.6, oy - 0.3 + _d.y * 0.6, oz + _d.z * 0.6);
   }
   // Bots look for something to upgrade to: nearest unopened chest, useful floor weapon/grenade.
@@ -4868,6 +5017,7 @@
 
   function updateBot(b, dt) {
     settle(b, dt);
+    if (b.downed) return;   // down: waits for their partner (or bleeds out)
     if (b.launched || b.lvx || b.lvz) { // shockwave flight: only velocity + gravity + collision until they land, then re-plan
       moveChar(b, b.lvx, b.lvz, dt);
       if (b.jumping) return;
@@ -4934,6 +5084,7 @@
       has = true;
     } else if (b.pursueT > 0 && b.lastSeen) { // chase the last place the target was SEEN (no wall-hacks: it must regain line of sight to shoot)
       if (Math.hypot(b.lastSeen.x - b.x, b.lastSeen.z - b.z) < 2) b.pursueT = 0; else { ensureDest(b, 'pursue'); has = follow(b); }
+    } else if (b.partner && b.partner.alive && teamWants(b)) { has = teamMove(b, dt);   // partners stay loosely together and revive each other
     } else if (b.loot) {
       if (Math.hypot(b.loot.x - b.x, b.loot.z - b.z) < 1.8 && Math.abs(((b.loot.ref && b.loot.ref.y) || 0) - b.y) < 2.2) botUseLoot(b);
       else { ensureDest(b, 'loot'); has = follow(b); }
@@ -4945,7 +5096,7 @@
     }
     if (b.stuckT <= 0) { // v2.0 stuck handling: a bot that wants to move but barely moves for ~1.5 s repaths, then jumps / sidesteps, then free-walks, then picks a new nearby goal
       b.stuckT = 0.5;
-      const wants = !b.target && b.reloadT <= 0 && zDist(b.x, b.z) > Math.max(zoneR * 0.5, 3) && !(b.loot && Math.hypot(b.loot.x - b.x, b.loot.z - b.z) < 2.2);   // wants to be somewhere else but is not fighting, reloading or looting
+      const wants = !b.target && b.reloadT <= 0 && !(b.partner && b.partner.downed && Math.hypot(b.partner.x - b.x, b.partner.z - b.z) < 2.4) && zDist(b.x, b.z) > Math.max(zoneR * 0.5, 3) && !(b.loot && Math.hypot(b.loot.x - b.x, b.loot.z - b.z) < 2.2);   // wants to be somewhere else but is not fighting, reloading or looting
       if (!window.__noBotFix && wants && Math.hypot(b.x - b.lx, b.z - b.lz) < 0.3) {
         b.stuckN = (b.stuckN || 0) + 1;
         if (b.stuckN >= (b.y > 1.5 ? 6 : 8)) { b.stuckN = 0;   // last resort: step to the nearest free, connected ground cell (off a roof / island / out of a pocket), then pick a new nearby goal
@@ -5124,7 +5275,7 @@
       p.bh = p.crouching ? CROUCH_H : BODY_H; p.ch += ((p.crouching ? 1 : 0) - p.ch) * Math.min(1, dt * 12);
       const hasIn = !p.mantle && !p.grap && inputDir();
       if (hasIn) {
-        moveChar(p, mv.x * PLAYER_SPEED * (p.crouching ? CROUCH_SPEED : 1), mv.z * PLAYER_SPEED * (p.crouching ? CROUCH_SPEED : 1), dt);
+        moveChar(p, mv.x * PLAYER_SPEED * (p.crouching ? CROUCH_SPEED : 1) * (p.downed ? 0.35 : 1), mv.z * PLAYER_SPEED * (p.crouching ? CROUCH_SPEED : 1) * (p.downed ? 0.35 : 1), dt);   // (down: a slow crawl)
         stepT -= dt; if (stepT <= 0) { stepT = p.crouching ? 0.55 : 0.38; if (!p.jumping && !p.crouching) sfx('step'); }
         if (p.jumping && !p.mantle && !(p.jetpack && keys.Space && p.fuel > 0)) { const m = findMantle(p, mv.x, mv.z); if (m) startMantle(p, m); }
       }
@@ -5152,6 +5303,7 @@
     gameWings.visible = p.state === 'glide' && !!cosId('glider') && !tp; // (third person draws the wings on the body)
     if (p.state === 'ground' && !isGun(p.slots[p.sel])) heldVisual(p, p.slots[p.sel]);
     if (p.state !== 'ground') return;
+    if (p.downed) { shotClick = false; return; }   // down: no shooting, no items
     const held = p.slots[p.sel];
     heldVisual(p, held);
     if (invOpen) { shotClick = false; return; } // no shooting / using while rearranging
@@ -5287,6 +5439,7 @@
   function resolveTick() {
     if (!tickDeaths.length) return;
     if (DUEL.on) { tickDeaths.length = 0; return; } // duels have their own round logic
+    if (MODE.downs) { resolveTeams(); return; }
     const aliveN = contestants.filter(c => c.alive).length;
     // Simultaneous eliminations share the best (lowest) place of their group.
     tickDeaths.forEach(c => { c.place = aliveN + 1; });
@@ -5296,10 +5449,33 @@
     else if (aliveN === 1 && player.alive) endGame('Victory', 1);
   }
 
+  // Duos result: no stats / ranked / Battle Pass changes, and no coins (coins now come only from the Battle Pass).
+  function endDuosGame(result, place) {
+    clearInputs(); state = 'over'; setDrone(false); sfx(result === 'Victory' ? 'win' : 'lose');
+    const m = matesOf(player)[0];
+    TEAM.endRows = [['TEAMMATE', (m ? m.name : '-') + (m ? (m.alive ? ' • SURVIVED' : ' • ELIMINATED') : '')]];
+    showVictory({ kind: result, place, rankRes: null });
+    if (NETH.matchEnd) NETH.matchEnd(result, place);
+    if (document.pointerLockElement) document.exitPointerLock();
+  }
+  function startMode(mode, mapId) { // begins a match for a mode from the config (online modes are never ranked)
+    MODE = mode; rotation.next = mapId; beginMatch();
+    if (mode.online || mode.dev) { match.ranked = false; match.settled = true; match.passAwarded = true; match.started = true; }
+  }
+  function resolveTeams() { // Duos: a team is out when every member is out; placement is by when the whole team went; one team left wins
+    const NC = modeContestants(MODE), live = new Set(contestants.slice(0, NC).filter(c => c.alive).map(c => c.teamId));
+    tickDeaths.forEach(c => { if (!live.has(c.teamId) && TEAM.place[c.teamId] === undefined) TEAM.place[c.teamId] = live.size + 1; });
+    const playerDied = tickDeaths.includes(player); tickDeaths.length = 0;
+    if (NETH.teamsChanged) NETH.teamsChanged();
+    if (!live.has(player.teamId)) endGame('Defeat', TEAM.place[player.teamId] || live.size + 1);
+    else if (live.size === 1) endGame('Victory', 1);
+    else if (playerDied && !match.ended) { TEAM.spectate = true; notify('You were eliminated: spectating your teammate', 4); }
+  }
   function endGame(result, place) {
     if (match.ended) return; // a match ends exactly once: no second result, reward, stat or victory sequence
     match.ended = true;
     clearInputs();
+    if (MODE.downs) { endDuosGame(result, place); return; }
     state = 'over';
     stats.played++; stats.kills += player.kills;
     if (result === 'Victory') stats.wins++; else if (result === 'Draw') stats.draws++;
@@ -5307,7 +5483,7 @@
     saveJSON('br_stats', stats);
     setDrone(false); sfx(result === 'Victory' ? 'win' : result === 'Draw' ? 'draw' : 'lose');
     let reward = '', coinsNow = 0;
-    if (result === 'Victory' && !rewardGranted) { // exactly one coin, once per match
+    if (result === 'Victory' && !rewardGranted && match.ranked) { // a win gives exactly one coin, once per match, in Ranked only
       rewardGranted = true; progress.coins++; coinsNow = 1; saveProgress(); refreshCoins(); reward = 'VICTORY — +1 COIN\n';
     }
     let rankedText = '', rankRes = null;
@@ -5346,8 +5522,10 @@
   function showVictory(v) { // v.kind: 'Victory' (banner + fanfare + confetti) or 'Defeat' (YOU PLACED #X, defeat styling)
     cleanupVictory(); const win = v.kind !== 'Defeat';
     $('vNum').textContent = win ? '#1' : 'ELIMINATED'; $('vTitle').textContent = win ? 'VICTORY ROYALE' : 'YOU PLACED #' + v.place;
-    const rows = [['PLACEMENT', '#' + v.place + ' / ' + total, true], ['ELIMINATIONS', String(player.kills)], ['DAMAGE DEALT', String(Math.round(match.damageDealt || 0))], ['MATCH TIME', fmtTime(matchTime)], ['COINS EARNED', win ? '+' + v.coinsNow : '0', true]];
-    const pr = match.passRes; rows.push(['BATTLE PASS XP', pr ? (pr.complete ? 'COMPLETE' : '+' + pr.gain) : '+0']);
+    const rows = [['PLACEMENT', '#' + v.place + ' / ' + (MODE.downs ? TEAM.teams + ' TEAMS' : total), true], ['ELIMINATIONS', String(player.kills)], ['DAMAGE DEALT', String(Math.round(match.damageDealt || 0))], ['MATCH TIME', fmtTime(matchTime)]];
+    if (match.ranked) rows.push(['COINS EARNED', win ? '+' + (v.coinsNow || 0) : '0', true]);
+    if (TEAM.endRows) TEAM.endRows.forEach(r => rows.splice(1, 0, r));
+    const pr = match.passRes; if (!MODE.downs) rows.push(['BATTLE PASS XP', pr ? (pr.complete ? 'COMPLETE' : '+' + pr.gain) : '+0']);
     if (v.rankRes) rows.push(['RANKED POINTS', (v.rankRes.net >= 0 ? '+' : '') + v.rankRes.net, true], ['RANK', v.rankRes.name.toUpperCase() + ' • ' + v.rankRes.points]);
     vGrid.innerHTML = rows.map(r => '<div class="vstat' + (r[2] ? ' gold' : '') + '"><small>' + r[0] + '</small><b>' + r[1] + '</b></div>').join('');
     vNote.textContent = (pr && pr.parts ? 'XP: ' + pr.parts : '') + (v.rankRes ? '\nPlacement +' + v.rankRes.placePts + ' • eliminations +' + v.rankRes.elim + ' • entry fee -' + v.rankRes.fee + (v.rankRes.promoted ? ' — PROMOTED!' : v.rankRes.demoted ? ' — demoted' : '') : '') + (storageOk ? '' : '\nSaving is unavailable in this browser — this result will not be kept after you close the page.');
@@ -5530,7 +5708,7 @@
   function updateDrops(dt) {
     if (stormStart !== null) {
       const t = matchTime - stormStart;
-      while (dropsSpawned < DROP_TIMES.length && t >= DROP_TIMES[dropsSpawned]) spawnDrop(drops[dropsSpawned++]);
+      while (dropsSpawned < DROP_TIMES.length && t >= DROP_TIMES[dropsSpawned]) { const di = dropsSpawned++; if (ONLINE.on) withSeed(ONLINE.seed + 977 * (di + 1), () => spawnDrop(drops[di])); else spawnDrop(drops[di]); }
     }
     for (const dp of drops) {
       if (!dp.state) continue;
@@ -5554,6 +5732,7 @@
   function interactDrop(dp, c) {
     if (dp.state === 'closed') {
       dp.state = 'open'; dp.lid.rotation.x = -1.9; dp.itemModel.visible = true;
+      NETH.dropAct(dp, 'open');
       if (c.isPlayer) { sfx('crate'); notify('Supply drop opened!', 2); } else sfx('crate', distVol(c));
       return true;
     }
@@ -5566,7 +5745,7 @@
       if (giveWeapon(c, DROP_WEAPON[dp.item]) === 'have') { if (c.isPlayer) notify('Already carrying a ' + dropItemName(dp), 1.5); return false; }
       if (c.isPlayer) notify(dropItemName(dp) + ' acquired', 2.5);
     }
-    dp.state = 'taken'; dp.itemModel.visible = false; dp.beacon.visible = false;
+    dp.state = 'taken'; dp.itemModel.visible = false; dp.beacon.visible = false; NETH.dropAct(dp, 'taken');
     if (c.isPlayer) sfx('pickup');
     return true;
   }
@@ -5633,8 +5812,8 @@
   const SHOP_BY_ID = {};
   SHOP.forEach(it => { SHOP_BY_ID[it.id] = it; });
   const FEATURED = ['trojan', 'raven', 'trubin']; // the featured skins (Samurai Riley, Pablo and Luke stay in the regular catalog) // three skins shown large at the top of the shop (same catalog items, same prices)
-  const PASS_XP = 150, PASS_TIERS = 20, PASS_MAX_XP = PASS_XP * PASS_TIERS, S1_TIERS = 30;   // Season 2 "FALLEN": 20 tiers (see the changelog for why 150 XP per tier)
-  const PASS_CATS = { icon: 'Banner Icon', wrap: 'Weapon Wrap', backpack: 'Backpack', contrail: 'Contrail', sound: 'Elimination Sound', skin: 'Character Skin', title: 'Player Title', platform: 'Lobby Platform', glider: 'Glider', effect: 'Elimination Effect' };
+  const PASS_XP = 150, PASS_TIERS = 25, PASS_MAX_XP = PASS_XP * PASS_TIERS, S1_TIERS = 30;   // Season 2 "FALLEN": 25 tiers, the last five give 3 coins each (see the changelog for why 150 XP per tier)
+  const PASS_CATS = { icon: 'Banner Icon', wrap: 'Weapon Wrap', backpack: 'Backpack', contrail: 'Contrail', sound: 'Elimination Sound', coins: 'Coins', skin: 'Character Skin', title: 'Player Title', platform: 'Lobby Platform', glider: 'Glider', effect: 'Elimination Effect' };
   const BANNER_DEFAULT = 'linear-gradient(90deg,#0d2a44,#1b4f7a)';
   const SI = id => Object.assign({}, SHOP_BY_ID[id], { key: id }); // a pass reward built from an item definition (its visual key stays the old item id)
   const REWARDS_S1 = [
@@ -5661,13 +5840,16 @@
     SI('sh_wrap_arctic'), SI('sh_gl_sunset'), SI('sh_tr_ember'), SI('sh_bk_pumpkin'), SI('sh_gl_desert'), SI('sh_tr_phantom'), SI('sh_wrap_gold'), SI('sh_gl_bat'), SI('sh_bk_bot'),
     { name: 'Haunted Legend', cat: 'title', desc: 'The title for players who finish the whole pass.' }
   ].map((r, i) => Object.assign(r, { tier: i + 1, id: 'bp' + (i + 1), s1: true }));
-  const REWARDS = [   // Season 2 "FALLEN": 20 tiers, all cosmetics or titles (no coins); Starfall is the only skin
+  const REWARDS_F = [   // Season 2 "FALLEN" cosmetics and titles (Starfall is the only skin); see REWARDS below for the 25-tier layout
     SI('f_wrap_plaid'), SI('f_bk_acorn'), SI('f_tr_leaves'), { name: 'Harvest Hand', cat: 'title', desc: 'Show off this title on your player card.' }, SI('f_gl_maple'),
     SI('f_wrap_gold'), SI('f_bk_patch'), SI('f_tr_ember'), SI('f_gl_kite'), SI('f_wrap_corn'),
     SI('f_bk_axe'), SI('f_tr_smoke'), SI('f_gl_balloon'), SI('f_wrap_candy'), SI('f_bk_shard'),
-    SI('f_tr_dust'), SI('f_wrap_crater'), SI('f_gl_starfall'), SI('f_wrap_frost'), { name: 'Starfall', cat: 'skin', skin: 'starfall', desc: 'A charred crater survivor with glowing purple-blue cracks, a meteor shard in the chest and one frozen arm.' }
-  ].map((r, i) => Object.assign(r, { tier: i + 1, id: 'fp' + (i + 1) }));
-  const TITLE_LEGEND = { name: 'Fallen Legend', cat: 'title', desc: 'The title for players who finish the Season 2 pass.', tier: 20, id: 'fp20t' };
+    SI('f_tr_dust'), SI('f_wrap_crater'), SI('f_gl_starfall'), SI('f_wrap_frost'), { name: 'Starfall', cat: 'skin', skin: 'starfall', desc: 'A charred crater survivor with glowing purple-blue cracks, a meteor shard in the chest and one frozen arm.' },
+  ].map((r, i) => Object.assign(r, { id: 'fp' + (i + 1), old: i + 1 }));   // ids and old tier numbers never change, so earlier claims stay valid
+  const COIN_TIERS = [1, 2, 3, 4, 5].map(i => ({ name: '3 Coins', cat: 'coins', coins: 3, desc: 'Claim 3 coins for the Item Shop.', id: 'fp' + (20 + i), old: 99 }));
+  // Coins come every 5 tiers (5, 10, 15, 20, 25); the 20 cosmetics fill the other tiers in their original order, so Starfall is now tier 24.
+  const REWARDS = (() => { const out = []; let ci = 0, ki = 0; for (let t = 1; t <= 25; t++) out.push(Object.assign(t % 5 === 0 ? COIN_TIERS[ci++] : REWARDS_F[ki++], { tier: t })); return out; })();
+  const TITLE_LEGEND = { name: 'Fallen Legend', cat: 'title', desc: 'The title for players who finish the Season 2 pass.', tier: 24, id: 'fp20t' };   // (tier 24 = Starfall + this title)   // (tier 20 = Starfall + this title; tiers 5, 10, 15, 20, 25 = 3 coins each)
   const REWARD_BY_ID = {};
   REWARDS_S1.forEach(r => { REWARD_BY_ID[r.id] = r; }); REWARDS.forEach(r => { REWARD_BY_ID[r.id] = r; }); REWARD_BY_ID[TITLE_LEGEND.id] = TITLE_LEGEND;
   const ALL_REWARDS = REWARDS_S1.concat(REWARDS, [TITLE_LEGEND]);   // everything a player can own / equip (Season 1 cosmetics stay owned)
@@ -5689,7 +5871,7 @@
       const raw = JSON.parse(localStorage.getItem('br_pass'));
       if (raw && typeof raw === 'object') {
         const n = normPass(raw, true); pz.xp = n.xp; const lv = passLevel(pz.xp);
-        n.claimed.forEach(id => { const r = typeof id === 'string' && REWARD_BY_ID[id]; if (r && (r.s1 ? r.tier <= S1_TIERS : r.tier <= lv) && !pz.claimed.includes(id)) pz.claimed.push(id); });
+        n.claimed.forEach(id => { const r = typeof id === 'string' && REWARD_BY_ID[id]; if (r && (r.s1 ? r.tier <= S1_TIERS : (r.tier <= lv || r.old <= lv)) && !pz.claimed.includes(id)) pz.claimed.push(id); });
         for (const cat in PASS_CATS) { const id = n.eq[cat], r = typeof id === 'string' && REWARD_BY_ID[id]; if (r && r.cat === cat && cat !== 'skin' && pz.claimed.includes(id)) pz.eq[cat] = id; }
         if (raw.s !== 2) { try { localStorage.setItem('br_pass', JSON.stringify(pz)); } catch (e) { /* storage unavailable */ } }
       }
@@ -5787,20 +5969,22 @@
     try { localStorage.setItem('br_pass', JSON.stringify(pass)); }
     catch (e) { if (storageOk) { storageOk = false; toast('Saving unavailable — progress will last this session only'); } }
   }
-  const passClaimable = () => REWARDS.filter(r => r.tier <= passLevel(pass.xp) && !pass.claimed.includes(r.id));   // (claiming Starfall also grants the Fallen Legend title, see claimReward)
-  const isEquipped = r => r.skin ? progress.equipped === r.skin : pass.eq[r.cat] === r.id;
+  const earned = r => r.tier <= passLevel(pass.xp) || r.old <= passLevel(pass.xp);   // (a cosmetic stays earned at its old, lower tier number)
+  const passClaimable = () => REWARDS.filter(r => earned(r) && !pass.claimed.includes(r.id));   // (claiming Starfall also grants the Fallen Legend title, see claimReward)
+  const isEquipped = r => r.coins ? false : r.skin ? progress.equipped === r.skin : pass.eq[r.cat] === r.id;
   function claimReward(id) { // permanent; each tier can be claimed once and only after it is earned
     const r = REWARD_BY_ID[id];
-    if (!r || r.s1 || r.tier > passLevel(pass.xp) || pass.claimed.includes(id)) return false;
+    if (!r || r.s1 || !earned(r) || pass.claimed.includes(id)) return false;
     pass.claimed.push(id); if (id === 'fp20' && !pass.claimed.includes('fp20t')) pass.claimed.push('fp20t');   // the final tier also gives the Fallen Legend title
     if (r.skin && !progress.owned.includes(r.skin)) progress.owned.push(r.skin);
-    savePass(); saveProgress();
+    if (r.coins) progress.coins = Math.min(1e9, progress.coins + r.coins);   // coin tiers pay out once, at the moment they are claimed
+    savePass(); saveProgress(); if (r.coins) refreshCoins();
     return true;
   }
   function claimAll() { let n = 0; passClaimable().forEach(r => { if (claimReward(r.id)) n++; }); return n; }
   function equipReward(id) {
     const r = REWARD_BY_ID[id];
-    if (!r || !pass.claimed.includes(id)) return false;
+    if (!r || r.coins || !pass.claimed.includes(id)) return false;
     if (r.skin) { if (!equipSkin(r.skin)) return false; }
     else { pass.eq[r.cat] = id; savePass(); }
     applyCosmetics();
@@ -6242,6 +6426,44 @@
     ring.material.color.setHex(pl ? 0xb07cff : 0x36e0ff); glow.material.color.setHex(pl ? 0x8a4cff : 0x36e0ff); lobbyRim.color.setHex(pl ? 0xb07cff : 0x36e0ff);
   }
 
+  // ---- Party view: the other player of an online lobby stands beside you on their own platform, with a name tag and Ready / Not Ready (the lobby code sets PARTY) ----
+  const PARTY = { on: false, other: false, sk: null, name: '', ready: false, meName: '', meReady: false, skApplied: null };
+  const pMats = makeSkinMats(), pEyeMat = new THREE.MeshBasicMaterial({ color: 0x14161c }), PM = makeHumanoid(role => role === 'eye' ? pEyeMat : pMats[role]), PX = makeExtras(PM);
+  const partner = new THREE.Group(); partner.position.set(2.15, 0, 0); partner.visible = false; stage.add(partner);
+  const pHero = new THREE.Group(); pHero.position.y = 0.1; pHero.rotation.y = Math.PI + 0.55; pHero.add(PM.root); partner.add(pHero);
+  { const pp = new THREE.Mesh(platform.geometry, new THREE.MeshLambertMaterial({ color: 0x0b2a3a, emissive: 0x0a7f99 })); pp.position.y = 0.05;
+    const pr = new THREE.Mesh(ring.geometry, new THREE.MeshBasicMaterial({ color: 0x36e0ff, side: THREE.DoubleSide })); pr.rotation.x = -Math.PI / 2; pr.position.y = 0.105; partner.add(pp, pr); }
+  PM.legR.rotation.x = 0.12; PM.legR.rotation.z = 0.07; PM.kneeR.rotation.x = -0.24; PM.legL.rotation.x = 0.04; PM.legL.rotation.z = -0.07; PM.kneeL.rotation.x = -0.12;
+  const pEyes = PM.head.children.filter(m => m.userData.role === 'eye');
+  function applyPartner() { // the partner's equipped skin (no wraps, backpack or other cosmetics: just the outfit)
+    const sk = SKIN_BY_ID[PARTY.sk] || SKIN_BY_ID.recruit; PARTY.skApplied = PARTY.sk;
+    paint(pMats, sk); pEyeMat.color.setHex(sk.eye || 0x14161c);
+    PX.bones.visible = !!sk.bone; PX.skull.visible = !!sk.bone; PX.pumpkin.visible = !!sk.pumpkin;
+    PM.headMesh.visible = !sk.pumpkin && !sk.nohead; PM.hair.visible = !sk.pumpkin && sk.hair !== 0; PM.tail.visible = PM.hair.visible && !sk.short; dressBody(PM, sk);
+    pEyes.forEach(e => { e.visible = !sk.pumpkin && !sk.bone && !sk.nohead; });
+    showBack(PX, ''); showSkinFx(PX, sk.id, false);
+  }
+  const ptagEl = document.createElement('div'); ptagEl.id = 'ptags'; ptagEl.innerHTML = '<div class="ptag" id="ptagMe"></div><div class="ptag" id="ptagOther"></div>'; $('lobby').appendChild(ptagEl);
+  const _pv3 = new THREE.Vector3(); let ptShown = false;
+  function ptagPlace(el, wx, name, ready) { // name tag above a head: projected from the 3D position every frame
+    _pv3.set(stage.position.x + wx * stage.scale.x, stage.position.y + 2.0 * stage.scale.x, 0).project(lobbyCam);
+    el.style.left = ((_pv3.x * 0.5 + 0.5) * lobbyEl.clientWidth) + 'px'; el.style.top = ((-_pv3.y * 0.5 + 0.5) * lobbyEl.clientHeight) + 'px';
+    el.innerHTML = '<b>' + String(name).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])) + '</b><span class="' + (ready ? 'rd' : 'nr') + '">' + (ready ? 'Ready' : 'Not Ready') + '</span>';
+  }
+  function partnerTick(t) {
+    const show = PARTY.on && curTab === 'play';
+    if (curTab === 'play') stageTargetX = PARTY.on && PARTY.other ? -1.05 : 0;   // with a partner, both characters share the middle of the screen
+    partner.visible = show && PARTY.other;
+    if (show !== ptShown) { ptShown = show; ptagEl.style.display = show ? 'block' : 'none'; }
+    if (!show) return;
+    if (partner.visible) {
+      if (PARTY.skApplied !== PARTY.sk) applyPartner();
+      PM.body.scale.y = 1 + Math.sin(t * 1.5 + 1) * 0.006; PM.head.rotation.y = Math.sin(t * 0.55 + 2) * 0.1;
+    }
+    ptagPlace($('ptagMe'), 0, PARTY.meName, PARTY.meReady);
+    const o = $('ptagOther'); o.style.display = PARTY.other ? '' : 'none'; if (PARTY.other) ptagPlace(o, 2.15, PARTY.name, PARTY.ready);
+  }
+
   // ---- Third-person body: the same humanoid with the equipped skin, wrap, backpack and the held weapon; shown only in third person ----
   const tpEyeMat = new THREE.MeshBasicMaterial({ color: 0x14161c }), tpMats = makeSkinMats(), TPM = makeHumanoid(role => role === 'eye' ? tpEyeMat : tpMats[role]), TPX = makeExtras(TPM);
   const tpRoot = new THREE.Group(); tpRoot.add(TPM.root); tpRoot.visible = false; scene.add(tpRoot);
@@ -6357,6 +6579,7 @@
     heroFlip += (heroFlipT - heroFlip) * 0.1;
     hero.rotation.y = heroFlip + lkSpin + Math.sin(t * 0.5) * 0.06; if (lkGunPivot.visible) lkGunPivot.rotation.y = lkSpin + t * 0.35;
     HM.body.scale.y = 1 + Math.sin(t * 1.6) * 0.006; HM.head.rotation.y = Math.sin(t * 0.6) * 0.1; HM.head.rotation.x = Math.sin(t * 0.9) * 0.03;      // breathing + a slight head turn
+    partnerTick(t);
     heroPivot.position.y = 1.2 + Math.sin(t * 1.6) * 0.007; heroPivot.rotation.z = -0.3 + Math.sin(t * 1.1) * 0.012; poseHero();                      // rifle sway; hands re-solved onto it
     glow.material.opacity = 0.11 + Math.sin(t * 2) * 0.025;
     if (heroTrail) { // contrail preview: the hero hangs in place while puffs rise away behind it (the descent seen from the character's side)
@@ -6372,11 +6595,12 @@
   }
 
   // ---- Lobby: settings + career stats (saved in localStorage when available) ----
-  const DEFAULT_SETTINGS = { name: 'Player', bots: BOT_COUNT, difficulty: 'normal', sens: 1, fov: 75, vol: 0.6, gfx: 'low', view: 'first' };
+  const DEFAULT_SETTINGS = { name: 'Player', bots: BOT_COUNT, difficulty: 'normal', sens: 1, fov: 75, vol: 0.6, gfx: 'high', view: 'first', offline: false };
   const DEFAULT_STATS = { wins: 0, played: 0, draws: 0, kills: 0, best: 0, duelWins: 0 };
   function loadJSON(key, def) { try { return Object.assign({}, def, JSON.parse(localStorage.getItem(key))); } catch (e) { return Object.assign({}, def); } }
   function saveJSON(key, v) { if (key === 'br_stats' || key === 'br_ranked') cloudQueue(); try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } }
   const settings = loadJSON('br_settings', DEFAULT_SETTINGS);
+  if (!settings.gfxHigh) { settings.gfx = 'high'; settings.gfxHigh = true; saveJSON('br_settings', settings); }   // one time: everyone moves to High (shadows on); the Graphics option in Settings still switches them off, and that choice is kept from then on
   const stats = loadJSON('br_stats', DEFAULT_STATS);
   if (settings.gfx !== 'high') settings.gfx = 'low'; // shadows are off unless High is chosen
   if (settings.view !== 'third') settings.view = 'first'; // new players start in first person
@@ -6397,7 +6621,7 @@
   $('rpClose').addEventListener('click', () => { $('rankPanel').classList.remove('open'); });
   $('verBtn').addEventListener('click', () => { $('verPanel').classList.add('open'); });
   $('verClose').addEventListener('click', () => { $('verPanel').classList.remove('open'); });
-  const inName = $('inName'), inSens = $('inSens'), inFov = $('inFov'), inGfx = $('inGfx'), inView = $('inView');
+  const inName = $('inName'), inSens = $('inSens'), inFov = $('inFov'), inGfx = $('inGfx'), inView = $('inView'), inOffline = $('inOffline');
   const sensVal = $('sensVal'), fovVal = $('fovVal'), inVol = $('inVol'), volVal = $('volVal');
   const tabsEl = $('tabs'), coinCount = $('coinCount'), shopFeat = $('shopFeat'), shopGrid = $('shopGrid'), shopFilters = $('shopFilters'), shopDetail = $('shopDetail'), shopBal = $('shopBal');
 
@@ -6449,7 +6673,7 @@
     lkView.back = lkView.wrap = false; previewId = id; ov = { wrap: '', backpack: '', glider: '', contrail: '' }; descentPrev = false; applyLobby();
     hero.rotation.y = Math.PI; stage.position.set(0, 0, 0); stage.scale.set(1, 1, 1); glow.visible = platform.visible = ring.visible = false; heroTrail.grp.visible = false;
     const mvis = lobbyMeteor.group.visible, fl = lobbyFlare.intensity; lobbyMeteor.group.visible = false; lobbyFlare.intensity = 0; const fvis = lobbyFall.visible; lobbyFall.visible = false; // (thumbnails show the skin only)
-    renderer.setRenderTarget(snapRT); renderer.setClearColor(0x000000, 0); renderer.clear(); renderer.render(lobbyScene, snapCam);
+    const _pvis = partner.visible; partner.visible = false; renderer.setRenderTarget(snapRT); renderer.setClearColor(0x000000, 0); renderer.clear(); renderer.render(lobbyScene, snapCam); partner.visible = _pvis;
     lobbyMeteor.group.visible = mvis; lobbyFlare.intensity = fl; lobbyFall.visible = fvis;
     const buf = new Uint8Array(W * H * 4); renderer.readRenderTargetPixels(snapRT, 0, 0, W, H, buf);
     renderer.setRenderTarget(null); renderer.setClearColor(sv.cc, sv.ca);
@@ -6498,7 +6722,7 @@
     else if (e.sk && e.sk.bp) btn = '<button disabled>BATTLE PASS — TIER ' + REWARD_BY_ID[e.sk.bp].tier + '</button>';
     else btn = '<button data-act="buy"' + (poor ? ' disabled' : '') + '>BUY — ' + e.price + (e.price === 1 ? ' COIN' : ' COINS') + '</button>';
     const desc = e.it ? e.it.desc : e.r ? e.r.desc : e.sk ? (e.sk.bp ? 'A battle-pass skin.' : 'A character skin.') : 'Your starting look for this slot.';
-    shopDetail.innerHTML = '<div class="dtx"><div class="dn">' + e.name.toUpperCase() + '</div><div class="dc">' + SHOP_CATS[e.cat].toUpperCase() + (e.type === 'bp' ? ' • BATTLE PASS ITEM' : '') + ' • ' + (st[0] === 'eq' ? 'EQUIPPED' : ownedNow ? 'OWNED' : e.sk && e.sk.bp ? 'BATTLE PASS' : e.price + ' COINS') + '</div><div class="dd">' + desc + '</div>' + (poor ? '<div class="dp">Not enough coins — you need ' + (e.price - progress.coins) + ' more (win a match for +1).</div>' : '') + '</div>' + btn + '<button class="alt" data-act="reset">CANCEL PREVIEW</button>';
+    shopDetail.innerHTML = '<div class="dtx"><div class="dn">' + e.name.toUpperCase() + '</div><div class="dc">' + SHOP_CATS[e.cat].toUpperCase() + (e.type === 'bp' ? ' • BATTLE PASS ITEM' : '') + ' • ' + (st[0] === 'eq' ? 'EQUIPPED' : ownedNow ? 'OWNED' : e.sk && e.sk.bp ? 'BATTLE PASS' : e.price + ' COINS') + '</div><div class="dd">' + desc + '</div>' + (poor ? '<div class="dp">Not enough coins — you need ' + (e.price - progress.coins) + ' more (earn coins from Battle Pass tiers 5, 10, 15, 20, 25).</div>' : '') + '</div>' + btn + '<button class="alt" data-act="reset">CANCEL PREVIEW</button>';
   }
   function shopPreview(id) { // preview one item on the hero (never buys or equips); null restores the saved look
     const e = id ? entryById(id) : null; shopSel = e ? e.id : null; ov = {}; descentPrev = false; previewId = progress.equipped;
@@ -6536,6 +6760,7 @@
   const wrapCss = r => 'repeating-linear-gradient(45deg,' + hex(r.wrap[0]) + ' 0 8px,' + hex(r.wrap[1]) + ' 8px 16px)';
   function thumb(r) {
     if (r.cat === 'banner') return '<div class="rthumb" style="background:' + r.bg + '"></div>';
+    if (r.cat === 'coins') return '<div class="rthumb"><span class="coin" style="width:34px;height:34px"></span><b style="font-size:13px;color:#ffd24a">x' + r.coins + '</b></div>';
     if (r.cat === 'wrap') return '<div class="rthumb" style="background:' + wrapCss(r) + '"></div>';
     if (r.cat === 'skin') { const k = SKIN_BY_ID[r.skin]; return '<div class="rthumb" style="background:linear-gradient(' + hex(k.shirt) + ' 0 50%,' + hex(k.pants) + ' 50%)">' + SVG.person.replace(/#ddd/, hex(k.tone || 0xe0b48a)).replace(/#aaa/, hex(k.shirt)).replace(/#888/g, hex(k.pants)) + '</div>'; }
     if (r.cat === 'contrail' || r.cat === 'glider' || r.cat === 'backpack') return '<div class="rthumb">' + entThumb({ type: 'bp', cat: r.cat, id: r.key || '', r }) + '</div>';
@@ -6556,9 +6781,9 @@
     pXpBar.style.width = (done ? 100 : into / PASS_XP * 100) + '%';
     pXpText.textContent = done ? 'PASS COMPLETE — ' + PASS_MAX_XP + ' XP' : into + ' / ' + PASS_XP + ' XP to tier ' + (lv + 1);
     pTrack.innerHTML = REWARDS.map(r => {
-      const claimed = pass.claimed.includes(r.id), avail = !claimed && r.tier <= lv, eq = claimed && isEquipped(r);
+      const claimed = pass.claimed.includes(r.id), avail = !claimed && earned(r), eq = claimed && isEquipped(r);
       let st;
-      if (claimed) st = eq ? '<button disabled data-act="none">EQUIPPED</button>' : '<button data-act="equip">EQUIP</button>';
+      if (claimed) st = r.coins ? '' : eq ? '<button disabled data-act="none">EQUIPPED</button>' : '<button data-act="equip">EQUIP</button>';
       else if (avail) st = '<button data-act="claim">CLAIM</button>';
       else st = '<div class="rs">' + SVG.lock + 'LOCKED</div>';
       return '<div class="rc ' + (claimed ? 'claimed' : avail ? 'avail' : 'locked') + (passSel === r.id ? ' sel' : '') + '" data-id="' + r.id + '"><span class="rt">' + r.tier + '</span>' + thumb(r) +
@@ -6566,13 +6791,13 @@
     }).join('');
     const r = REWARD_BY_ID[passSel];
     if (r) {
-      const claimed = pass.claimed.includes(r.id), avail = !claimed && r.tier <= lv, eq = claimed && isEquipped(r), n = passClaimable().length;
+      const claimed = pass.claimed.includes(r.id), avail = !claimed && earned(r), eq = claimed && isEquipped(r), n = passClaimable().length;
       let act;
-      if (claimed) act = eq ? '<button disabled>EQUIPPED</button>' : '<button data-act="equip">EQUIP</button>';
+      if (claimed) act = r.coins ? '<button disabled>CLAIMED</button>' : eq ? '<button disabled>EQUIPPED</button>' : '<button data-act="equip">EQUIP</button>';
       else if (avail) act = '<button data-act="claim">CLAIM</button>';
       else act = '<button disabled>LOCKED</button><div class="why">Reach tier ' + r.tier + ' — ' + ((r.tier * PASS_XP) - pass.xp) + ' XP to go.</div>';
       pDetail.innerHTML = '<div class="dt">' + PASS_CATS[r.cat].toUpperCase() + ' • TIER ' + r.tier + '</div><h3>' + r.name + '</h3><p>' + r.desc + (WEARABLE[r.cat] && !claimed ? ' (Previewing)' : '') + '</p>' + act +
-        (claimed && eq ? '<button class="alt" data-act="default">USE DEFAULT ' + PASS_CATS[r.cat].toUpperCase() + '</button>' : '') +
+        (claimed && eq && !r.coins ? '<button class="alt" data-act="default">USE DEFAULT ' + PASS_CATS[r.cat].toUpperCase() + '</button>' : '') +
         (n > 1 ? '<button class="alt" data-act="claimall">CLAIM ALL (' + n + ')</button>' : '');
       let ctr = '';
       const bg = r.cat === 'banner' ? r.bg : bannerOf(pass.eq.banner), ic = r.cat === 'icon' ? SVG[r.icon] : iconOf(pass.eq.icon), tt = r.cat === 'title' ? r.name : passTitle();
@@ -6611,7 +6836,7 @@
   pDetail.addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (b && passSel) passAction(b.dataset.act, passSel); });
   pCenter.addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (b && passSel) passAction(b.dataset.act, passSel); });
   function syncLobby() {
-    inName.value = settings.name;
+    inName.value = settings.name; inOffline.checked = !!settings.offline;
     inSens.value = settings.sens; inFov.value = settings.fov; inVol.value = settings.vol; inGfx.value = settings.gfx; inView.value = settings.view;
     volVal.textContent = Math.round(settings.vol * 100) + '%';
     sensVal.textContent = Number(settings.sens).toFixed(1) + 'x'; fovVal.textContent = settings.fov + '°';
@@ -6622,7 +6847,7 @@
     refreshCoins(); renderShop(); renderPCard(); refreshPassBadge();
   }
   function readSettings() {
-    settings.name = inName.value.trim().slice(0, 12) || 'Player';
+    settings.name = inName.value.trim().slice(0, 12) || 'Player'; settings.offline = inOffline.checked; if (typeof onlineRetrack === 'function') onlineRetrack();
     settings.sens = +inSens.value; settings.fov = +inFov.value; settings.vol = +inVol.value; settings.gfx = inGfx.value === 'high' ? 'high' : 'low'; settings.view = inView.value === 'third' ? 'third' : 'first'; camMode = settings.view;
     saveJSON('br_settings', settings);
     applySettings(); setVolume(); syncLobby();
@@ -6641,6 +6866,7 @@
     if (name === 'board') lbLoad();
   }
   function showLobby() {
+    MODE = MODES.solos; if (ONLINE.on || LB.ch) duosCleanup();
     cleanupVictory(); clearInputs();
     clearEffects();
     hotbar.style.display = 'none';
@@ -6752,7 +6978,7 @@
   [['modeQuick', 'quick'], ['modeRanked', 'ranked']].forEach(([id, mode]) => $(id).addEventListener('click', () => {
     initAudio(); sfx('click'); ranked.mode = mode; saveRanked(); refreshRankUI();
   }));
-  [inName, inSens, inFov, inVol, inGfx, inView].forEach(el => el.addEventListener(el.type === 'range' || el.type === 'text' ? 'input' : 'change', readSettings));
+  [inName, inSens, inFov, inVol, inGfx, inView, inOffline].forEach(el => el.addEventListener(el.type === 'range' || el.type === 'text' ? 'input' : 'change', readSettings));
   $('resetStats').addEventListener('click', () => {
     initAudio(); sfx('click'); Object.assign(stats, DEFAULT_STATS); saveJSON('br_stats', stats); syncLobby(); });
   // ---- Map rotation: alternates each time a match actually starts; opening menus never advances it ----
@@ -6794,6 +7020,8 @@
   //   track: aim turn speed (rad/s) | aggr: chance range to engage a sighting | fight: seconds before a stalled fight is broken off | cover: how often a hurt / reloading bot ducks behind cover
   //   pursue: seconds a bot chases the spot where it last SAW its target (never tracks through walls) | pause: delay between bursts | strafe: seconds between strafe changes
   const BOT_PROFILES = {
+    cannonMiss: true,   // for now bots always MISS with the Hand Cannon, at every rank and in Quick Match (set to false to use cannonErr instead)
+    cannonErr: 0.45,    // the Hand Cannon's fixed aim error for every rank, used when cannonMiss is false
     pistolErrMult: 1.8, // pistols are sloppier than every other gun: aim error x1.8 at every rank (and in Quick Match)
     quick: { name: 'Normal', err: 0.15, rmin: 0.6, rmax: 1.2, sight: 55, sightPistol: 20, track: Infinity, aggr: [0.25, 0.65], fight: 7, cover: 0, pursue: 0, pause: [0.8, 1.6], strafe: [1, 2.5] },
     ranks: [
@@ -6857,7 +7085,7 @@
   }
   startBtn.addEventListener('click', () => {
     initAudio(); sfx('click');
-    readSettings();
+    readSettings(); MODE = MODES.solos;
     beginMatch();
     renderer.domElement.requestPointerLock(); // state becomes 'playing' when the lock is granted
   });
@@ -6870,7 +7098,6 @@
   });
 
   // ---- UI ----
-  const CONTROLS = 'WASD move • Mouse look • Left click shoot • 1-5 inventory • I rearrange • E interact (swaps when full) • R reload • Hold G: grenade arc • Right-click or Q: scope in / out (sniper) • C crouch • V camera\nSpace: jump (hold with a jetpack to fly) • Esc: pause';
 
   function showOverlay(title, msg, btnText) {
     titleEl.textContent = title; msgEl.textContent = msg; btn.textContent = btnText;
@@ -6889,7 +7116,7 @@
   function setState(s) {
     state = s;
     if (s === 'playing') { hideOverlay(); onMatchStart(); lastTime = performance.now(); if (actx && actx.state === 'suspended') actx.resume(); }
-    else if (s === 'paused') showOverlay('Paused', (DUEL.on ? 'DUEL IN PROGRESS — your opponent can still hit you while you are paused.\n\n' : '') + CONTROLS, 'Resume');
+    else if (s === 'paused') showOverlay('Paused', (DUEL.on ? 'DUEL IN PROGRESS — your opponent can still hit you while you are paused.' : ONLINE.on ? 'ONLINE MATCH IN PROGRESS — the game keeps running while you are paused, so you can still be hit.' : ''), 'Resume');
   }
   function pause() {
     if (state !== 'playing' || (DIR && DIR.lock)) return;
@@ -7018,10 +7245,17 @@
     g.fillStyle = '#ffd400'; g.strokeStyle = '#000'; g.lineWidth = 1;
     g.beginPath(); g.moveTo(0, -6); g.lineTo(4.5, 5); g.lineTo(0, 2.5); g.lineTo(-4.5, 5); g.closePath(); g.fill(); g.stroke();
     g.restore();
+    if (MODE.downs) for (const m of matesOf(p)) if (m.alive) { g.fillStyle = m.downed ? '#ee3333' : '#36e0ff'; g.strokeStyle = '#000'; g.lineWidth = 1; g.beginPath(); g.arc(clamp(X(m.x), 0, MM), clamp(X(m.z), 0, MM), 4.5, 0, Math.PI * 2); g.fill(); g.stroke(); }   // teammate
     g.fillStyle = '#fff'; g.font = '12px ' + FONT_STACK; g.fillText('N', MM / 2 - 3, 11);
   }
 
   // Two firearm slots (icon + key + infinite ammo), selected slot highlighted.
+  function specHotbar() { // while spectating, the hotbar shows the teammate's items
+    if (!TEAM.spectate || player.alive) return null;
+    const m = matesOf(player).find(x => x.alive); if (!m) return null;
+    const v = m.remoteHuman ? m.specInv : m; if (!v || !v.slots) return null;
+    return { slots: v.slots, cnt: v.cnt, mag: v.mag, sel: v.sel, active: v.sel, reloadT: 0, jetpack: false, fuel: 0, weapon: v.weapon === undefined ? m.weapon : v.weapon, heat: 0, overheated: false, spin: 1 };
+  }
   function updateHotbar(p) {
     slotEls.forEach((el, i) => {
       const id = p.slots[i], gun = isGun(id);
@@ -7046,11 +7280,39 @@
     }
   }
 
+  const _tgv = new THREE.Vector3();
+  function updateTeamHud() { // teammate panel, floating name tag, revive bar and the "you are down" message (Duos only)
+    const on = MODE.downs && state !== 'lobby';
+    const vis = (el, v) => { const x = v ? 'visible' : 'hidden'; if (el._v !== x) { el._v = x; el.style.visibility = x; } };
+    if (!on) { vis(teamHud, 0); vis(tmTag, 0); vis(revBar, 0); vis(downMsg, 0); return; }
+    const m = matesOf(player)[0], p = player;
+    vis(teamHud, !!m);
+    if (m) {
+      const st = !m.alive ? 'ELIMINATED' : m.downed ? 'DOWN ' + Math.ceil(m.downT) + 's' + (REV.tgt === m ? ' • REVIVING' : m.reviveP > 0 ? ' • BEING REVIVED' : '') : '';
+      const h = '<div class="tn"><span>' + m.name.replace(/[<>&]/g, '') + '</span><small>' + st + '</small></div><div class="tb"><i style="width:' + (m.alive ? Math.max(0, m.hp) / MAX_HEALTH * 100 : 0) + '%;background:' + (m.downed ? '#ee3333' : '#33dd55') + '"></i></div><div class="tb"><i style="width:' + (m.alive ? Math.max(0, m.shield) / MAX_SHIELD * 100 : 0) + '%;background:#4fb4ff"></i></div>';
+      if (teamHud._h !== h) { teamHud._h = h; teamHud.innerHTML = h; }
+      const show = m.alive && !TEAM.spectate && p.alive;
+      if (show) {
+        _tgv.set(m.x, m.y + (m.bh || BODY_H) + 0.45, m.z).project(camera);
+        if (_tgv.z < 1 && Math.abs(_tgv.x) < 1 && Math.abs(_tgv.y) < 1) { tmTag.style.left = ((_tgv.x + 1) / 2 * innerWidth) + 'px'; tmTag.style.top = ((1 - _tgv.y) / 2 * innerHeight) + 'px'; setText(tmTag, m.name + (m.downed ? ' (DOWN)' : '')); vis(tmTag, 1); } else vis(tmTag, 0);
+      } else vis(tmTag, 0);
+    } else vis(tmTag, 0);
+    // revive bar: your revive progress, or "hold F" when you are next to a downed teammate, or the progress of the teammate reviving you
+    let label = '', prog = 0;
+    if (REV.tgt) { label = 'Reviving ' + REV.tgt.name; prog = REV.t / MODE.reviveSec; }
+    else if (p.downed && m && m.alive && m.reviveP > 0) { label = m.name + ' is reviving you'; prog = m.reviveP / MODE.reviveSec; }
+    else if (m && p.alive && !p.downed && m.alive && m.downed && Math.hypot(m.x - p.x, m.z - p.z) < 2.6) label = 'Hold F to revive ' + m.name;
+    vis(revBar, !!label);
+    if (label) { setText(revBar.querySelector('span'), label); revBar.querySelector('i').style.width = Math.min(100, prog * 100) + '%'; }
+    const dm = p.downed ? 'YOU ARE DOWN\nbleeding out in ' + Math.ceil(p.downT) + 's' : TEAM.spectate ? 'SPECTATING ' + (m ? m.name : '') : '';
+    vis(downMsg, !!dm); if (dm) setText(downMsg, dm);
+  }
   function updateHud() {
     drawMinimap();
     applyFx();
     const p = player, aliveN = contestants.filter(c => c.alive).length;
-    setText(hud, DUEL.on ? duelScoreText() : 'Alive: ' + aliveN + '/' + total);
+    setText(hud, DUEL.on ? duelScoreText() : MODE.downs ? 'Alive: ' + aliveN + '/' + total + '  •  Teams left: ' + new Set(contestants.filter(c => c.alive).map(c => c.teamId)).size : 'Alive: ' + aliveN + '/' + total);
+    updateTeamHud();
     setText(kcEl, String(p.kills));
     kcEl.style.transform = killPopT > 0 ? 'scale(1.9)' : 'scale(1)';
     kcEl.style.color = killPopT > 0 ? '#ffd24a' : '#fff';
@@ -7067,7 +7329,7 @@
     shFill.style.width = (Math.max(p.shield, 0) / MAX_SHIELD * 100) + '%';
     hpFill.style.background = p.hp > 50 ? '#33dd55' : p.hp > 25 ? '#ffb020' : '#ee3333';
     crouchInd.style.visibility = p.crouching && p.state === 'ground' ? 'visible' : 'hidden';
-    updateHotbar(p);
+    updateHotbar(specHotbar() || p);
     invHelpEl.style.display = invOpen ? 'block' : 'none';
     setText(invHelpEl, invFrom < 0 ? 'INVENTORY — press a spot number (1-5) to pick up its item • I closes' : 'Now press the spot to swap / move to • X drops it • same number cancels');
     let z;
@@ -7116,7 +7378,7 @@
       e.preventDefault();
       keys.Space = true;
       if (player.state === 'plane') jump(player);
-      else if (player.state === 'ground' && player.alive && !player.jumping && !player.mantle && !e.repeat) {
+      else if (player.state === 'ground' && player.alive && !player.downed && !player.jumping && !player.mantle && !e.repeat) {
         if (player.crouching && !canStand(player)) return; // no room to stand and jump
         player.crouchWant = false; if (player.crouching) { player.crouching = false; player.bh = BODY_H; }
         player.jumping = true; player.vy = JUMP_V; player.baseY = player.y; sfx('hop');
@@ -7150,6 +7412,14 @@
   });
   window.addEventListener('blur', pause);
   document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+  // A hidden tab gets no animation frames, so an online match is stepped from a timer instead (browsers slow timers in background tabs; the step catches up in small slices so bots and snapshots keep going, just in coarser bursts)
+  let bgLast = 0;
+  setInterval(() => {
+    if (!document.hidden || !ONLINE.on || state !== 'paused') { bgLast = 0; return; }
+    const now = performance.now(); let el = bgLast ? Math.min((now - bgLast) / 1000, 5) : 0; bgLast = now;
+    while (el > 0.001) { const d = Math.min(el, MAX_DT); update(d); el -= d; if (state !== 'paused') break; }
+  }, 200);
+  document.addEventListener('mousedown', () => { if (ONLINE.on && state === 'playing' && document.pointerLockElement !== renderer.domElement) { initAudio(); try { renderer.domElement.requestPointerLock(); } catch (e) { /* refused */ } } });   // an online match starts without a click, so the first click takes the mouse
   document.addEventListener('mousemove', e => {
     if (state !== 'playing' || document.pointerLockElement !== renderer.domElement) return;
     const sens = MOUSE_SENS * settings.sens * camera.fov / NORMAL_FOV;
@@ -7191,7 +7461,7 @@
     plane.visible = px < HALF + 35;
 
     for (const c of contestants) {
-      if (!c.alive) continue;
+      if (!c.alive || c.netCtl) continue;   // (a contestant driven by the other machine is placed by its snapshots)
       if (c.state === 'plane') {
         c.x = px; c.z = 0; c.y = PLANE_ALT;
         if (c.isPlayer ? planeT >= PLAYER_AUTO_JUMP : planeT >= c.jumpAt) jump(c);
@@ -7205,14 +7475,18 @@
     setDrone(player.alive && player.state === 'plane');
     if (stormStart !== null) {
       for (const c of contestants) {
-        if (c.alive && c.state === 'ground' && zDist(c.x, c.z) > zoneR) damage(c, zoneDps * dt, null);
+        if (c.alive && !c.netCtl && c.state === 'ground' && zDist(c.x, c.z) > zoneR) damage(c, zoneDps * dt, null);
       }
     }
     if (player.alive && player.state === 'ground' && stormStart !== null && zDist(player.x, player.z) > zoneR) {
       warnT -= dt; if (warnT <= 0) { warnT = 1; sfx('warn'); }
     }
-    for (const b of bots) if (b.alive && b.state === 'ground' && !b.remote) updateBot(b, dt);
-    if (player.alive) updatePlayer(dt);
+    if (ONLINE.on) onlineApply(dt);
+    for (const b of bots) if (b.alive && b.state === 'ground' && !b.remote) { // (online host: bots far from both humans think less often and with a larger step)
+      if (ONLINE.on && ONLINE.host && !ONLINE.nearIds.has(b.id)) { const k = 3 + ONLINE.guard.level; if ((PERF.n + b.id) % k === 0) updateBot(b, dt * k); } else updateBot(b, dt);
+    }
+    teamTick(dt);
+    if (player.alive) updatePlayer(dt); else if (TEAM.spectate) spectateCam();
     updateEffects(dt); updateGrenades(dt); updateRockets(dt); updateShockFx(dt); updateArc(); updateRope();
     if (dmgPending > 0) { // damage taken from shots this tick; accumulate numbers within ~1s
       dmgSum = dmgT > 0 ? dmgSum + dmgPending : dmgPending;
@@ -7221,6 +7495,7 @@
     }
 
     updateDying(dt);
+    if (ONLINE.on) onlineTick(dt);
     for (const b of bots) {
       if (!b.alive) continue;
       b.mesh.visible = b.state !== 'plane';
@@ -7253,7 +7528,7 @@
     storm.scale.set(s, 1, s); storm.position.x = zoneCx; storm.position.z = zoneCz;
     storm.visible = zoneR < 138; // the wall only matters once it is inside the map
     resolveTick();
-    if (state === 'playing' && !finalTwoShown && player.alive && total > 2 && contestants.filter(c => c.alive).length === 2) {
+    if (state === 'playing' && !finalTwoShown && !MODE.downs && player.alive && total > 2 && contestants.filter(c => c.alive).length === 2) {
       finalTwoShown = true; showBanner('FINAL TWO', 3); sfx('final');
     }
     updateHud();
@@ -7272,10 +7547,25 @@
     }
     renderer.render(scene, camera);
   }
+  // FPS and ping next to the minimap (shown with the rest of the in-game HUD): FPS counts drawn frames over half a second; ping is the round trip of a tiny request to the game's own server every 4 s ("-" when offline / opened from a file)
+  const PERF = { n: 0, t: 0, fps: 0, ping: -2, probeT: 0 };
+  function perfTick(now) {
+    PERF.n++;
+    if (now - PERF.t < 500) return;
+    PERF.fps = Math.round(PERF.n * 1000 / (now - PERF.t)); PERF.n = 0; PERF.t = now;
+    if (perfEl.style.display !== 'block') return;
+    const fc = PERF.fps >= 50 ? '#5ee27a' : PERF.fps >= 30 ? '#ffd24a' : '#ff5a4a', pc = PERF.ping < 0 ? '#9fb0c4' : PERF.ping < 60 ? '#5ee27a' : PERF.ping < 120 ? '#ffd24a' : '#ff5a4a';
+    perfEl.innerHTML = '<b style="color:' + fc + '">' + PERF.fps + ' FPS</b> &nbsp;<b style="color:' + pc + '">' + (PERF.ping < 0 ? '- ms' : PERF.ping + ' ms') + '</b>';
+    if (now - PERF.probeT > 4000 && !DIRECTOR && /^https?:$/.test(location.protocol) && !document.hidden) {
+      PERF.probeT = now; const t0 = performance.now();
+      fetch(location.pathname, { method: 'HEAD', cache: 'no-store' }).then(() => { PERF.ping = Math.round(performance.now() - t0); }).catch(() => { PERF.ping = -1; });
+    }
+  }
   function loop(now) {
     requestAnimationFrame(loop);
     if (DIR && DIR.lock) return;   // director mode drives its own frames
-    if (state === 'playing') {
+    perfTick(now);
+    if (state === 'playing' || (state === 'paused' && ONLINE.on)) {   // an online match keeps running while you are paused (your partner and the host's bots depend on it)
       const dt = Math.min((now - lastTime) / 1000, MAX_DT);
       lastTime = now;
       update(dt);
@@ -7315,10 +7605,26 @@
     return [0, tz];
   }
   // ---- Online player count (lobby only): everyone sitting in the lobby joins one Realtime presence channel; the badge counts the connected tabs. Hidden if the service is unreachable. ----
-  const ONL = { ch: null, id: Math.random().toString(36).slice(2, 10), t: 0 }, onlBadge = $('onlBadge');
-  function onlineShow(n) { onlBadge.textContent = '\u25CF ' + n + ' ONLINE'; onlBadge.classList.toggle('on', n > 0); }
+  const ONL = { ch: null, id: Math.random().toString(36).slice(2, 10), t: 0 }, onlBadge = $('onlBadge'), onlTxt = $('onlTxt'), onlList = $('onlList');
+  // Clicking the badge lists who is online: account usernames, or "Guest" plus a number (the same guest name the 1v1 duel uses). "Appear offline" (Settings) keeps you in the count but hides your name.
+  const onlineName = () => String((CL && CL.username) || (DUEL.guest = DUEL.guest || 'Guest' + (100 + ((Math.random() * 900) | 0)))).slice(0, 16);
+  const onlineMeta = () => ({ name: settings.offline ? '' : onlineName(), t: Date.now() });
+  function onlineRender() {
+    const ch = ONL.ch; if (!ch) return;
+    const st = ch.presenceState(), names = []; let hidden = 0, me = '';
+    Object.keys(st).forEach(k => { const m = (st[k] && st[k][0]) || {}; if (m.name) { if (k === ONL.id) me = m.name; else names.push(m.name); } else hidden++; });
+    names.sort((a, b) => a.localeCompare(b));
+    const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    onlList.innerHTML = (me ? '<div class="you">' + esc(me) + ' (you)</div>' : '') + names.map(n => '<div>' + esc(n) + '</div>').join('') + (hidden ? '<div class="more">+ ' + hidden + ' appearing offline' + (settings.offline ? ' (including you)' : '') + '</div>' : '');
+  }
+  function onlineRetrack() { const ch = ONL.ch; if (ch) { try { ch.track(onlineMeta()); } catch (e) { /* not connected yet */ } } }
+  function onlineShow(n) { onlTxt.textContent = '\u25CF ' + n + ' ONLINE'; onlBadge.classList.toggle('on', n > 0); if (n <= 0) onlBadge.classList.remove('open'); onlineRender(); }
+  function onlineToggle(open) { const o = open === undefined ? !onlBadge.classList.contains('open') : open; if (o && !onlBadge.classList.contains('on')) return; onlBadge.classList.toggle('open', o); onlBadge.setAttribute('aria-expanded', o); if (o) onlineRender(); }
+  onlBadge.addEventListener('click', e => { if (e.target.closest('.onlist')) return; if (typeof sfx === 'function') sfx('click'); onlineToggle(); });
+  onlBadge.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onlineToggle(); } else if (e.key === 'Escape') onlineToggle(false); });
+  document.addEventListener('click', e => { if (!onlBadge.contains(e.target)) onlineToggle(false); });
   function onlineStop() {
-    clearTimeout(ONL.t); ONL.t = 0; onlBadge.classList.remove('on');
+    clearTimeout(ONL.t); ONL.t = 0; onlBadge.classList.remove('on', 'open');
     const ch = ONL.ch; ONL.ch = null;
     if (ch) { try { const sb = duelClient(); ch.untrack && ch.untrack(); sb && sb.removeChannel(ch); } catch (e) { /* ignore */ } }
   }
@@ -7332,11 +7638,15 @@
         const ch = sb.channel('lobby-online', { config: { presence: { key: ONL.id } } });
         ONL.ch = ch;
         ch.on('presence', { event: 'sync' }, () => { if (ONL.ch === ch) onlineShow(Object.keys(ch.presenceState()).length); })
-          .subscribe(st => { if (st === 'SUBSCRIBED' && ONL.ch === ch) ch.track({ t: Date.now() }); else if ((st === 'CHANNEL_ERROR' || st === 'TIMED_OUT' || st === 'CLOSED') && ONL.ch === ch) onlBadge.classList.remove('on'); });
+          .subscribe(st => { if (st === 'SUBSCRIBED' && ONL.ch === ch) ch.track(onlineMeta()); else if ((st === 'CHANNEL_ERROR' || st === 'TIMED_OUT' || st === 'CLOSED') && ONL.ch === ch) onlBadge.classList.remove('on'); });
       } catch (e) { ONL.ch = null; }
     }, 1500);
   }
-  function duelClient() { // a second, anonymous client: Realtime (websockets) always connects straight to Supabase, never through the Netlify proxy
+  function duelClient() { // (test builds: ?netsim swaps in the same-browser channel)
+    if (typeof NETSIM !== 'undefined' && NETSIM) return SIMSB;
+    return duelClientLive();
+  }
+  function duelClientLive() { // a second, anonymous client: Realtime (websockets) always connects straight to Supabase, never through the Netlify proxy
     if (DUEL.sb) return DUEL.sb;
     try { if (!DIRECTOR && window.supabase && window.supabase.createClient) DUEL.sb = window.supabase.createClient(SB_DIRECT, SB_KEY, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'br_duel_auth' }, realtime: { params: { eventsPerSecond: 30 } } }); } catch (e) { DUEL.sb = null; }
     return DUEL.sb;
@@ -7768,8 +8078,9 @@
     } catch (er) { busy(false); authSay(authErrText(er)); }
   }
   async function cloudLogout() {
-    try { if (CL.dirty) await cloudPush(); } catch (e) { /* offline: signing out anyway */ }
-    try { await CL.sb.auth.signOut(); } catch (e) { /* signed out locally regardless */ }
+    try { if (CL.dirty) await Promise.race([cloudPush(), new Promise(r => setTimeout(r, 4000))]); } catch (e) { /* offline: signing out anyway */ }   // (a slow save never blocks logging out)
+    try { await Promise.race([CL.sb.auth.signOut({ scope: 'local' }), new Promise(r => setTimeout(r, 4000))]); } catch (e) { /* signed out locally regardless */ }   // 'local' ends this browser's session without needing the server (a failed server call used to leave the session in place)
+    try { Object.keys(localStorage).filter(k => /^sb-.*-auth-token/.test(k)).forEach(k => localStorage.removeItem(k)); } catch (e) { /* storage unavailable */ }   // belt and braces: the saved session must be gone before the reload
     ['br_progress', 'br_pass', 'br_stats', 'br_ranked', 'br_cloud_uid', 'br_cloud_ts', 'br_cloud_dirty'].forEach(lsDel); location.reload();   // the device goes back to a clean guest
   }
   function maybeAutoAuth() { if (CL.sb && CL.initDone && CL.newsDone && !CL.user && !CL.guest && !CL.autoShown && authEl.hidden) { CL.autoShown = true; authOpen('login'); } }
@@ -7779,7 +8090,7 @@
       setTimeout(() => {   // (not awaited inside the callback, as the library asks)
         if (ev === 'INITIAL_SESSION') CL.initDone = true;
         if (ev === 'PASSWORD_RECOVERY') { authOpen('recover'); return; }
-        if (CL.user) { if (!authEl.hidden && authMode !== 'recover') authClose(); cloudSync(); if (ev === 'SIGNED_IN' && CL.newsDone) newsOpenNow(); } else { CL.synced = ''; CL.username = ''; }
+        if (CL.user) { if (!authEl.hidden && authMode !== 'recover') authClose(); cloudSync(); } else { CL.synced = ''; CL.username = ''; }
         acctRender(); maybeAutoAuth();
       }, 0);
     });
@@ -7821,8 +8132,8 @@
   function lbSwitch(mode) { if (lbMode === mode) return; lbMode = mode; $('lbTabRank').classList.toggle('on', mode === 'rank'); $('lbTabDuel').classList.toggle('on', mode === 'duel'); $('lbTabRank').setAttribute('aria-selected', mode === 'rank'); $('lbTabDuel').setAttribute('aria-selected', mode === 'duel'); $('lbTable').innerHTML = ''; lbLoad(true); }
   $('lbTabRank').addEventListener('click', () => { sfx('click'); lbSwitch('rank'); }); $('lbTabDuel').addEventListener('click', () => { sfx('click'); lbSwitch('duel'); });
   $('lbRefresh').addEventListener('click', () => { sfx('click'); lbLoad(true); });
-  // ---- UPDATE / NEWS popup: one page for v2.0, shown automatically when the game opens and after a fresh log in, and reopened from the lobby's NEWS button ----
-  const newsEl = $('news'), newsPlay = $('newsPlay'), NEWS_VER = '2.0', NEWS_KEY = 'fl_news_seen';
+  // ---- UPDATE / NEWS popup: one page for v2.1, shown automatically ONE time per browser (see NEWS_KEY) and reopened from the lobby's NEWS button ----
+  const newsEl = $('news'), newsPlay = $('newsPlay'), NEWS_VER = '2.1', NEWS_KEY = 'fl_news_seen';
   let newsOpen = false, newsOpener = null;
   function newsClose() {
     if (!newsOpen) return;
@@ -7862,13 +8173,415 @@
       const g = buildGun(GUN_DEFS[W.CANNON], 'static'); g.scale.setScalar(GUN_DEFS[W.CANNON].scale * 4.6); g.rotation.y = -0.55; sc.add(g);
       cam.position.set(0, 0.1, 3); cam.lookAt(0, 0, 0); renderer.render(sc, cam);
     });
-    const tj = $('newsTrojan'); try { snapSkin('trojan'); if (snapCache.trojan) { tj.src = snapCache.trojan; tj.hidden = false; } } catch (er) { tj.hidden = true; }
-    newsShot($('newsCrater'), NW, NH, 0x9bd0ff, () => { // Mallfall Crater, from the Meadow Town map
-      const m0 = getMap(0); useMap(m0);
-      const cam = new THREE.PerspectiveCamera(48, NW / NH, 0.5, 400); cam.position.set(30, 22, 36); cam.lookAt(0, -2, 0);
-      m0.group.updateMatrixWorld(true); renderer.render(scene, cam);
+    newsShot($('newsDuos'), 440, 260, 0xf0c080, () => { // two characters side by side in the lobby (your character and a partner in the Trojan skin)
+      const keep = { pv: partner.visible, sk: PARTY.sk, ska: PARTY.skApplied, px: stage.position.x, py: stage.position.y, sc: stage.scale.x, ry: hero.rotation.y, fall: lobbyFall.visible, met: lobbyMeteor.group.visible, fl: lobbyFlare.intensity };
+      PARTY.sk = 'trojan'; applyPartner(); partner.visible = true; stage.position.set(0, 0, 0); stage.scale.set(1, 1, 1); hero.rotation.y = Math.PI - 0.55; lobbyFall.visible = false; lobbyMeteor.group.visible = false; lobbyFlare.intensity = 0;
+      const cam = new THREE.PerspectiveCamera(33, 440 / 260, 0.1, 80); cam.position.set(1.08, 1.2, 5.3); cam.lookAt(1.08, 0.98, 0);
+      renderer.render(lobbyScene, cam);
+      partner.visible = keep.pv; PARTY.sk = keep.sk; PARTY.skApplied = null; stage.position.set(keep.px, keep.py, 0); stage.scale.set(keep.sc, keep.sc, keep.sc); hero.rotation.y = keep.ry; lobbyFall.visible = keep.fall; lobbyMeteor.group.visible = keep.met; lobbyFlare.intensity = keep.fl;
     });
   }
+  // =====================================================================================================================
+  // ONLINE LOBBY + ONLINE DUOS (Supabase Realtime only: Presence for the lobby, Broadcast for the match; the host's browser runs the bots)
+  // =====================================================================================================================
+  const NETSIM = /[?&]netsim(?:[=&#]|$)/.test(location.search);   // developer / test only: carries the same channel API over BroadcastChannel so two tabs of one browser can play each other offline
+  class SimChannel {
+    constructor(name, cfg) { this.key = cfg.config.presence.key; this.bc = new BroadcastChannel('flsim:' + name); this.h = { presence: [], broadcast: {} }; this.peers = {}; this.meta = null; this.bc.onmessage = e => this.recv(e.data); }
+    on(type, filter, cb) { if (type === 'presence') this.h.presence.push(cb); else (this.h.broadcast[filter.event] = this.h.broadcast[filter.event] || []).push(cb); return this; }
+    subscribe(cb) { setTimeout(() => { cb('SUBSCRIBED'); this.post({ k: 'hello', id: this.key }); }, 30); return this; }
+    track(meta) { this.meta = meta; this.post({ k: 'pres', id: this.key, meta }); this.sync(); return Promise.resolve('ok'); }
+    untrack() { if (!this.meta) return; this.meta = null; this.post({ k: 'leave', id: this.key }); this.sync(); }
+    presenceState() { const st = {}; Object.keys(this.peers).forEach(k => { st[k] = [this.peers[k]]; }); if (this.meta) st[this.key] = [this.meta]; return st; }
+    send(m) { if (m && m.event) this.post({ k: 'bc', event: m.event, payload: m.payload }); return Promise.resolve('ok'); }
+    post(o) { try { this.bc.postMessage(o); } catch (e) { /* closed */ } }
+    recv(d) {
+      if (d.k !== 'bc' && d.id === this.key) return;
+      if (d.k === 'hello') { if (this.meta) this.post({ k: 'pres', id: this.key, meta: this.meta }); }
+      else if (d.k === 'pres') { this.peers[d.id] = d.meta; this.sync(); }
+      else if (d.k === 'leave') { delete this.peers[d.id]; this.sync(); }
+      else if (d.k === 'bc') (this.h.broadcast[d.event] || []).forEach(f => f({ payload: d.payload }));
+    }
+    sync() { this.h.presence.forEach(f => f()); }
+    close() { this.untrack(); const bc = this.bc; this.bc = { postMessage() {}, close() {} }; setTimeout(() => { try { bc.close(); } catch (e) { /* already closed */ } }, 100); }   // (closed a moment later so the leave message goes out first)
+  }
+  const SIMSB = { channel: (n, cfg) => new SimChannel(n, cfg), removeChannel: ch => { ch.close(); } };
+  const netSb = () => NETSIM ? SIMSB : duelClient();
+  const mulberry32 = seed => { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; };
+  function withSeed(seed, fn) { const old = Math.random; Math.random = mulberry32(seed); try { return fn(); } finally { Math.random = old; } }   // (loot, zone and drops must come out the same on both machines)
+
+  const LB = { poll: false, subscribed: false, wsT: 0, rd: {}, gone: {}, fullT: 0, open: false, ch: null, code: '', id: '', host: false, ready: false, t: 0, cfg: { mode: 'duosOnline', map: -1 }, status: 'idle', findT: 0, graceT: 0, lastN: 0, started: false };
+  const ONLINE = { on: false, ch: null, id: '', host: false, slot: 0, seed: 0, code: '', start: null, players: [], tickN: 0, acc: { p: 0, b: 0, z: 0, h: 0, ping: 0 }, seq: { p: 0, b: 0, z: 0 }, rx: { p: -1, b: -1, z: -1 }, last: { p: '', b: {}, hp: {} }, snaps: [], bsnap: {}, mateGone: 0, hostGone: 0, applying: false, uidN: 0,
+    st: { sent: 0, recv: 0, bytes: 0, ps: 0, rs: 0, bps: 0, t: 0, ping: 0 }, guard: { level: 0, low: 0, ok: 0 }, fps: 60, revActive: 0, farN: 0, nearIds: new Set() };
+  const SID = c => c.id >= 2 ? c.id : c.isPlayer ? ONLINE.slot : 1 - ONLINE.slot;   // the same id for the same contestant on both machines (bots keep their index; the two humans are slot 0 / 1)
+  const byS = s => s >= 2 ? contestants[s] : s === ONLINE.slot ? contestants[0] : contestants[1];
+  const lbCode = poll => { let c = poll ? DUEL_D[(Math.random() * DUEL_D.length) | 0] : DUEL_L[(Math.random() * DUEL_L.length) | 0]; for (let i = 1; i < 6; i++) c += DUEL_CHARS[(Math.random() * DUEL_CHARS.length) | 0]; return c; };   // a code that starts with a digit uses the school-friendly connection (ordinary web requests, for networks that block live connections)
+  const myName = () => String((CL && CL.username) || (settings.name && settings.name !== 'Player' ? settings.name : (DUEL.guest = DUEL.guest || 'Guest' + (100 + ((Math.random() * 900) | 0))))).replace(/[^\w .\-]/g, '').slice(0, 16) || 'Player';
+  const escH = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const modeOf = () => MODES[LB.cfg.mode] || MODES.duosOnline;
+
+  // ---------- lobby UI ----------
+  const olStyle = document.createElement('style');
+  olStyle.textContent = `#olobby { position: fixed; inset: 0; z-index: 56; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.55); font-family: var(--font); color: #fff; } #olobby[hidden], #olobby [hidden] { display: none !important; }
+    #olobby .ol-box { width: min(620px, 94vw); max-height: 94vh; overflow-y: auto; padding: 20px 24px; border-radius: 16px; border: 2px solid var(--cyan); background: linear-gradient(160deg, #0d1c36, #101a2e); }
+    #olobby h2 { margin: 0 0 8px; letter-spacing: 0.1em; font-size: 28px; } #olobby .ol-row { display: flex; gap: 10px; align-items: center; margin: 10px 0; flex-wrap: wrap; } #olobby .ol-code { font-size: 38px; letter-spacing: 0.25em; color: #ffd24a; } #olobby .ol-st { font-size: 14px; letter-spacing: 0.1em; color: #9fb0c4; } #olobby .ol-st.ok { color: #5ee27a; } #olobby .ol-st.bad { color: #ff7a6a; }
+    #olobby button, #olobby select, #olobby input { font-family: inherit; font-size: 18px; letter-spacing: 0.08em; padding: 8px 14px; border-radius: 8px; border: 2px solid var(--cyan); background: #12233f; color: #fff; cursor: pointer; } #olobby button:disabled { opacity: 0.4; cursor: default; } #olobby button.go { background: #ffd400; color: #111; border-color: #ffd400; } #olobby input { text-transform: uppercase; width: 150px; cursor: text; letter-spacing: 0.2em; text-align: center; }
+    #olobby .ol-cards { display: flex; gap: 12px; flex-wrap: wrap; } #olobby .ol-card { flex: 1 1 200px; min-height: 130px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.05); padding: 10px; text-align: center; } #olobby .ol-card.empty { color: #7f94ab; border-style: dashed; display: flex; align-items: center; justify-content: center; } #olobby .ol-card img { height: 78px; } #olobby .ol-card b { display: block; font-size: 20px; } #olobby .ol-badge { display: inline-block; padding: 1px 8px; border-radius: 6px; font-size: 12px; background: #ffd400; color: #111; margin-left: 6px; } #olobby .ol-rdy { color: #5ee27a; font-size: 14px; } #olobby .ol-nr { color: #ff9a6a; font-size: 14px; } #olobby .ol-msg { min-height: 1.4em; color: #ffd24a; }
+    #netDbg { position: fixed; left: 8px; bottom: 8px; z-index: 40; padding: 6px 9px; border-radius: 8px; background: rgba(0,0,0,0.6); color: #9bff9b; font: 12px/1.35 monospace; white-space: pre; pointer-events: none; display: none; }`;
+  document.head.appendChild(olStyle);
+  const olEl = document.createElement('div'); olEl.id = 'olobby'; olEl.hidden = true; olEl.setAttribute('role', 'dialog'); olEl.setAttribute('aria-modal', 'true');
+  olEl.innerHTML = '<div class="ol-box"><h2>ONLINE LOBBY</h2><div id="olStart"><div class="ol-row"><button id="olCreate" class="go">CREATE LOBBY</button><button id="olCreateP" title="For school networks that block live connections">SCHOOL-FRIENDLY LOBBY</button><span>or</span><input id="olCode" maxlength="6" placeholder="CODE" autocomplete="off" spellcheck="false"><button id="olJoin">JOIN</button></div></div>' +
+    '<div class="ol-msg" id="olMsg"></div>' +
+    '<div class="ol-row"><button id="olClose">CLOSE</button></div></div>';
+  document.body.appendChild(olEl);
+  const olQ = id => document.getElementById(id), olMsg = t => { olQ('olMsg').textContent = t || ''; };
+  const dbgEl = document.createElement('div'); dbgEl.id = 'netDbg'; document.body.appendChild(dbgEl);
+  const lobbyBtn = document.createElement('button'); lobbyBtn.type = 'button'; lobbyBtn.id = 'lobbyBtn'; lobbyBtn.textContent = 'ONLINE LOBBY'; lobbyBtn.style.cssText = $('duelBtn').style.cssText; $('duelBtn').after(lobbyBtn);
+  { const cs = document.createElement('style'); cs.textContent = '#lobbyBtn { display: block; width: 100%; margin-top: 8px; padding: 8px 0 6px; background: transparent; color: #fff; border: 2px solid #5ee27a; border-radius: 8px; font-family: inherit; font-size: 22px; letter-spacing: 0.1em; cursor: pointer; } #lobbyBtn:hover { background: rgba(94,226,122,0.15); }'; document.head.appendChild(cs); }
+
+  function lbPlayers() {
+    if (!LB.ch) return [];
+    const st = LB.ch.presenceState(), arr = [];
+    Object.keys(st).forEach(k => { const m = st[k] && st[k][st[k].length - 1]; if (m && m.u && !LB.gone[m.u]) arr.push(Object.assign({}, m, { r: m.u === LB.id ? LB.ready : !!LB.rd[m.u] })); });   // ready comes from broadcast messages, not from presence (re-tracking presence on every toggle was unreliable)
+    return arr.sort((a, b) => a.t - b.t || (a.u < b.u ? -1 : 1));
+  }
+  function lbMeta() { return { u: LB.id, n: myName(), sk: progress.equipped, h: LB.host, r: LB.ready, t: LB.t, cfg: LB.host ? LB.cfg : undefined, m: ONLINE.on ? 1 : 0 }; }
+  const lbTrack = () => { if (LB.ch) Promise.resolve(LB.ch.track(lbMeta())).catch(() => {}); };
+  function lbStatus(txt, cls) { const e = $('ppStat'); e.textContent = txt.toUpperCase(); e.className = 'pp-st ' + (cls || ''); LB.status = txt; }
+  function lbRender() {
+    const room = !!LB.ch; olQ('olStart').hidden = room;
+    if (!room) { PARTY.on = false; PARTY.other = false; lobbyEl.classList.remove('inparty'); return; }
+    if (!olEl.hidden) lbClose();   // once you are in a lobby the party shows in the main lobby, not in the pop-up
+    const pl = lbPlayers(), hostM = pl.find(p => p.h), cfg = (LB.host ? LB.cfg : hostM && hostM.cfg) || LB.cfg, md = MODES[cfg.mode] || MODES.duosOnline, cap = md.humans;
+    const other = pl.find(p => p.u !== LB.id), two = pl.length >= 2;
+    Object.assign(PARTY, { on: true, other: !!other, sk: other ? other.sk : null, name: other ? other.n : '', ready: !!(other && other.r), meName: myName(), meReady: LB.ready });
+    lobbyEl.classList.add('inparty');
+    $('ppCode').textContent = LB.code;
+    $('ppModes').hidden = !two;
+    $('ppDuos').classList.toggle('on', cfg.mode === 'duosOnline'); $('ppDuel2').classList.toggle('on', cfg.mode === 'duel');
+    $('ppDuos').disabled = $('ppDuel2').disabled = !(LB.host && two);
+    $('ppNote').textContent = !two ? 'Waiting for your partner to join...' : LB.host ? 'Pick a mode, then ready up. The map is random.' : 'The host picks the mode. The map is random.';
+    $('ppReady').textContent = LB.ready ? 'UNREADY' : 'READY'; $('ppReady').classList.toggle('on', LB.ready); $('ppReady').disabled = !two;
+    $('ppGo').hidden = !LB.host; $('ppGo').disabled = !(LB.host && pl.length >= md.minPlayers && pl.length === cap && pl.every(p => p.r));
+  }
+  function lbSync() {
+    if (!LB.ch || LB.started) return;
+    let pl = lbPlayers();
+    { const h0 = pl.find(p => p.h); if (h0) { LB.sawHost = true; clearTimeout(LB.findT); LB.findT = 0; lbStatus('connected', 'ok'); } }   // seeing the host counts even before your own entry shows up in the list (a slow connection delivers it a moment later)
+    const me = pl.findIndex(p => p.u === LB.id);
+    if (me < 0) return;
+    const hostM = pl.find(p => p.h), md = MODES[((LB.host ? LB.cfg : hostM && hostM.cfg) || LB.cfg).mode] || MODES.duosOnline;
+    if (me >= md.humans && !LB.host) { // presence cannot enforce capacity: the newest joiner steps out, but only if it is still over capacity a moment later (never on a passing glitch)
+      if (!LB.fullT) LB.fullT = setTimeout(() => { LB.fullT = 0; if (!LB.ch || LB.host || LB.started) return; const q = lbPlayers(), h = q.find(x => x.h), c = (h && h.cfg) || LB.cfg, mm = MODES[c.mode] || MODES.duosOnline; if (q.findIndex(x => x.u === LB.id) >= mm.humans) lbLeave('Lobby full.'); }, 2000);
+    }
+    if (hostM) { LB.sawHost = true; clearTimeout(LB.findT); LB.findT = 0; lbStatus('connected', 'ok'); }
+    else if (LB.sawHost && pl.length && pl[0].u === LB.id && !LB.host) { LB.host = true; LB.cfg = { mode: 'duosOnline', map: -1 }; lbTrack(); }   // the host left: the earliest joiner takes over (only after a host was seen, so joining never makes you the host by accident)
+    Object.keys(LB.rd).forEach(u => { if (!pl.some(p => p.u === u)) delete LB.rd[u]; });
+    if (pl.length < LB.lastN && LB.ready) { LB.ready = false; lbSend({ t: 'lr', u: LB.id, r: false }); }   // someone left: ready states reset
+    if (pl.length > LB.lastN) lbSend({ t: 'lr', u: LB.id, r: LB.ready });   // someone joined: tell them where we stand
+    LB.lastN = pl.length; lbRender();
+    if (!LB.host && !ONLINE.on && !LB.rjSent && hostM && hostM.m) { LB.rjSent = true; lbSend({ t: 'rj', u: LB.id, n: myName() }); olMsg('Match in progress: rejoining...'); }   // rejoin: ask the host for the match state
+  }
+  function lbPollChannel(code, id) { // the school-friendly connection, shaped like a live channel (and counting yourself in the presence list)
+    const ch = pollChannel(code, id), ps = ch.presenceState;
+    ch.presenceState = () => { const o = ps(); if (ch.meta) o[id] = [ch.meta]; return o; };
+    return ch;
+  }
+  function lbFail(status) { // the connection never came up (or a school-friendly one died)
+    if (LB.started || ONLINE.on) { lbStatus('connection lost', 'bad'); return; }
+    if (LB.host && !LB.poll && !LB.subscribed) { lbConnect(lbCode(true), true); toast('Live connection is blocked here, so this lobby uses the slower school-friendly connection.'); return; }   // fall back automatically, like the 1v1 room
+    lbLeave(status === 'NO_TABLE' ? 'School-friendly lobbies are not set up yet (the duel_msgs table is missing).' : LB.poll ? 'Could not connect. Check your internet.' : 'Could not connect: this network blocks live connections. Ask your friend to create a SCHOOL-FRIENDLY LOBBY and use their code.');
+  }
+  function lbConnect(code, host) {
+    const poll = isPollCode(code), sb = poll ? null : netSb(); if (!poll && !sb) { olMsg('Live connection is not available here. Try SCHOOL-FRIENDLY LOBBY.'); return; }
+    lbDrop(); LB.code = code; LB.host = host; LB.poll = poll; LB.subscribed = false; LB.id = Math.random().toString(36).slice(2, 10); LB.t = Date.now(); LB.ready = false; LB.rd = {}; LB.gone = {}; clearTimeout(LB.fullT); LB.fullT = 0; LB.started = false; LB.lastN = 0; LB.sawHost = host; LB.rjSent = false; olMsg(host ? 'Creating the lobby...' : 'Joining...');
+    let ch; try { ch = poll ? lbPollChannel(code, LB.id) : sb.channel('lobby:' + code, { config: { broadcast: { self: false }, presence: { key: LB.id } } }); } catch (e) { olMsg('Could not reach the online service.'); return; }
+    LB.ch = ch; lbStatus('connecting');
+    if (!poll) { clearTimeout(LB.wsT); LB.wsT = setTimeout(() => { if (LB.ch === ch && !LB.subscribed) lbFail('TIMED_OUT'); }, 7000); }   // a blocked websocket never answers: give up after 7 seconds instead of retrying forever
+    ch.on('presence', { event: 'sync' }, () => { if (LB.ch === ch) { lbSync(); if (ONLINE.on) onlinePresence(); } })
+      .on('broadcast', { event: 'o' }, e => { if (LB.ch === ch && e && e.payload) onlineRecv(e.payload); })
+      .subscribe(status => {
+        if (LB.ch !== ch) return;
+        if (status === 'SUBSCRIBED') {
+          LB.subscribed = true; clearTimeout(LB.wsT);
+          lbTrack(); lbRender();
+          if (!host) { clearTimeout(LB.findT); LB.findT = setTimeout(() => { if (LB.ch === ch && !lbPlayers().some(p => p.h)) lbLeave('Lobby not found. Check the code.'); }, poll ? 8000 : 6000); }
+          else lbStatus('connected', 'ok');
+        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED' || status === 'NO_TABLE') {
+          clearTimeout(LB.wsT);
+          if (!LB.subscribed) lbFail(status); else lbStatus(LB.started || ONLINE.on ? 'reconnecting' : 'connection lost', 'bad');
+        }
+      });
+    lbRender();
+  }
+  function lbDrop(keepChannel) {
+    clearTimeout(LB.findT); LB.findT = 0; clearTimeout(LB.fullT); LB.fullT = 0; clearTimeout(LB.wsT); LB.wsT = 0; const ch = LB.ch;
+    if (ch && !keepChannel) { try { ch.send({ type: 'broadcast', event: 'o', payload: { t: 'lg', u: LB.id } }); if (ch.isPoll) ch.send({ type: 'broadcast', event: 'o', payload: { t: 'bye' } }); } catch (e) { /* offline */ } }
+    LB.ch = null;
+    if (ch && !keepChannel) { try { if (ch.isPoll) setTimeout(() => ch.close(), 400); else { ch.untrack && ch.untrack(); const sb = netSb(); sb && sb.removeChannel(ch); } } catch (e) { /* gone already */ } }   // (a school-friendly channel is closed a moment later so its goodbye messages go out first)
+  }
+  function lbLeave(msg) { lbDrop(); LB.host = false; LB.ready = false; lbRender(); if (msg && olEl.hidden && !LB.started && !ONLINE.on) lbOpen(); olMsg(msg || ''); }
+  function lbOpen() { olEl.hidden = false; lobbyEl.inert = true; olMsg(''); lbRender(); document.addEventListener('keydown', lbKey, true); }
+  function lbClose() { olEl.hidden = true; if (!newsOpen && authEl.hidden && duEl.hidden) lobbyEl.inert = false; document.removeEventListener('keydown', lbKey, true); }
+  function lbKey(e) { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); lbClose(); } else e.stopPropagation(); }
+  lobbyBtn.addEventListener('click', () => { sfx('click'); lbOpen(); });
+  olQ('olClose').addEventListener('click', () => { sfx('click'); if (LB.ch && !LB.started) lbLeave(); lbClose(); });
+  olQ('olCreate').addEventListener('click', () => { sfx('click'); lbConnect(lbCode(false), true); });
+  olQ('olCreateP').addEventListener('click', () => { sfx('click'); lbConnect(lbCode(true), true); });
+  olQ('olJoin').addEventListener('click', () => { sfx('click'); const c = olQ('olCode').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, ''); if (c.length < 5) { olMsg('Enter the 5 or 6 character code.'); return; } lbConnect(c, false); });
+  $('ppLeave').addEventListener('click', () => { sfx('click'); lbLeave(); });
+  $('ppReady').addEventListener('click', () => { sfx('click'); LB.ready = !LB.ready; lbSend({ t: 'lr', u: LB.id, r: LB.ready }); lbRender(); });
+  $('ppCopy').addEventListener('click', () => { sfx('click'); try { navigator.clipboard.writeText(LB.code); toast('Code copied'); } catch (e) { toast('Code: ' + LB.code); } });
+  [$('ppDuos'), $('ppDuel2')].forEach(b => b.addEventListener('click', () => { if (!LB.host || b.dataset.m === LB.cfg.mode) return; sfx('click'); LB.cfg.mode = b.dataset.m; LB.ready = false; lbTrack(); lbSend({ t: 'lr', u: '*', r: false }); lbRender(); }));
+  $('ppGo').addEventListener('click', () => { sfx('click'); lbStart(); });
+  function lbStart() { // the host builds the match description once; every client builds the match from it
+    const pl = lbPlayers(), md = modeOf(); if (!LB.host || pl.length !== md.humans || !pl.every(p => p.r)) return;
+    const maps = md.maps, map = LB.cfg.map >= 0 && maps.includes(LB.cfg.map) ? LB.cfg.map : maps[(Math.random() * maps.length) | 0];
+    const st = { mode: md.id, map, seed: (Math.random() * 4294967295) >>> 0, players: pl.map((p, i) => ({ u: p.u, n: p.n, sk: p.sk, slot: i })), teams: md.teamSize > 1 ? 'duo' : 'solo' };
+    LB.started = true; lbSend({ t: 'start', st }); onLobbyStart(st);
+  }
+  function lbSend(m) { if (LB.ch) { try { LB.ch.send({ type: 'broadcast', event: 'o', payload: m }); } catch (e) { /* offline */ } } }
+  function onLobbyStart(st) {
+    LB.started = true; lbClose();
+    if (st.mode === 'duel') { // 1v1: the existing duel engine takes over with the same code (it runs its own room)
+      const host = LB.host, code = LB.code; lbDrop(); duelOpen(); duelConnect(code, host); return;
+    }
+    beginDuosMatch(st);
+  }
+
+  // ---------- online match ----------
+  function oSend(m) { // every message goes through here (counted for the debug overlay)
+    if (!ONLINE.ch) return; const s = JSON.stringify(m);
+    ONLINE.st.sent++; ONLINE.st.bytes += s.length + 20;
+    try { ONLINE.ch.send({ type: 'broadcast', event: 'o', payload: m }); } catch (e) { /* offline */ }
+  }
+  const q1 = v => Math.round(v * 10), q2 = v => Math.round(v * 100);
+  function beginDuosMatch(st) {
+    ONLINE.ch = LB.ch; ONLINE.id = LB.id; ONLINE.host = LB.host; ONLINE.code = LB.code; ONLINE.start = st; ONLINE.players = st.players; ONLINE.seed = st.seed;
+    ONLINE.slot = Math.max(0, st.players.findIndex(p => p.u === ONLINE.id)); const other = st.players[1 - ONLINE.slot] || { n: 'Teammate' };
+    Object.assign(ONLINE, { leftU: '', tickN: 0, snaps: [], bsnap: {}, mateGone: 0, hostGone: 0, uidN: 0, revActive: 0, rx: { p: -1, b: -1, z: -1 }, seq: { p: 0, b: 0, z: 0 }, last: { p: '', b: {}, hp: {} }, guard: { level: 0, low: 0, ok: 0 }, applying: false, farN: 0, nearIds: new Set(), acc: { p: 0, b: 0, z: 0, h: 0, ping: 0 } });
+    Object.assign(ONLINE.st, { sent: 0, recv: 0, bytes: 0, ps: 0, rs: 0, bps: 0, t: performance.now(), ping: 0 });
+    const cfg = Object.assign({}, MODES.duosOnline);
+    withSeed(st.seed, () => startMode(cfg, st.map));   // chests, floor loot, the zone and (identical on both machines) the bot names all come from the shared seed
+    pickups.forEach((pk, i) => { if (pk.active) pk.uid = 'g' + i; });
+    match.id = 'duos-' + st.seed + '-' + ONLINE.code;
+    const mate = contestants[1]; Object.assign(mate, { remoteHuman: true, remote: true, netCtl: true, name: other.n });
+    mate.snapReady = false;
+    if (!ONLINE.host) bots.forEach(b => { if (b.id >= 2) { b.remote = true; b.netCtl = true; } });
+    player.name = myName();
+    state = 'paused';   // (the match starts straight away below; no start screen)
+    dbgEl.style.display = /[?&]netdbg/.test(location.search) ? 'block' : 'none';
+    document.addEventListener('keydown', onlineKey, true);
+    ONLINE.on = true; lbTrack(); if (ONLINE.host) farFlags();
+    setState('playing'); try { initAudio(); renderer.domElement.requestPointerLock(); } catch (e) { /* needs a click: the first click in the game captures the mouse (below) */ }
+  }
+  function onlineKey(e) { if (e.code === 'F3') { e.preventDefault(); dbgEl.style.display = dbgEl.style.display === 'block' ? 'none' : 'block'; } }
+  function duosCleanup() { // back in the lobby: a finished match leaves the party together (unready); anything else clears it
+    if (!ONLINE.on && !LB.ch) return;
+    const keep = ONLINE.on && !!LB.ch && LB.subscribed;   // you were in the match and the connection is still up
+    if (keep) { try { lbSend({ t: 'lm', u: LB.id }); } catch (e) { /* offline */ } }
+    document.removeEventListener('keydown', onlineKey, true); dbgEl.style.display = 'none';
+    contestants.forEach(c => { if (c.netCtl) { c.remote = false; c.netCtl = false; c.remoteHuman = false; } });
+    ONLINE.on = false; ONLINE.ch = null; clearTimeout(ONLINE.mateT); ONLINE.mateT = 0; clearTimeout(ONLINE.hostT);
+    LB.started = false; LB.ready = false; LB.rd = {};
+    if (keep) { LB.rjSent = true; lbTrack(); lbSend({ t: 'lr', u: LB.id, r: false }); }   // (rjSent: going back to the lobby on purpose must not pull you back into the match)
+    else { lbDrop(); LB.host = false; }
+    lbRender();
+  }
+
+  const hostOf = () => ONLINE.players[0] && ONLINE.players[0].u;   // (slot 0 = the host of the lobby when the match began)
+  function onlinePresence() { // who is still in the room (a dropped human gets a grace period before they count as out)
+    if (!ONLINE.on || !LB.ch) return;
+    const ids = lbPlayers().filter(p => p.u !== ONLINE.leftU).map(p => p.u), mateU = (ONLINE.players[1 - ONLINE.slot] || {}).u, hostU = hostOf();
+    if (mateU && !ids.includes(mateU)) {
+      if (!ONLINE.mateT && !match.ended) {
+        ONLINE.mateT = setTimeout(() => { ONLINE.mateT = 0; if (!ONLINE.on || match.ended || lbPlayers().some(p => p.u === mateU && p.u !== ONLINE.leftU)) return; if (mateU === hostU) onlineAbort('The host left the match. No win and no penalty.'); else { const m = contestants[1]; if (m.alive) onlineElim(m, null, undefined); } }, 10000);
+        notify('Your teammate lost connection... waiting 10 s', 4);
+      }
+    } else if (ONLINE.mateT) { clearTimeout(ONLINE.mateT); ONLINE.mateT = 0; }
+  }
+  function onlineAbort(msg) { // the host disconnected: the match just ends, nobody wins or loses anything
+    if (match.ended) return; match.ended = true; clearInputs(); state = 'over'; setDrone(false);
+    hudEls.forEach(e => { e.style.display = 'none'; }); showOverlay('MATCH ENDED', msg, 'Return to lobby'); if (document.pointerLockElement) document.exitPointerLock();
+  }
+  function onlineElim(c, by, wpn) { // somebody was eliminated on the other machine (or timed out): apply it here
+    if (!c.alive) return;
+    c.downed = false; c.hp = 0; c.alive = false; c.state = 'dead'; if (c.mesh) { c.dying = true; c.deadT = 0; }
+    tickDeaths.push(c); if (by && by !== c) by.kills++; addFeed(by || null, c, wpn === undefined && by ? by.weapon : wpn);
+  }
+
+  // outgoing state ----------------------------------------------------------------
+  function humanState() {
+    const p = player, st = p.state === 'plane' ? 0 : p.state === 'glide' ? 1 : p.alive ? 2 : 3;
+    return [q2(p.x), q2(p.y), q2(p.z), Math.round(p.yaw * 1000), Math.round(pitch * 1000), st, (p.downed ? 1 : 0) | (p.crouching ? 2 : 0) | (p.jumping ? 4 : 0) | (p.alive ? 0 : 8), p.weapon, Math.round(p.hp), Math.round(p.shield), Math.round(p.downT || 0)];
+  }
+  function sendHuman(force) {
+    const a = humanState(), key = a.join(',');
+    if (!force && key === ONLINE.last.p && ONLINE.acc.h < 0.5) return;
+    ONLINE.last.p = key; ONLINE.acc.h = 0; oSend({ t: 'p', s: ++ONLINE.seq.p, a });
+  }
+  function botFlags(b) { return (b.state === 'plane' ? 0 : b.state === 'glide' ? 1 : b.alive ? 2 : 3) | (b.downed ? 4 : 0) | (b.fireFlash > 0 ? 8 : 0) | ((b.weapon & 15) << 4) | (b.crouching ? 256 : 0); }
+  function sendBots() { // one batched message: only the bots that changed, quantised; far bots go out less often
+    const near = ONLINE.nearIds, rate = Math.max(1, Math.round(MODE.botHz * Math.pow(0.75, ONLINE.guard.level) / (MODE.farHz * Math.pow(0.75, ONLINE.guard.level)))), arr = [];
+    for (let i = 2; i < contestants.length; i++) {
+      const b = contestants[i]; if (b.state === 'none' || (!b.alive && b.state !== 'dead')) continue; if (b.state === 'dead') continue;
+      if (!near.has(i) && (ONLINE.tickN + i) % rate !== 0) continue;
+      const rec = [i, q1(b.x), q1(b.y), q1(b.z), Math.round(b.yaw * 100), botFlags(b)], key = rec.slice(1).join(','), prev = ONLINE.last.b[i];
+      if (prev === key) continue; ONLINE.last.b[i] = key; arr.push(rec);
+    }
+    if (arr.length) oSend({ t: 'b', s: ++ONLINE.seq.b, a: arr });
+    ONLINE.tickN++;
+  }
+  function sendHp() { const arr = []; for (let i = 2; i < contestants.length; i++) { const b = contestants[i]; if (!b.alive) continue; const v = Math.round(b.hp) + ':' + Math.round(b.shield); if (ONLINE.last.hp[i] !== v) { ONLINE.last.hp[i] = v; arr.push([i, Math.round(b.hp), Math.round(b.shield), Math.round(b.downT || 0)]); } } if (arr.length) oSend({ t: 'hp', a: arr }); }
+  function sendZone() { oSend({ t: 'z', s: ++ONLINE.seq.z, tm: Math.round(matchTime * 100) / 100, ss: stormStart === null ? -1 : Math.round(stormStart * 100) / 100, n: contestants.filter(c => c.alive).length }); }
+  function farFlags() { // which bots are near a human (full rate) and which are far (reduced update rate and simplified AI)
+    const lvl = Math.pow(0.7, ONLINE.guard.level), R = MODE.nearDist * lvl, set = new Set(), hs = [player, contestants[1]];
+    for (let i = 2; i < contestants.length; i++) { const b = contestants[i]; if (!b.alive) continue; if (hs.some(h => h.alive && Math.abs(h.x - b.x) < R && Math.abs(h.z - b.z) < R)) set.add(i); }
+    ONLINE.nearIds = set;
+  }
+  function onlineTick(dt) { // once per frame while a match runs
+    const A = ONLINE.acc, hz = MODE.sendHz; A.p += dt; A.h += dt; A.b += dt; A.z += dt; A.ping += dt;
+    if (A.p >= 1 / hz) { A.p = 0; sendHuman(false); }
+    if ((A.inv = (A.inv || 0) + dt) >= 0.5) { A.inv = 0; const p = player, ik = JSON.stringify([p.slots, p.cnt, p.mag, p.sel]); if (ik !== ONLINE.last.inv) { ONLINE.last.inv = ik; oSend({ t: 'inv', s: p.slots, c: p.cnt, m: p.mag, sel: p.sel, w: p.weapon }); } }
+    if (ONLINE.host) {
+      const bhz = MODE.botHz * Math.pow(0.75, ONLINE.guard.level);
+      if (A.b >= 1 / bhz) { A.b = 0; if (ONLINE.farN++ % 6 === 0) farFlags(); sendBots(); }
+      if (A.z >= 1) { A.z = 0; sendZone(); sendHp(); }
+    }
+    if (A.ping >= 2) { A.ping = 0; oSend({ t: 'pg', c: performance.now() }); }
+    const S = ONLINE.st, now = performance.now();   // debug counters + the host performance guard
+    if (now - S.t >= 1000) { S.ps = S.sent; S.rs = S.recv; S.bps = S.bytes; S.sent = S.recv = S.bytes = 0; S.t = now; ONLINE.fps = PERF.fps || 60;
+      if (ONLINE.host) { const g = ONLINE.guard; if (ONLINE.fps < MODE.lowFps) { g.low++; g.ok = 0; if (g.low >= 3 && g.level < 3) { g.level++; g.low = 0; } } else { g.low = 0; if (++g.ok >= 10 && g.level > 0) { g.level--; g.ok = 0; } } }
+      if (dbgEl.style.display === 'block') dbgEl.textContent = 'ONLINE ' + (ONLINE.host ? 'HOST' : 'GUEST') + '\nmsgs/s out ' + S.ps + '  in ' + S.rs + '\nbytes/s out ' + S.bps + '\nping ' + Math.round(S.ping) + ' ms   fps ' + ONLINE.fps + '\nbots alive ' + contestants.filter((c, i) => i >= 2 && c.alive).length + (ONLINE.host ? '\nnear-rate bots ' + ONLINE.nearIds.size + '  guard level ' + ONLINE.guard.level : ''); }
+  }
+  // remote state: interpolation --------------------------------------------------------
+  function lerpAng(a, b, t) { let d = b - a; d = Math.atan2(Math.sin(d), Math.cos(d)); return a + d * t; }
+  function applyInterp(c, a, b, t) { // a, b: snapshots {x,y,z,yaw}; t 0..1
+    c.x = a.x + (b.x - a.x) * t; c.y = a.y + (b.y - a.y) * t; c.z = a.z + (b.z - a.z) * t; c.yaw = lerpAng(a.yaw, b.yaw, t);
+  }
+  function applyRemoteFlags(c, st, fl) {
+    const states = ['plane', 'glide', 'ground', 'dead'];
+    if (st < 3) { if (c.state !== 'dead' && c.state !== states[st]) { c.state = states[st]; if (c.canopy) c.canopy.visible = st === 1; } }
+    const dn = !!(fl & 4); if (dn !== !!c.downed && c.alive && st < 3) { c.downed = dn; if (c.mesh) c.mesh.rotation.x = dn ? -1.2 : 0; }
+  }
+  function onlineApply(dt) { // before the frame is drawn: place the remote human and (guest) the bots from the buffered snapshots
+    const now = performance.now();
+    const m = contestants[1], sn = ONLINE.snaps;
+    if (sn.length && m.alive) {
+      const rt = now - 100; let i = sn.length - 1; while (i > 0 && sn[i - 1].t > rt) i--;
+      const a = sn[Math.max(0, i - 1)], b = sn[i], t = b.t > a.t ? clamp((rt - a.t) / (b.t - a.t), 0, 1) : 1;
+      if (sn.length > 1 && i > 0) applyInterp(m, a, b, t); else applyInterp(m, b, b, 1);
+      m.pitch = b.pitch; m.bh = b.cr ? CROUCH_H : BODY_H;
+    }
+    if (!ONLINE.host) for (const k in ONLINE.bsnap) {
+      const bs = ONLINE.bsnap[k], b = contestants[k]; if (!b || !b.alive) continue;
+      const rt = now - 220; let i = bs.length - 1; while (i > 0 && bs[i - 1].t > rt) i--;
+      const a = bs[Math.max(0, i - 1)], c2 = bs[i], t = c2.t > a.t ? clamp((rt - a.t) / (c2.t - a.t), 0, 1) : 1;
+      if (bs.length > 1 && i > 0) applyInterp(b, a, c2, t); else applyInterp(b, c2, c2, 1);
+    }
+  }
+  function revealRemote(c) { c.mesh.visible = true; }
+  // incoming ----------------------------------------------------------------------------
+  const finArr = (a, n) => Array.isArray(a) && a.length === n && a.every(v => Number.isFinite(v));
+  function onlineShotVis(m) { // a shot fired on the other machine: sound, muzzle flash and the bullet line (no damage here)
+    const c = m.b !== undefined ? contestants[m.b] : contestants[1]; if (!c || !c.alive || !finArr(m.o, 3) || !finArr(m.d, 3) || !finArr(m.s, 3)) return;
+    const w = WEAPONS[m.w]; if (!w || w.rocket) return; const len = Math.hypot(m.d[0], m.d[1], m.d[2]) || 1;
+    c.fireFlash = 0.1; sfx(w.sfx, distVol(c));
+    for (let i = 0; i < w.pellets; i++) {
+      _p.set(m.d[0] / len, m.d[1] / len, m.d[2] / len); if (w.spread > 0) perturb(_p, w.spread);
+      castRay(m.o[0], m.o[1], m.o[2], _p.x, _p.y, _p.z, w.range, c);
+      spawnBullet(m.s[0], m.s[1], m.s[2], m.o[0] + _p.x * rayT, m.o[1] + _p.y * rayT, m.o[2] + _p.z * rayT);
+    }
+  }
+  function onlineRecv(m) {
+    if (m.t === 'start') { if (!LB.started) onLobbyStart(m.st); return; }
+    if (m.t === 'lr') { // a lobby ready / unready (u '*' = the host changed the mode: everyone is unready)
+      if (m.u === '*') { LB.ready = false; LB.rd = {}; } else if (m.u !== LB.id) LB.rd[m.u] = !!m.r;
+      lbRender(); return;
+    }
+    if (m.t === 'lg') { if (m.u && m.u !== LB.id) { LB.gone[m.u] = true; delete LB.rd[m.u]; lbSync(); } return; }   // a player left on purpose: drop them from the list at once (presence can be slow to say so)
+    if (m.t === 'lm') { if (ONLINE.on && m.u && m.u !== LB.id) { ONLINE.leftU = m.u; onlinePresence(); } return; }   // the other player went back to the lobby (they stay in the party but are out of the match)
+    if (m.t === 'rj') { onlineRejoinRequest(m); return; }
+    if (m.t === 'resume') { onlineResume(m); return; }
+    if (!ONLINE.on) return;
+    ONLINE.st.recv++;
+    switch (m.t) {
+      case 'sh': onlineShotVis(m); break;
+      case 'inv': { const c = contestants[1]; if (c && Array.isArray(m.s) && Array.isArray(m.c) && Array.isArray(m.m)) c.specInv = { slots: m.s.slice(0, 5).map(v => v === null || typeof v === 'number' || typeof v === 'string' ? v : null), cnt: m.c.slice(0, 5).map(v => +v || 0), mag: m.m.slice(0, 5).map(v => +v || 0), sel: m.sel | 0, weapon: m.w | 0 }; break; }   // the other human's hotbar, shown while you spectate them
+      case 'p': { // the other human
+        if (m.s <= ONLINE.rx.p) return; ONLINE.rx.p = m.s; const a = m.a, c = contestants[1];
+        const s = { t: performance.now(), x: a[0] / 100, y: a[1] / 100, z: a[2] / 100, yaw: a[3] / 1000, pitch: a[4] / 1000, cr: !!(a[6] & 2) };
+        ONLINE.snaps.push(s); if (ONLINE.snaps.length > 12) ONLINE.snaps.shift();
+        if (!(a[6] & 8) && c.alive) { applyRemoteFlags(c, a[5], (a[6] & 1) ? 4 : 0); c.weapon = a[7]; c.hp = a[8]; c.shield = a[9]; c.downT = a[10]; c.crouching = !!(a[6] & 2); if (a[5] === 2 && !c.mesh.visible) c.mesh.visible = true; if (!c.snapReady) { c.snapReady = true; applySnap(c, s, s, 1); } }
+        break; }
+      case 'b': { // host-run bots (guest only)
+        if (ONLINE.host || m.s <= ONLINE.rx.b) return; ONLINE.rx.b = m.s; const now = performance.now();
+        for (const r of m.a) {
+          const b = contestants[r[0]]; if (!b || b.state === 'dead') continue;
+          const s = { t: now, x: r[1] / 10, y: r[2] / 10, z: r[3] / 10, yaw: r[4] / 100 }, arr = ONLINE.bsnap[r[0]] || (ONLINE.bsnap[r[0]] = []);
+          arr.push(s); if (arr.length > 8) arr.shift();
+          const fl = r[5], st = fl & 3; if (b.alive) { applyRemoteFlags(b, st, fl); b.weapon = (fl >> 4) & 15; b.crouching = !!(fl & 256); b.fireFlash = fl & 8 ? 0.1 : 0; if (!b.snapReady) { b.snapReady = true; applySnap(b, s, s, 1); } }
+        }
+        break; }
+      case 'hp': for (const r of m.a) { const b = contestants[r[0]]; if (b && b.alive) { b.hp = r[1]; b.shield = r[2]; b.downT = r[3]; if (b.hp < MAX_HEALTH) b.barT = 2; } } break;
+      case 'z': if (!ONLINE.host && m.s > ONLINE.rx.z) { ONLINE.rx.z = m.s; if (Math.abs(matchTime - m.tm) > 0.4) matchTime = m.tm; if (m.ss >= 0 && stormStart === null) stormStart = m.ss; } break;
+      case 'ph': if (ONLINE.host) { const b = contestants[m.b], by = contestants[1]; if (b && b.alive) damage(b, m.d, by, m.w, !!m.hd); } break;       // the other human hit one of the host's bots
+      case 'bh': { const by = contestants[m.b]; if (m.v === ONLINE.slot) damage(player, m.d, by, m.w, !!m.hd); break; }                          // a bot hit me
+      case 'dn': { const c = byS(m.s); if (c && c !== player && c.alive && !c.downed) { c.downed = true; c.hp = MODE.downHp; c.downT = MODE.bleedSec; if (c.mesh) c.mesh.rotation.x = -1.2; if (player.downed && player.alive) { player.downed = false; player.noDown = true; damage(player, 1e4, null, undefined, false, null); } } break; }   // both of us down: nobody can revive, the team is out
+      case 'el': { const c = byS(m.s); if (c && c !== player) onlineElim(c, m.by >= 0 ? byS(m.by) : null, m.w); break; }
+      case 'rs': if (m.to === ONLINE.slot) { contestants[1].reviveP = 0.01; ONLINE.revActive = 1; } break;
+      case 'rc': if (m.to === ONLINE.slot) { contestants[1].reviveP = 0; ONLINE.revActive = 0; } break;
+      case 'rd': if (m.to === ONLINE.slot) { ONLINE.revActive = 0; contestants[1].reviveP = 0; reviveDone(player, contestants[1]); } else { const c = byS(m.to); if (c && c.downed) { c.downed = false; c.hp = MODE.reviveHp; if (c.mesh) c.mesh.rotation.x = 0; } } break;
+      case 'co': { const ch = chests[m.i]; if (ch && !ch.opened) { ONLINE.applying = true; try { openChest(ch, { x: ch.x + 1, z: ch.z }); } finally { ONLINE.applying = false; } } break; }
+      case 'pi': { const pk = pickups.find(q => q.active && q.uid === m.u); if (pk) { pk.active = false; pk.mesh.visible = false; } break; }
+      case 'id': for (const r of m.a) { if (pickups.some(q => q.active && q.uid === r[0])) continue; const pk = spawnPickup(r[1], r[2], r[3], r[4], r[5], r[6]); if (pk) { pk.uid = r[0]; if (r[1] === 'weapon') pk.life = DROPPED_GUN_LIFE; } } break;
+      case 'do': { const dp = drops[m.i]; if (dp && dp.state) { if (m.s === 'open' && dp.state === 'closed') { dp.state = 'open'; dp.lid.rotation.x = -1.9; dp.itemModel.visible = true; } else if (m.s === 'taken') { dp.state = 'taken'; dp.itemModel.visible = false; dp.beacon.visible = false; } } break; }
+      case 'end': if (!match.ended) { if (m.win === (ONLINE.slot === 0 ? 0 : 0)) { /* both humans share the result */ } endGame(m.win ? 'Victory' : 'Defeat', m.place); } break;
+      case 'pg': oSend({ t: 'po', c: m.c }); break;
+      case 'po': ONLINE.st.ping = performance.now() - m.c; break;
+    }
+  }
+  // hooks the game code calls -------------------------------------------------------------
+  NETH.shot = (c, ox, oy, oz, dir, sx, sy, sz) => { // the other machine draws this shot (visual only: damage is reported separately)
+    const w = WEAPONS[c.weapon]; if (!w || w.rocket) return;
+    if (!c.isPlayer) { // host bots: only shots near the other human, and no more than about 8 a second in all
+      const now = performance.now(); ONLINE.shotTok = Math.min(8, (ONLINE.shotTok === undefined ? 8 : ONLINE.shotTok) + (now - (ONLINE.shotT || now)) / 125); ONLINE.shotT = now;
+      const g = contestants[1]; if (ONLINE.shotTok < 1 || !g || Math.hypot(c.x - g.x, c.z - g.z) > 60) return; ONLINE.shotTok -= 1;
+    }
+    const m = { t: 'sh', w: c.weapon, o: [r2(ox), r2(oy), r2(oz)], d: [r3(dir.x), r3(dir.y), r3(dir.z)], s: [r2(sx), r2(sy), r2(sz)] }; if (!c.isPlayer) m.b = c.id; oSend(m);
+  };
+  NETH.downed = t => { if (ONLINE.on && (t.isPlayer || ONLINE.host && !t.netCtl)) oSend({ t: 'dn', s: SID(t) }); if (ONLINE.on && t.isPlayer) sendHuman(true); };
+  NETH.reviveStart = tgt => { if (ONLINE.on && tgt.remoteHuman) oSend({ t: 'rs', to: SID(tgt) }); };
+  NETH.reviveCancel = tgt => { if (ONLINE.on && tgt.remoteHuman) oSend({ t: 'rc', to: SID(tgt) }); };
+  NETH.reviveDone = (m, by) => { if (ONLINE.on && (by.isPlayer || ONLINE.host && !by.netCtl)) oSend({ t: 'rd', to: SID(m) }); };
+  NETH.elim = (t, by, wpn) => { if (ONLINE.on && (t.isPlayer || ONLINE.host && !t.netCtl)) { oSend({ t: 'el', s: SID(t), by: by ? SID(by) : -1, w: wpn === undefined ? -1 : wpn }); if (t.isPlayer) sendHuman(true); } };
+  NETH.hitBot = (t, amt, by, wpn, head) => { if (ONLINE.on && !ONLINE.host) oSend({ t: 'ph', b: SID(t), d: Math.round(amt * 10) / 10, w: wpn === undefined ? by.weapon : wpn, hd: head ? 1 : 0 }); };
+  NETH.hitHuman = (t, amt, by, wpn, head) => { if (ONLINE.on && ONLINE.host) oSend({ t: 'bh', b: by.id, v: SID(t), d: Math.round(amt * 10) / 10, w: wpn === undefined ? by.weapon : wpn, hd: head ? 1 : 0 }); };
+  NETH.chestOpened = ch => { if (ONLINE.on && !ONLINE.applying) oSend({ t: 'co', i: chests.indexOf(ch) }); };
+  NETH.picked = pk => { if (ONLINE.on && !ONLINE.applying && pk.uid) oSend({ t: 'pi', u: pk.uid }); };
+  NETH.dropped = list => { if (ONLINE.on && list.length) oSend({ t: 'id', a: list.map(pk => [pk.uid, pk.kind, pk.id, q2(pk.x) / 100, q2(pk.y) / 100, q2(pk.z) / 100, pk.ammo]) }); };
+  NETH.dropAct = (dp, st) => { if (ONLINE.on && !ONLINE.applying) oSend({ t: 'do', i: drops.indexOf(dp), s: st }); };
+  NETH.matchEnd = (result, place) => { if (ONLINE.on && ONLINE.host) oSend({ t: 'end', win: result === 'Victory' ? 1 : 0, place }); };
+  // rejoin: a human who refreshed re-enters the same code during the grace window and gets the match state from the host
+  function onlineRejoinRequest(m) {
+    if (!ONLINE.on || !ONLINE.host || match.ended) return;
+    const slot = 1 - ONLINE.slot; ONLINE.players[slot].u = m.u; if (ONLINE.mateT) { clearTimeout(ONLINE.mateT); ONLINE.mateT = 0; }
+    const rm = contestants[1];
+    oSend({ t: 'resume', to: m.u, slot, st: ONLINE.start, tm: matchTime, ss: stormStart, chests: chests.map((c, i) => c.opened ? i : -1).filter(i => i >= 0), taken: pickups.filter(p => p.uid && String(p.uid)[0] === 'g' && !p.active).map(p => p.uid), drops: drops.map(d => d.state || ''),
+      dead: contestants.filter((c, i) => i >= 2 && !c.alive && c.state !== 'none').map(c => c.id), hs: { x: rm.x, y: rm.y, z: rm.z, hp: rm.hp, sh: rm.shield, dn: rm.downed ? 1 : 0, w: rm.weapon, st: rm.state }, hp: contestants.slice(2).map(c => [c.id, Math.round(c.hp), Math.round(c.shield)]) });
+  }
+  function onlineResume(m) { // (the refreshed game: build the match from the seed, then restore what the host knew)
+    if (m.to !== LB.id || ONLINE.on) return;
+    LB.started = true; olEl.hidden = true; m.st.players[m.slot].u = LB.id; beginDuosMatch(m.st);
+    matchTime = m.tm; if (m.ss >= 0) stormStart = m.ss;
+    ONLINE.applying = true; try { m.chests.forEach(i => { if (chests[i] && !chests[i].opened) openChest(chests[i], { x: chests[i].x + 1, z: chests[i].z }); }); } finally { ONLINE.applying = false; }
+    m.taken.forEach(u => { const pk = pickups.find(q => q.uid === u); if (pk) { pk.active = false; pk.mesh.visible = false; } });
+    m.drops.forEach((s, i) => { const dp = drops[i]; if (!dp) return; if (s && !dp.state) spawnDrop(dp); if (s === 'open') { dp.state = 'open'; dp.itemModel.visible = true; dp.lid.rotation.x = -1.9; } if (s === 'taken') { dp.state = 'taken'; dp.itemModel.visible = false; } });
+    m.dead.forEach(id => { const b = contestants[id]; if (b) { b.alive = false; b.state = 'dead'; if (b.mesh) b.mesh.visible = false; } });
+    m.hp.forEach(r => { const b = contestants[r[0]]; if (b && b.alive) { b.hp = r[1]; b.shield = r[2]; } });
+    const hs = m.hs; player.state = hs.st === 'glide' || hs.st === 'plane' ? 'glide' : 'ground'; player.x = hs.x; player.z = hs.z; player.y = hs.y; player.hp = hs.hp; player.shield = hs.sh; player.downed = !!hs.dn; if (hs.dn) player.downT = MODE.bleedSec; if (hs.w !== undefined) { giveWeapon(player, hs.w); selectSlot(player, player.slots.indexOf(hs.w)); }
+    planeT = 1e5;
+  }
+
   // ---- DIRECTOR MODE (developer only: open the game with ?director). Records the trailer shots with a fixed 1/60 s step. Never reachable from the menus. ----
   // Shots live in one list (SHOTS). Actors are bots with remote = true (no AI): a script moves them, damage and deaths use the normal game code. The player is driven by a script too:
   // it follows a path, aims at an actor (smooth flick + a little drift) and fires at set times through the real weapon code. Math.random is seeded while a shot runs, so a shot looks the same every run.
@@ -8225,7 +8938,12 @@
   showLobby();
   requestAnimationFrame(loop);
   renderNewsShots(); useMap(getMap(rotation.next));
-  if (!DIRECTOR) newsOpenNow(); else CL.newsDone = true; // shown every time the game opens (and again after a fresh log in); the login prompt waits until it is closed
+  if (!DIRECTOR && !DBG_DUOS && lsGet(NEWS_KEY) !== NEWS_VER) { lsSet(NEWS_KEY, NEWS_VER); newsOpenNow(); } else CL.newsDone = true;   // shown ONCE per browser per version (marked as seen the moment it opens, so a reload never shows it again); the NEWS button reopens it any time. The login prompt waits until it is closed
+  if (DBG_DUOS && !DIRECTOR) setTimeout(() => {   // dev-only local Duos: you + a bot teammate vs N bots in duos. ?duosdebug&bots=34&map=0
+    const q = new URLSearchParams(location.search), nb = Math.max(2, +(q.get('bots') || 34)), mp = +(q.get('map') || 0);
+    startMode(Object.assign({}, MODES.duosOnline, { botTeams: Math.ceil(nb / 2), dev: true, online: false }), mp);
+    contestants[1].name = 'Teammate'; match.started = true; setState('playing');
+  }, 400);
   if (DIRECTOR) directorMode();
 })();
 </script>
