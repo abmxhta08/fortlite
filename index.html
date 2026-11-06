@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>/* Set to false to bring the game back. While true only the downtime screen shows: no Supabase client, no polling, no game loop. */ const DOWNTIME = false;</script>
 <title>Fortlite</title>
 <link rel="preload" href="fonts/Anton-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -543,6 +544,13 @@
 </style>
 </head>
 <body>
+<!-- DOWNTIME SCREEN: shown only while DOWNTIME is true (top of <head>) -->
+<div id="downtime" hidden style="position:fixed;inset:0;z-index:2147483647;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:system-ui,-apple-system,sans-serif;padding:24px;">
+  <div style="font-size:clamp(28px,6vw,56px);font-weight:800;letter-spacing:.08em;">DOWNTIME</div>
+  <div style="margin-top:16px;font-size:clamp(14px,2.5vw,20px);opacity:.7;">Servers under maintenance</div>
+</div>
+<script>(function(){var d=document.getElementById('downtime');if(DOWNTIME){d.hidden=false;d.style.display='flex';}else d.remove();})();</script>
+<!-- END DOWNTIME -->
 <div id="hud"></div>
 <canvas id="minimap" width="180" height="180"></canvas>
 <div id="perf" aria-hidden="true"></div>
@@ -886,11 +894,11 @@
   <button id="btn2" style="font-size:16px;padding:8px 24px;margin-top:10px">Back to Lobby</button>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="supabase.min.js"></script>
-<script>window.supabase || document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"><\/script>');</script>
+<script>if(!DOWNTIME){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script><script src="supabase.min.js"><\/script>');}</script>
+<script>if(!DOWNTIME && !window.supabase) document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"><\/script>');</script>
 <script>
 (function () {
+  if (DOWNTIME) return;   // downtime: nothing below runs (no Supabase client, no polling, no game loop)
   // DIRECTOR MODE (developer only): the URL flag ?director opens the trailer shot recorder. Nothing is ever written to storage and the online services stay off while it runs.
   const DIRECTOR = /[?&]director(?:[=&#]|$)/.test(location.search);
   if (DIRECTOR) { try { Storage.prototype.setItem = function () {}; Storage.prototype.removeItem = function () {}; } catch (e) { /* nothing to block */ } }
@@ -7646,9 +7654,9 @@
     if (typeof NETSIM !== 'undefined' && NETSIM) return SIMSB;
     return duelClientLive();
   }
-  function duelClientLive() { // a second, anonymous client: Realtime (websockets) always connects straight to Supabase, never through the Netlify proxy
+  function duelClientLive() { // the shared client: Realtime (websockets) always connects straight to Supabase, never through the Netlify proxy
     if (DUEL.sb) return DUEL.sb;
-    try { if (!DIRECTOR && window.supabase && window.supabase.createClient) DUEL.sb = window.supabase.createClient(SB_DIRECT, SB_KEY, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'br_duel_auth' }, realtime: { params: { eventsPerSecond: 30 } } }); } catch (e) { DUEL.sb = null; }
+    DUEL.sb = getSb();   // the one shared client (see getSb)
     return DUEL.sb;
   }
   const duelName = () => String((CL && CL.username) || (settings.name && settings.name !== 'Player' ? settings.name : (DUEL.guest = DUEL.guest || 'Guest' + (100 + ((Math.random() * 900) | 0))))).slice(0, 16);
@@ -7670,9 +7678,13 @@
     };
     ch.fail = st => { if (++ch.fails >= 6 && ch.alive && ch.onError) ch.onError(st); };
     let changed = false;
+    const POLL_MS = 1500, POLL_MAX = 10000;   // at most one duel_msgs read every 1.5 s (was every ~140 ms); after an error the wait doubles up to 10 s and resets on success
+    let delay = POLL_MS;
     const poll = () => {
       if (!ch.alive) return;
-      fetch(base + '?room=eq.' + code + '&id=gt.' + ch.last + '&sender=neq.' + myId + '&order=id.asc&limit=200', { headers: H }).then(r => { if (!r.ok) { ch.fail(r.status); return null; } ch.fails = 0; return r.json(); }).then(rows => {
+      if (document.hidden) { ch.paused = true; return; }   // tab hidden: stop polling; the visibilitychange handler below resumes it
+      ch.paused = false;
+      fetch(base + '?room=eq.' + code + '&id=gt.' + ch.last + '&sender=neq.' + myId + '&select=id,sender,kind,body&order=id.asc&limit=50', { headers: H }).then(r => { if (!r.ok) { delay = Math.min(POLL_MAX, delay * 2); ch.fail(r.status); return null; } ch.fails = 0; delay = POLL_MS; return r.json(); }).then(rows => {
         const now = performance.now();
         (rows || []).forEach(r => {
           if (r.id > ch.last) ch.last = r.id;
@@ -7682,19 +7694,27 @@
         });
         Object.keys(ch.peers).forEach(k => { if (now - ch.peers[k].seen > 12000) { delete ch.peers[k]; changed = true; } });
         if (changed) { changed = false; if (ch.handlers.sync) ch.handlers.sync(); }
-      }).catch(() => ch.fail(0)).then(() => { if (ch.alive) ch.pt = setTimeout(poll, 140); });
+      }).catch(() => { delay = Math.min(POLL_MAX, delay * 2); ch.fail(0); }).then(() => { if (ch.alive && !ch.paused) { clearTimeout(ch.pt); ch.pt = setTimeout(poll, delay); } });
     };
+    const onVis = () => { // resume after the tab comes back (peers are not timed out for the time we were not listening)
+      if (!ch.alive || document.hidden || !ch.paused || ch.last === undefined || !ch.started) return;
+      const now = performance.now(); Object.keys(ch.peers).forEach(k => { ch.peers[k].seen = now; });
+      clearTimeout(ch.pt); delay = POLL_MS; poll();
+    };
+    document.addEventListener('visibilitychange', onVis);
     ch.subscribe = cb => {
       fetch(base + '?room=eq.' + code + '&select=id&order=id.desc&limit=1', { headers: H }).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(rows => {
-        if (!ch.alive) return; ch.last = rows && rows[0] ? rows[0].id : 0; cb('SUBSCRIBED'); poll();
-        ch.timers.push(setInterval(() => { flush(); }, 120));
-        ch.timers.push(setInterval(() => { if (ch.meta) enqueue('p', ch.meta); }, 1500));
+        if (!ch.alive) return; ch.last = rows && rows[0] ? rows[0].id : 0; ch.started = true; cb('SUBSCRIBED'); clearTimeout(ch.pt); poll();
+        if (!ch.timers.length) {   // never stack a second set of timers
+          ch.timers.push(setInterval(() => { flush(); }, 120));   // (only sends when something is queued)
+          ch.timers.push(setInterval(() => { if (ch.meta) enqueue('p', ch.meta); }, 4000));   // presence heartbeat: every 4 s (was 1.5 s); peers time out after 12 s
+        }
         fetch(base + '?created_at=lt.' + encodeURIComponent(new Date(Date.now() - 3600000).toISOString()), { method: 'DELETE', headers: H }).catch(() => {}); // tidy up old rooms
       }).catch(st => { if (ch.alive) cb(st === 404 ? 'NO_TABLE' : 'CHANNEL_ERROR'); });
       ch.onError = () => { if (ch.alive) cb('CHANNEL_ERROR'); };
       return ch;
     };
-    ch.close = () => { ch.alive = false; clearTimeout(ch.pt); ch.timers.forEach(t => { clearTimeout(t); clearInterval(t); }); };
+    ch.close = () => { ch.alive = false; clearTimeout(ch.pt); document.removeEventListener('visibilitychange', onVis); ch.timers.forEach(t => { clearTimeout(t); clearInterval(t); }); };
     return ch;
   }
 
@@ -7943,7 +7963,19 @@
   // ---- Online accounts, cloud saves and the leaderboard (Supabase). Everything here is optional: with no network, no account or the library blocked, the game plays as before with local saves. ----
   const SB_DIRECT = 'https://xbdotysbdgxkteswznbs.supabase.co', SB_URL = /\.netlify\.app$/.test(location.hostname) ? location.origin + '/sb' : SB_DIRECT, SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhiZG90eXNiZGd4a3Rlc3d6bmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NTgyOTMsImV4cCI6MjEwODMzNDI5M30.lmR79XGrDE4LD-3J8us30CBRtaaoQMcCRHacj0Qmmfc'; // (the public anon key; row-level security protects the data)
   CL = { sb: null, user: null, session: null, username: '', timer: 0, dirty: false, busy: false, initDone: false, newsDone: false, guest: false, autoShown: false, synced: '', status: '' };
-  try { if (!DIRECTOR && window.supabase && window.supabase.createClient) CL.sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }); } catch (e) { CL.sb = null; }
+  // ONE Supabase client for the whole game (accounts, profiles, leaderboard AND Realtime duels / lobbies / online count), so there is never a "Multiple GoTrueClient instances" warning.
+  // It is created against the direct URL (Realtime websockets can't use the Netlify /sb proxy); on Netlify its ordinary REST/auth requests are rewritten to the proxy by the fetch wrapper below.
+  // storageKey is the same one the old account client used (derived from SB_URL), so signed-in players stay signed in.
+  let SB_CLIENT = null;
+  function getSb() {
+    if (SB_CLIENT || DOWNTIME || DIRECTOR || !(window.supabase && window.supabase.createClient)) return SB_CLIENT;
+    try {
+      const viaProxy = SB_URL !== SB_DIRECT, f = (u, o) => fetch(viaProxy && typeof u === 'string' && u.indexOf(SB_DIRECT) === 0 ? SB_URL + u.slice(SB_DIRECT.length) : u, o);
+      SB_CLIENT = window.supabase.createClient(SB_DIRECT, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'sb-' + new URL(SB_URL).hostname.split('.')[0] + '-auth-token' }, global: { fetch: f }, realtime: { params: { eventsPerSecond: 30 } } });
+    } catch (e) { SB_CLIENT = null; }
+    return SB_CLIENT;
+  }
+  CL.sb = getSb();
   const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* storage unavailable */ } }, lsDel = k => { try { localStorage.removeItem(k); } catch (e) { /* storage unavailable */ } };
   const canon = o => JSON.stringify(o, (k, v) => Array.isArray(v) ? v.slice().sort() : v && typeof v === 'object' ? Object.keys(v).sort().reduce((r, x) => { r[x] = v[x]; return r; }, {}) : v);   // key-order-independent, so equal data never looks "changed"
   const cloudSnap = () => ({ v: 1, progress: { coins: progress.coins, owned: progress.owned.slice(), equipped: progress.equipped }, pass: { s: 2, xp: pass.xp, claimed: pass.claimed.slice(), eq: Object.assign({}, pass.eq) }, stats: Object.assign({}, stats), ranked: { points: ranked.points } });
@@ -7974,6 +8006,8 @@
   async function cloudPush() {
     if (!CL || !CL.user || !CL.sb) return;
     if (CL.busy) { CL.timer = setTimeout(cloudPush, 1500); return; }
+    const sig = canon([cloudSnap(), CL.noRankCol, CL.noDuelCol]);
+    if (sig === CL.lastSaved) { CL.dirty = false; lsDel('br_cloud_dirty'); return; }   // nothing actually changed since the last successful save: no request
     CL.busy = true; const ts = new Date().toISOString();
     try {
       const body = { progress: cloudSnap(), wins: num(stats.wins), updated_at: ts }; if (!CL.noRankCol) body.rank_points = num(ranked.points); if (!CL.noDuelCol) body.duel_wins = num(stats.duelWins);
@@ -7982,7 +8016,7 @@
         const m = r.error.message || ''; if (/rank_points/i.test(m)) { CL.noRankCol = true; delete body.rank_points; } else if (/duel_wins/i.test(m)) { CL.noDuelCol = true; delete body.duel_wins; } else break;
         r = await CL.sb.from('profiles').update(body).eq('id', CL.user.id);
       }
-      if (r.error) throw r.error; CL.dirty = false; lsDel('br_cloud_dirty'); lsSet('br_cloud_ts', ts); acctRender('saved'); }
+      if (r.error) throw r.error; CL.lastSaved = sig; CL.dirty = false; lsDel('br_cloud_dirty'); lsSet('br_cloud_ts', ts); acctRender('saved'); }
     catch (e) { acctRender('offline'); CL.timer = setTimeout(cloudPush, 30000); }
     CL.busy = false;
   }
@@ -7992,7 +8026,7 @@
   });
   window.addEventListener('online', () => { if (CL && CL.user && lsGet('br_cloud_dirty')) cloudQueue(); });
   async function cloudSync() { // after sign-in / on load with a saved session: pull the account's data and reconcile it with this device
-    const u = CL.user; if (!u || !CL.sb || CL.synced === u.id) return; CL.synced = u.id;
+    const u = CL.user; if (!u || !CL.sb || CL.synced === u.id) return; CL.synced = u.id; CL.lastSaved = '';
     let row = null;
     try { const r = await CL.sb.from('profiles').select('*').eq('id', u.id).maybeSingle(); if (r.error) throw r.error; row = r.data; } catch (e) { acctRender('offline'); CL.synced = ''; return; }
     const owner = lsGet('br_cloud_uid'), foreign = !!owner && owner !== u.id, local = foreign ? mergeSnap(null, null, false) : cloudSnap(), cloudData = row && row.progress && row.progress.v ? row.progress : null;
@@ -8090,7 +8124,7 @@
       setTimeout(() => {   // (not awaited inside the callback, as the library asks)
         if (ev === 'INITIAL_SESSION') CL.initDone = true;
         if (ev === 'PASSWORD_RECOVERY') { authOpen('recover'); return; }
-        if (CL.user) { if (!authEl.hidden && authMode !== 'recover') authClose(); cloudSync(); } else { CL.synced = ''; CL.username = ''; }
+        if (CL.user) { if (!authEl.hidden && authMode !== 'recover') authClose(); cloudSync(); } else { CL.synced = ''; CL.username = ''; CL.lastSaved = ''; }
         acctRender(); maybeAutoAuth();
       }, 0);
     });
@@ -8103,20 +8137,17 @@
   document.addEventListener('click', e => { if (e.target.id === 'acctIn') authOpen('login'); else if (e.target.id === 'acctOut') cloudLogout(); });
   acctRender();
   // ---- Leaderboard tab: top players by wins, plus your own rank ----
-  let lbT = 0, lbMode = 'rank', lbShown = '';
+  const LB_TTL = 45000, LB_LIMIT = 50, lbCache = {};   // per mode: { t, tbl, mine }; one request set per mode every 45 s at most
+  let lbMode = 'rank'; const lbPending = {};
   async function lbLoad(force) {
     const tb = $('lbTable'), mine = $('lbMine'); if (!tb) return;
     if (!CL.sb) { tb.innerHTML = ''; mine.textContent = 'The leaderboard needs an internet connection.'; return; }
-    if (!force && lbShown === lbMode && Date.now() - lbT < 15000 && tb.rows.length) return; lbT = Date.now(); lbShown = lbMode; mine.textContent = 'Loading...';
-    const duel = lbMode === 'duel', col = duel ? 'duel_wins' : 'rank_points';
+    const duel = lbMode === 'duel', col = duel ? 'duel_wins' : 'rank_points', hit = lbCache[lbMode];
+    if (hit && Date.now() - hit.t < (force ? 15000 : LB_TTL)) { tb.innerHTML = hit.tbl; mine.textContent = hit.mine; return; }   // cached (the refresh button may re-fetch after 10 s)
+    if (lbPending[lbMode]) return; lbPending[lbMode] = true; mine.textContent = 'Loading...';
+    const mode = lbMode;
     try {
-      // every player with points, fetched a page at a time (the server caps one request at 1000 rows)
-      const r = { data: [], error: null };
-      for (let from = 0; from < 20000; from += 1000) {
-        const pg = await CL.sb.from('profiles').select('username,' + col).gt(col, 0).order(col, { ascending: false }).order('username').range(from, from + 999);
-        if (pg.error) { r.error = pg.error; break; }
-        r.data.push(...pg.data); if (pg.data.length < 1000) break;
-      }
+      const r = await CL.sb.from('profiles').select('username,' + col).gt(col, 0).order(col, { ascending: false }).order('username').limit(LB_LIMIT);   // top 50 only
       if (lbMode !== (duel ? 'duel' : 'rank')) return;   // the player switched tabs while this was loading
       if (r.error) { tb.innerHTML = ''; mine.textContent = new RegExp(col, 'i').test(r.error.message || '') ? 'This leaderboard is not set up yet (the ' + col + ' column is missing in the database).' : 'Could not load the leaderboard.'; return; }
       const me = CL.username, rk = pts => RANKS[rankOf(pts)] || RANKS[0], rc = pts => rk(pts).color || '#cd7f32', mark = p => me && p.username === me ? ' class="me"' : '';
@@ -8127,9 +8158,11 @@
         if (w > 0) { const c = await CL.sb.from('profiles').select('id', { count: 'exact', head: true }).gt(col, w); if (lbMode === (duel ? 'duel' : 'rank')) mine.textContent = c.error ? '' : 'YOUR RANK: #' + ((c.count || 0) + 1) + ' \u2022 ' + (duel ? w + (w === 1 ? ' duel win' : ' duel wins') : rk(w).name.toUpperCase() + ' \u2022 ' + w + ' pts'); }
         else mine.textContent = duel ? 'Win a 1v1 duel to get on the board.' : 'Earn ranked points (Ranked mode) to get on the board.';
       } else mine.textContent = 'Log in to appear on the leaderboard.';
+      lbCache[mode] = { t: Date.now(), tbl: tb.innerHTML, mine: mine.textContent };
     } catch (e) { mine.textContent = 'Could not load the leaderboard - check your connection.'; }
+    finally { lbPending[mode] = false; }
   }
-  function lbSwitch(mode) { if (lbMode === mode) return; lbMode = mode; $('lbTabRank').classList.toggle('on', mode === 'rank'); $('lbTabDuel').classList.toggle('on', mode === 'duel'); $('lbTabRank').setAttribute('aria-selected', mode === 'rank'); $('lbTabDuel').setAttribute('aria-selected', mode === 'duel'); $('lbTable').innerHTML = ''; lbLoad(true); }
+  function lbSwitch(mode) { if (lbMode === mode) return; lbMode = mode; $('lbTabRank').classList.toggle('on', mode === 'rank'); $('lbTabDuel').classList.toggle('on', mode === 'duel'); $('lbTabRank').setAttribute('aria-selected', mode === 'rank'); $('lbTabDuel').setAttribute('aria-selected', mode === 'duel'); $('lbTable').innerHTML = ''; lbLoad(); }
   $('lbTabRank').addEventListener('click', () => { sfx('click'); lbSwitch('rank'); }); $('lbTabDuel').addEventListener('click', () => { sfx('click'); lbSwitch('duel'); });
   $('lbRefresh').addEventListener('click', () => { sfx('click'); lbLoad(true); });
   // ---- UPDATE / NEWS popup: one page for v2.1, shown automatically ONE time per browser (see NEWS_KEY) and reopened from the lobby's NEWS button ----

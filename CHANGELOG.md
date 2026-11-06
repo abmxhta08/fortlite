@@ -1,5 +1,15 @@
 # FortLite changelog
 
+## Unreleased: fewer Supabase requests (and a downtime switch)
+
+Only how often the game talks to Supabase changed; gameplay, balance, UI and features are the same. All changes are in `index.html`.
+
+- **Downtime switch:** `const DOWNTIME` at the top of `<head>`. `true` shows only a black "Servers under maintenance" screen (no libraries loaded, no Supabase client, no polling, no game loop); `false` (current) runs the game normally.
+- **One Supabase client:** accounts, profiles, leaderboard, Realtime duels / lobbies and the online count all share one client from `getSb()` (no more "Multiple GoTrueClient instances"). On Netlify its REST / auth calls go through the `/sb` proxy; Realtime stays direct. Same storage key, so players stay signed in. Nothing calls `getSession` / refresh in a loop (the library refreshes the token itself).
+- **School-friendly duel and lobby polling (`duel_msgs`):** one read every 1.5 s (was ~140 ms, about 7 a second), `id=gt.<lastId>`, `limit=50` (was 200), `select=id,sender,kind,body`. Errors back off (delay doubles up to 10 s, resets on success). It stops when the room or lobby is left or the match ends, pauses while the tab is hidden and resumes when it is visible. Timers can no longer stack. The presence heartbeat write is every 4 s (was 1.5 s; peers still time out after 12 s).
+- **profiles writes:** one batched update (progress, wins, rank, duel wins) a couple of seconds after a real change (match end, purchase, equip), skipped if the values equal the last successful save; the tab-close save only runs with unsaved data. No timer writes to profiles.
+- **Leaderboard:** fetched only when the BOARD tab opens or the mode is switched, cached 45 s per mode, `limit=50` ordered by points descending (was paging up to 20,000 rows). REFRESH is throttled to once per 15 s.
+
 ## v2.1 "Duos" (online Duos, party lobby, news and version bump)
 
 Version 2.1 adds online Duos and the party lobby, nerfs the Hand Cannon for bots, moves coins to Ranked wins and the Battle Pass, and ships the fixes found along the way.
