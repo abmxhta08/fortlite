@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>/* Set to false to re-open ONLINE LOBBY (1v1 Duel + Duos). While true the button only shows a maintenance message and no realtime connection is ever made. */ const ONLINE_MAINTENANCE = true;</script>
 <script>/* Set to false to bring the game back. While true only the downtime screen shows: no Supabase client, no polling, no game loop. */ const DOWNTIME = false;</script>
 <title>Fortlite</title>
 <link rel="preload" href="fonts/Anton-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -172,7 +173,6 @@
   #lobby .card .poor { color: #ff6a6a; font-size: 11px; margin-top: 4px; min-height: 14px; }
   #lobby .verbtn { position: absolute; left: 24px; top: 196px; width: 250px; display: none; padding: 12px 18px; border-radius: 14px; border: 2px solid rgba(255,210,74,0.8); background: rgba(5,12,28,0.85); color: #ffd24a; font-weight: 900; font-size: 18px; letter-spacing: 3px; cursor: pointer; }
   #lobby[data-tab="play"] .verbtn { display: block; }
-  #lobby .onl { position: absolute; left: 24px; top: 308px; width: 250px; display: none; box-sizing: border-box; padding: 8px 18px; border-radius: 14px; border: 2px solid rgba(94,226,122,0.55); background: rgba(5,12,28,0.85); color: #5ee27a; font-weight: 900; font-size: 15px; letter-spacing: 3px; text-align: center; pointer-events: none; } #lobby[data-tab="play"] .onl.on { display: block; }
   #lobby .vtag { position: absolute; left: 26px; bottom: 6px; font-size: 11px; letter-spacing: 2px; color: #7f94ab; pointer-events: none; }
   #lobby .verbtn:hover { background: rgba(255,210,74,0.15); }
   #verPanel { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.55); z-index: 5; }
@@ -537,10 +537,6 @@
   #lobby .tabs button { color: #ffe2bc; } #lobby .tabs button.active { color: #3a1c08; box-shadow: 0 2px 0 var(--cyan); }
   #lobby .newsbtn { border-color: rgba(255,176,74,0.85); color: #ffb04a; background: rgba(40,20,8,0.85); } #lobby .newsbtn:hover { background: rgba(255,176,74,0.18); }
   #lobby .brand { text-shadow: 0 0 14px rgba(255,176,74,0.55); } #lobby .rk-bar i { background: linear-gradient(90deg, #e07a1c, var(--cyan)); }
-  #lobby .rcol .onl { position: relative; width: auto; top: auto; left: auto; }
-  #lobby .onl.on { pointer-events: auto; cursor: pointer; } #lobby .onl.on:hover { background: rgba(10,26,52,0.92); }
-  #lobby .onl .onlist { display: none; position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 30; max-height: 240px; overflow-y: auto; padding: 8px 12px; border-radius: 12px; border: 2px solid rgba(94,226,122,0.45); background: rgba(5,12,28,0.96); color: #dfeee3; font-size: 14px; font-weight: 700; letter-spacing: 1px; text-align: left; cursor: default; }
-  #lobby .onl.open .onlist { display: block; } #lobby .onlist div { padding: 3px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } #lobby .onlist .you { color: #ffd24a; } #lobby .onlist .more { color: #8fa3b8; font-weight: 600; font-size: 12px; letter-spacing: 0; }
 </style>
 </head>
 <body>
@@ -690,7 +686,6 @@
     <div class="mc-art" id="mapArt"></div>
     <div class="mc-name" id="mapName"></div>
   </div>
-  <div class="onl" id="onlBadge" role="button" tabindex="0" aria-expanded="false" title="Click to see who is online"><span id="onlTxt"></span><div class="onlist" id="onlList"></div></div>
   </div>
   <div class="pcard" id="pCard"><span class="pi" id="pCardIcon"></span><div><b id="pCardName"></b><small id="pCardTitle"></small></div></div>
   <section class="pass" id="tab-pass">
@@ -733,7 +728,7 @@
       <li>Shield potions (blue) add up to 100 shield; medkits come out of chests.</li>
       <li>Four supply drops land each match (every ~30 s once the storm starts). Press E to open one — it holds a jetpack, sniper or minigun. Jetpack: hold Space while airborne. Sniper: right-click or Q toggles the scope.</li>
       <li><b>New skins:</b> Raven Developer and Sergeant Trubin are the two featured Item Shop skins; Samurai Riley, Pablo and Luke are in the regular catalog (10 coins each). Previously sold skins Crimson, Arctic, Jungle, Midnight and Golden were retired: owners keep them, nobody can buy them.</li>
-      <li><b>1v1 Duel:</b> the <b>ONLINE LOBBY</b> button opens a lobby: CREATE LOBBY gives a code to share, or type a friend's code and JOIN. When both players are in, the host picks <b>1v1 Duel</b> or <b>Duos</b>; press READY and START; after a 3-second countdown it is first to 3 round wins in a walled Meadow Mall arena (no chests, no storm). Both players spawn on opposite sides with an assault rifle, a shotgun, 2 shield potions and full health and shield. Pausing does not stop the match. If your network blocks live connections, use SCHOOL-FRIENDLY ROOM (a slower connection; its codes start with a digit). Duels give no coins or ranked points; duel wins count for the DUELS tab of the LEADERBOARD (log in to appear).</li>
+      <li><b>1v1 Duel:</b> the <b>ONLINE LOBBY</b> button opens a lobby: CREATE LOBBY gives a code to share, or type a friend's code and JOIN. When both players are in, the host picks <b>1v1 Duel</b> or <b>Duos</b>; press READY and START; after a 3-second countdown it is first to 3 round wins in a walled Meadow Mall arena (no chests, no storm). Both players spawn on opposite sides with an assault rifle, a shotgun, 2 shield potions and full health and shield. Pausing does not stop the match. Duels give no coins or ranked points; duel wins count for the DUELS tab of the LEADERBOARD (log in to appear).</li>
       <li><b>Accounts &amp; leaderboard:</b> optionally create an account (email + password, with a username) to save your coins, skins, battle pass and ranked points online and appear on the LEADERBOARD tab. You can always play as a guest; guest progress stays on this device and is added to your account the first time you log in.</li>
       <li><b>Locker:</b> the LOCKER tab shows what you own in five slots (outfit, back bling, glider, contrail, weapon wrap). Click an item to preview it, then EQUIP; choose NONE / DEFAULT to remove one. Items earned from the Battle Pass or bought in the Item Shop all appear there.</li>
       <li><b>Pumpkin RPG</b> (chest find, 15% of chests): one slow rocket per magazine, R to reload from 3 spare rockets, a 5.5 m blast for 120 damage that walls block and that also hurts you.</li>
@@ -777,7 +772,7 @@
     <h2>WHAT'S NEW IN v2.1</h2><div class="vsub">FORTLITE VERSION 2.1</div>
     <ul>
       <li><b>Duos (online):</b> press <b>ONLINE LOBBY</b>, create a lobby and send the code to a friend (or enter theirs). Once you are both in, the host picks <b>Duos</b> or <b>1v1 Duel</b>; ready up and START. In Duos you and your partner are one team against 17 bot duos on a random map. Lethal damage knocks you down for 30 seconds: hold <b>F</b> next to a downed teammate for 5 seconds to revive them. No friendly fire; if you are out you spectate your teammate (you see their items and their shots). Last team standing wins.</li>
-      <li><b>Lobby:</b> your party now stands together in the main lobby, with Ready / Not Ready above each player. After a match you both return to the same party. On networks that block live connections (some school Chromebooks) create a <b>SCHOOL-FRIENDLY LOBBY</b> instead.</li>
+      <li><b>Lobby:</b> your party now stands together in the main lobby, with Ready / Not Ready above each player. After a match you both return to the same party.</li>
       <li><b>Hand Cannon nerfed:</b> bots can still pick it up, but their Hand Cannon shots always miss for now.</li>
       <li><b>Coins:</b> a win gives 1 coin in <b>Ranked</b> only. The Battle Pass now has 25 tiers: tiers 5, 10, 15, 20 and 25 give 3 coins each, and the Starfall skin moved to tier 24.</li>
       <li><b>Also new:</b> a live list of who is online (with an Appear offline setting), an FPS and ping readout in matches, and shadows on by default (turn them off in Settings). An online match keeps running while you pause. Fixed: logging in now loads your saved progress, and Log out really logs you out.</li>
@@ -853,7 +848,6 @@
     <div class="du-tag">1V1 DUEL</div><h2 id="duelTitle">PLAY A FRIEND</h2>
     <div id="duMenu">
       <button type="button" id="duCreate" class="du-go">CREATE ROOM</button>
-      <button type="button" id="duCreateP" class="du-alt" style="margin-top:8px">SCHOOL-FRIENDLY ROOM (SLOWER)</button>
       <div class="du-or">OR JOIN WITH A CODE</div>
       <div class="du-join"><input id="duCode" maxlength="4" placeholder="CODE" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Room code"><button type="button" id="duJoin" class="du-alt">JOIN</button></div>
     </div>
@@ -6855,7 +6849,7 @@
     refreshCoins(); renderShop(); renderPCard(); refreshPassBadge();
   }
   function readSettings() {
-    settings.name = inName.value.trim().slice(0, 12) || 'Player'; settings.offline = inOffline.checked; if (typeof onlineRetrack === 'function') onlineRetrack();
+    settings.name = inName.value.trim().slice(0, 12) || 'Player'; settings.offline = inOffline.checked;
     settings.sens = +inSens.value; settings.fov = +inFov.value; settings.vol = +inVol.value; settings.gfx = inGfx.value === 'high' ? 'high' : 'low'; settings.view = inView.value === 'third' ? 'third' : 'first'; camMode = settings.view;
     saveJSON('br_settings', settings);
     applySettings(); setVolume(); syncLobby();
@@ -6889,7 +6883,6 @@
     showTab('play'); stage.position.x = 0; stage.position.y = 0; stage.scale.set(1, 1, 1);
     lobbyBg.style.display = 'block';
     lobbyEl.style.display = 'block';
-    onlineStart();
     if (!storageOk) toast('Saving unavailable — progress will last this session only');
   }
   tabsEl.addEventListener('click', e => {
@@ -7073,7 +7066,7 @@
   let match = { mapId: 0, started: true, ranked: false, settled: true, passAwarded: true };
   // A genuinely new match: fresh reset, this match's map is chosen, and the victory reward can be granted again.
   function beginMatch() {
-    cleanupVictory(); rewardGranted = false; onlineStop();
+    cleanupVictory(); rewardGranted = false;
     const isRanked = ranked.mode === 'ranked', rk = rankOf(ranked.points);
     // The entry fee is locked from the rank held right now and is only paid once the match really starts.
     match = { mapId: rotation.next, started: false, ranked: isRanked, entryCost: isRanked ? RANKS[rk].cost : 0, startPoints: ranked.points, startRank: rk, profile: isRanked ? BOT_PROFILES.ranks[rk] : BOT_PROFILES.quick, entryPaid: 0, elimPoints: 0, settled: false, passAwarded: false, damageDealt: 0, ended: false };
@@ -7612,44 +7605,6 @@
     }
     return [0, tz];
   }
-  // ---- Online player count (lobby only): everyone sitting in the lobby joins one Realtime presence channel; the badge counts the connected tabs. Hidden if the service is unreachable. ----
-  const ONL = { ch: null, id: Math.random().toString(36).slice(2, 10), t: 0 }, onlBadge = $('onlBadge'), onlTxt = $('onlTxt'), onlList = $('onlList');
-  // Clicking the badge lists who is online: account usernames, or "Guest" plus a number (the same guest name the 1v1 duel uses). "Appear offline" (Settings) keeps you in the count but hides your name.
-  const onlineName = () => String((CL && CL.username) || (DUEL.guest = DUEL.guest || 'Guest' + (100 + ((Math.random() * 900) | 0)))).slice(0, 16);
-  const onlineMeta = () => ({ name: settings.offline ? '' : onlineName(), t: Date.now() });
-  function onlineRender() {
-    const ch = ONL.ch; if (!ch) return;
-    const st = ch.presenceState(), names = []; let hidden = 0, me = '';
-    Object.keys(st).forEach(k => { const m = (st[k] && st[k][0]) || {}; if (m.name) { if (k === ONL.id) me = m.name; else names.push(m.name); } else hidden++; });
-    names.sort((a, b) => a.localeCompare(b));
-    const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    onlList.innerHTML = (me ? '<div class="you">' + esc(me) + ' (you)</div>' : '') + names.map(n => '<div>' + esc(n) + '</div>').join('') + (hidden ? '<div class="more">+ ' + hidden + ' appearing offline' + (settings.offline ? ' (including you)' : '') + '</div>' : '');
-  }
-  function onlineRetrack() { const ch = ONL.ch; if (ch) { try { ch.track(onlineMeta()); } catch (e) { /* not connected yet */ } } }
-  function onlineShow(n) { onlTxt.textContent = '\u25CF ' + n + ' ONLINE'; onlBadge.classList.toggle('on', n > 0); if (n <= 0) onlBadge.classList.remove('open'); onlineRender(); }
-  function onlineToggle(open) { const o = open === undefined ? !onlBadge.classList.contains('open') : open; if (o && !onlBadge.classList.contains('on')) return; onlBadge.classList.toggle('open', o); onlBadge.setAttribute('aria-expanded', o); if (o) onlineRender(); }
-  onlBadge.addEventListener('click', e => { if (e.target.closest('.onlist')) return; if (typeof sfx === 'function') sfx('click'); onlineToggle(); });
-  onlBadge.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onlineToggle(); } else if (e.key === 'Escape') onlineToggle(false); });
-  document.addEventListener('click', e => { if (!onlBadge.contains(e.target)) onlineToggle(false); });
-  function onlineStop() {
-    clearTimeout(ONL.t); ONL.t = 0; onlBadge.classList.remove('on', 'open');
-    const ch = ONL.ch; ONL.ch = null;
-    if (ch) { try { const sb = duelClient(); ch.untrack && ch.untrack(); sb && sb.removeChannel(ch); } catch (e) { /* ignore */ } }
-  }
-  function onlineStart() {
-    if (DIRECTOR || ONL.ch || ONL.t) return;
-    ONL.t = setTimeout(() => { // a short delay, so quickly starting a match never opens the connection
-      ONL.t = 0;
-      if (state !== 'lobby' || ONL.ch) return;
-      const sb = duelClient(); if (!sb) return;
-      try {
-        const ch = sb.channel('lobby-online', { config: { presence: { key: ONL.id } } });
-        ONL.ch = ch;
-        ch.on('presence', { event: 'sync' }, () => { if (ONL.ch === ch) onlineShow(Object.keys(ch.presenceState()).length); })
-          .subscribe(st => { if (st === 'SUBSCRIBED' && ONL.ch === ch) ch.track(onlineMeta()); else if ((st === 'CHANNEL_ERROR' || st === 'TIMED_OUT' || st === 'CLOSED') && ONL.ch === ch) onlBadge.classList.remove('on'); });
-      } catch (e) { ONL.ch = null; }
-    }, 1500);
-  }
   function duelClient() { // (test builds: ?netsim swaps in the same-browser channel)
     if (typeof NETSIM !== 'undefined' && NETSIM) return SIMSB;
     return duelClientLive();
@@ -7660,63 +7615,8 @@
     return DUEL.sb;
   }
   const duelName = () => String((CL && CL.username) || (settings.name && settings.name !== 'Player' ? settings.name : (DUEL.guest = DUEL.guest || 'Guest' + (100 + ((Math.random() * 900) | 0))))).slice(0, 16);
-  const DUEL_L = 'ABCDEFGHJKMNPQRSTUVWXYZ', DUEL_D = '23456789', isPollCode = c => /^[2-9]/.test(c);
+  const DUEL_L = 'ABCDEFGHJKMNPQRSTUVWXYZ', DUEL_D = '23456789';
   const duelCode = poll => { let c = (poll ? DUEL_D : DUEL_L)[(Math.random() * (poll ? DUEL_D : DUEL_L).length) | 0]; for (let i = 1; i < 4; i++) c += DUEL_CHARS[(Math.random() * DUEL_CHARS.length) | 0]; return c; }; // codes starting with a digit use the slower request-based connection (it works on networks that block websockets)
-
-  // ----- fallback connection: the same channel interface, carried by ordinary requests to the duel_msgs table (they also work through the Netlify /sb proxy) -----
-  function pollChannel(code, myId) {
-    const H = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' }, base = SB_URL + '/rest/v1/duel_msgs';
-    const ch = { isPoll: true, handlers: {}, peers: {}, queue: [], last: 0, alive: true, meta: null, timers: [], fails: 0 };
-    ch.on = (type, f, cb) => { ch.handlers[type === 'presence' ? 'sync' : 'm'] = cb; return ch; };
-    ch.presenceState = () => { const o = {}; Object.keys(ch.peers).forEach(k => { o[k] = [ch.peers[k].meta]; }); return o; };
-    const enqueue = (kind, body) => { if (kind === 'm' && body && body.t === 'st') ch.queue = ch.queue.filter(r => !(r.kind === 'm' && r.body && r.body.t === 'st')); ch.queue.push({ room: code, sender: myId, kind, body }); };
-    ch.track = meta => { ch.meta = meta; enqueue('p', meta); return Promise.resolve(); };
-    ch.send = o => { const b = o.payload; if (b && b.t === 'bye') { enqueue('x', b); flush(true); } else enqueue('m', b); return Promise.resolve('ok'); };
-    const flush = keep => {
-      if (!ch.queue.length) return; const rows = ch.queue; ch.queue = [];
-      fetch(base, { method: 'POST', keepalive: !!keep, headers: Object.assign({ Prefer: 'return=minimal' }, H), body: JSON.stringify(rows) }).then(r => { if (!r.ok) ch.fail(r.status); else ch.fails = 0; }).catch(() => ch.fail(0));
-    };
-    ch.fail = st => { if (++ch.fails >= 6 && ch.alive && ch.onError) ch.onError(st); };
-    let changed = false;
-    const POLL_MS = 1500, POLL_MAX = 10000;   // at most one duel_msgs read every 1.5 s (was every ~140 ms); after an error the wait doubles up to 10 s and resets on success
-    let delay = POLL_MS;
-    const poll = () => {
-      if (!ch.alive) return;
-      if (document.hidden) { ch.paused = true; return; }   // tab hidden: stop polling; the visibilitychange handler below resumes it
-      ch.paused = false;
-      fetch(base + '?room=eq.' + code + '&id=gt.' + ch.last + '&sender=neq.' + myId + '&select=id,sender,kind,body&order=id.asc&limit=50', { headers: H }).then(r => { if (!r.ok) { delay = Math.min(POLL_MAX, delay * 2); ch.fail(r.status); return null; } ch.fails = 0; delay = POLL_MS; return r.json(); }).then(rows => {
-        const now = performance.now();
-        (rows || []).forEach(r => {
-          if (r.id > ch.last) ch.last = r.id;
-          if (r.kind === 'p') { if (!ch.peers[r.sender]) changed = true; ch.peers[r.sender] = { meta: r.body, seen: now }; }
-          else if (r.kind === 'x') { if (ch.peers[r.sender]) { delete ch.peers[r.sender]; changed = true; } if (ch.handlers.m) ch.handlers.m({ payload: r.body }); }
-          else { if (ch.peers[r.sender]) ch.peers[r.sender].seen = now; if (ch.handlers.m && r.body) ch.handlers.m({ payload: r.body }); }
-        });
-        Object.keys(ch.peers).forEach(k => { if (now - ch.peers[k].seen > 12000) { delete ch.peers[k]; changed = true; } });
-        if (changed) { changed = false; if (ch.handlers.sync) ch.handlers.sync(); }
-      }).catch(() => { delay = Math.min(POLL_MAX, delay * 2); ch.fail(0); }).then(() => { if (ch.alive && !ch.paused) { clearTimeout(ch.pt); ch.pt = setTimeout(poll, delay); } });
-    };
-    const onVis = () => { // resume after the tab comes back (peers are not timed out for the time we were not listening)
-      if (!ch.alive || document.hidden || !ch.paused || ch.last === undefined || !ch.started) return;
-      const now = performance.now(); Object.keys(ch.peers).forEach(k => { ch.peers[k].seen = now; });
-      clearTimeout(ch.pt); delay = POLL_MS; poll();
-    };
-    document.addEventListener('visibilitychange', onVis);
-    ch.subscribe = cb => {
-      fetch(base + '?room=eq.' + code + '&select=id&order=id.desc&limit=1', { headers: H }).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(rows => {
-        if (!ch.alive) return; ch.last = rows && rows[0] ? rows[0].id : 0; ch.started = true; cb('SUBSCRIBED'); clearTimeout(ch.pt); poll();
-        if (!ch.timers.length) {   // never stack a second set of timers
-          ch.timers.push(setInterval(() => { flush(); }, 120));   // (only sends when something is queued)
-          ch.timers.push(setInterval(() => { if (ch.meta) enqueue('p', ch.meta); }, 4000));   // presence heartbeat: every 4 s (was 1.5 s); peers time out after 12 s
-        }
-        fetch(base + '?created_at=lt.' + encodeURIComponent(new Date(Date.now() - 3600000).toISOString()), { method: 'DELETE', headers: H }).catch(() => {}); // tidy up old rooms
-      }).catch(st => { if (ch.alive) cb(st === 404 ? 'NO_TABLE' : 'CHANNEL_ERROR'); });
-      ch.onError = () => { if (ch.alive) cb('CHANNEL_ERROR'); };
-      return ch;
-    };
-    ch.close = () => { ch.alive = false; clearTimeout(ch.pt); document.removeEventListener('visibilitychange', onVis); ch.timers.forEach(t => { clearTimeout(t); clearInterval(t); }); };
-    return ch;
-  }
 
   // ----- room screen -----
   function duelUi(msg, ok) { duMsg.textContent = msg || ''; duMsg.className = 'du-msg' + (ok ? ' ok' : ''); }
@@ -7744,22 +7644,22 @@
 
   // ----- connection -----
   function duelConnect(code, host) {
-    const poll = isPollCode(code), sb = poll ? null : duelClient();
-    if (!poll && !sb) { duelUi('Live connection is not available here. Press "SCHOOL-FRIENDLY ROOM" instead.'); return; }
+    if (ONLINE_MAINTENANCE) { duelUi('Online play is under maintenance.'); return; }
+    const sb = duelClient();
+    if (!sb) { duelUi('Live connection is not available here.'); return; }
     duelDropCh();
-    Object.assign(DUEL, { code, host, id: Math.random().toString(36).slice(2, 10), name: duelName(), t: Date.now(), opp: null, meReady: false, oppReady: false, subscribed: false, lastMsg: performance.now(), poll });
+    Object.assign(DUEL, { code, host, id: Math.random().toString(36).slice(2, 10), name: duelName(), t: Date.now(), opp: null, meReady: false, oppReady: false, subscribed: false, lastMsg: performance.now(), poll: false });
     duelUi(host ? 'Creating the room…' : 'Joining the room…', true);
     let ch;
-    try { ch = poll ? pollChannel(code, DUEL.id) : sb.channel('duel-' + code, { config: { broadcast: { self: false }, presence: { key: DUEL.id } } }); } catch (e) { duelUi('Could not reach the online service.'); return; }
+    try { ch = sb.channel('duel-' + code, { config: { broadcast: { self: false }, presence: { key: DUEL.id } } }); } catch (e) { duelUi('Could not reach the online service.'); return; }
     DUEL.ch = ch;
     const fail = status => {
       if (DUEL.ch !== ch || DUEL.on) return;
-      if (host && !poll) { duelConnect(duelCode(true), true); duelUi('Live connection is blocked here, so this room uses the slower school-friendly connection.', true); return; } // fall back automatically
       duelDropCh();
-      duelUi(status === 'NO_TABLE' ? 'School-friendly duels are not set up yet (the duel_msgs table is missing).' : poll ? 'Could not connect. Check your internet.' : 'Could not connect: this network blocks live connections. Ask your friend to create a SCHOOL-FRIENDLY ROOM and use their code.');
+      duelUi('Could not connect. This network may block live connections, or check your internet.');
       duelRender();
     };
-    if (!poll) DUEL.wsT = setTimeout(() => { if (DUEL.ch === ch && !DUEL.subscribed) fail('TIMED_OUT'); }, 7000);
+    DUEL.wsT = setTimeout(() => { if (DUEL.ch === ch && !DUEL.subscribed) fail('TIMED_OUT'); }, 7000);
     ch.on('presence', { event: 'sync' }, () => { if (DUEL.ch === ch) duelPresence(); })
       .on('broadcast', { event: 'm' }, e => { if (DUEL.ch === ch && e && e.payload) duelRecv(e.payload); })
       .subscribe(status => {
@@ -7767,7 +7667,7 @@
         if (status === 'SUBSCRIBED') {
           DUEL.subscribed = true; DUEL.lastMsg = performance.now(); clearTimeout(DUEL.wsT);
           Promise.resolve(ch.track({ id: DUEL.id, name: DUEL.name, host, t: DUEL.t })).catch(() => {});
-          clearTimeout(DUEL.findT); DUEL.findT = setTimeout(() => { if (DUEL.ch === ch && !DUEL.opp && !host) { duelDropCh(); duelUi('No room with that code. Check the letters and try again.'); duelRender(); } }, poll ? 6000 : 3500);
+          clearTimeout(DUEL.findT); DUEL.findT = setTimeout(() => { if (DUEL.ch === ch && !DUEL.opp && !host) { duelDropCh(); duelUi('No room with that code. Check the letters and try again.'); duelRender(); } }, 3500);
           if (host) duelUi('Room ready. Give your friend the code!', true);
           duelRender();
         } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'NO_TABLE') { clearTimeout(DUEL.wsT); fail(status); }
@@ -7778,7 +7678,7 @@
     const ch = DUEL.ch, sb = DUEL.sb; DUEL.ch = null; clearTimeout(DUEL.findT);
     Object.assign(DUEL, { subscribed: false, opp: null, oppReady: false, meReady: false, code: '' });
     if (!ch) return;
-    clearTimeout(DUEL.wsT); let done = false; const end = () => { if (done) return; done = true; try { if (ch.isPoll) ch.close(); else sb.removeChannel(ch); } catch (e) { /* already closed */ } };
+    clearTimeout(DUEL.wsT); let done = false; const end = () => { if (done) return; done = true; try { sb.removeChannel(ch); } catch (e) { /* already closed */ } };
     try { const r = ch.send({ type: 'broadcast', event: 'm', payload: { t: 'bye', f: DUEL.id } }); if (r && r.then) r.then(end, end); else end(); } catch (e) { end(); }
     setTimeout(end, 1200);
   }
@@ -7895,7 +7795,7 @@
   function duelCheckGo() { // the host starts the match once both players are ready
     if (DUEL.host && DUEL.on && DUEL.phase === 'wait' && DUEL.meReady && DUEL.oppReady && DUEL.opp) { duelSend({ t: 'go' }); duelBegin(); }
   }
-  function duelBegin() { onlineStop(); DUEL.meReady = DUEL.oppReady = false; DUEL.lastMsg = performance.now(); DUEL.score = [0, 0]; DUEL.round = 1; duelRoundSetup(); duelCountdown(); }
+  function duelBegin() { DUEL.meReady = DUEL.oppReady = false; DUEL.lastMsg = performance.now(); DUEL.score = [0, 0]; DUEL.round = 1; duelRoundSetup(); duelCountdown(); }
   function duelCountdown() { DUEL.phase = 'count'; DUEL.freeze = true; DUEL.countAt = performance.now() + 3000; DUEL.lastNum = 99; }
   function duelSlow() { // 10 times a second, even while the game is paused: countdown, heartbeat and disconnect check
     const now = performance.now();
@@ -7951,7 +7851,6 @@
   const duelStatusText = () => DUEL.phase === 'wait' ? 'Waiting for ' + (DUEL.opp ? DUEL.opp.name : 'your opponent') + ' to be ready…' : DUEL.phase === 'count' ? 'ROUND ' + DUEL.round + ' — get ready' : DUEL.phase === 'between' ? DUEL.result : 'ROUND ' + DUEL.round + '  •  first to ' + DUEL_WINS;
   $('duelBtn').addEventListener('click', () => { initAudio(); sfx('click'); duelOpen(); });
   $('duCreate').addEventListener('click', () => { sfx('click'); duelConnect(duelCode(), true); });
-  $('duCreateP').addEventListener('click', () => { sfx('click'); duelConnect(duelCode(true), true); });
   $('duJoin').addEventListener('click', () => { sfx('click'); const c = $('duCode').value.toUpperCase().replace(/[^A-Z0-9]/g, ''); if (c.length !== 4) { duelUi('Enter the 4-letter room code.'); return; } duelConnect(c, false); });
   $('duBack').addEventListener('click', () => { sfx('click'); duelBack(); });
   $('duReady').addEventListener('click', duelReadyClick);
@@ -7962,6 +7861,15 @@
   if (document.fonts && document.fonts.load) document.fonts.load('16px Anton').then(() => { maps.forEach(m => m && m.redrawMM && m.redrawMM()); }).catch(() => {}); // labels drawn with the fallback font get redrawn once Anton is ready
   // ---- Online accounts, cloud saves and the leaderboard (Supabase). Everything here is optional: with no network, no account or the library blocked, the game plays as before with local saves. ----
   const SB_DIRECT = 'https://xbdotysbdgxkteswznbs.supabase.co', SB_URL = /\.netlify\.app$/.test(location.hostname) ? location.origin + '/sb' : SB_DIRECT, SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhiZG90eXNiZGd4a3Rlc3d6bmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NTgyOTMsImV4cCI6MjEwODMzNDI5M30.lmR79XGrDE4LD-3J8us30CBRtaaoQMcCRHacj0Qmmfc'; // (the public anon key; row-level security protects the data)
+  // Direct-first: requests go straight to Supabase (free of Netlify request counts). Only if that fails (school filters block supabase.co) the game switches to the Netlify /sb proxy, remembered for a day.
+  const SB_ONNL = /\.netlify\.app$/.test(location.hostname), SB_PROXY = location.origin + '/sb';
+  let sbViaProxy = false; try { sbViaProxy = SB_ONNL && Date.now() - Number(localStorage.getItem('sbpx') || 0) < 86400000; } catch (e) { /* storage unavailable */ }
+  function sbFetch(u, o) {
+    if (!SB_ONNL || typeof u !== 'string' || u.indexOf(SB_DIRECT) !== 0) return fetch(u, o);
+    const px = SB_PROXY + u.slice(SB_DIRECT.length);
+    if (sbViaProxy) return fetch(px, o);
+    return fetch(u, o).catch(err => { if (o && o.signal && o.signal.aborted) throw err; sbViaProxy = true; try { localStorage.setItem('sbpx', String(Date.now())); } catch (e) { /* storage unavailable */ } return fetch(px, o); });
+  }
   CL = { sb: null, user: null, session: null, username: '', timer: 0, dirty: false, busy: false, initDone: false, newsDone: false, guest: false, autoShown: false, synced: '', status: '' };
   // ONE Supabase client for the whole game (accounts, profiles, leaderboard AND Realtime duels / lobbies / online count), so there is never a "Multiple GoTrueClient instances" warning.
   // It is created against the direct URL (Realtime websockets can't use the Netlify /sb proxy); on Netlify its ordinary REST/auth requests are rewritten to the proxy by the fetch wrapper below.
@@ -7970,7 +7878,7 @@
   function getSb() {
     if (SB_CLIENT || DOWNTIME || DIRECTOR || !(window.supabase && window.supabase.createClient)) return SB_CLIENT;
     try {
-      const viaProxy = SB_URL !== SB_DIRECT, f = (u, o) => fetch(viaProxy && typeof u === 'string' && u.indexOf(SB_DIRECT) === 0 ? SB_URL + u.slice(SB_DIRECT.length) : u, o);
+      const f = sbFetch;
       SB_CLIENT = window.supabase.createClient(SB_DIRECT, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'sb-' + new URL(SB_URL).hostname.split('.')[0] + '-auth-token' }, global: { fetch: f }, realtime: { params: { eventsPerSecond: 30 } } });
     } catch (e) { SB_CLIENT = null; }
     return SB_CLIENT;
@@ -8016,13 +7924,13 @@
         const m = r.error.message || ''; if (/rank_points/i.test(m)) { CL.noRankCol = true; delete body.rank_points; } else if (/duel_wins/i.test(m)) { CL.noDuelCol = true; delete body.duel_wins; } else break;
         r = await CL.sb.from('profiles').update(body).eq('id', CL.user.id);
       }
-      if (r.error) throw r.error; CL.lastSaved = sig; CL.dirty = false; lsDel('br_cloud_dirty'); lsSet('br_cloud_ts', ts); acctRender('saved'); }
-    catch (e) { acctRender('offline'); CL.timer = setTimeout(cloudPush, 30000); }
+      if (r.error) throw r.error; CL.fails = 0; CL.lastSaved = sig; CL.dirty = false; lsDel('br_cloud_dirty'); lsSet('br_cloud_ts', ts); acctRender('saved'); }
+    catch (e) { acctRender('offline'); CL.fails = (CL.fails || 0) + 1; CL.timer = setTimeout(cloudPush, Math.min(300000, 30000 * Math.pow(2, CL.fails - 1))); }   // retry after 30 s, doubling up to 5 min (the unsaved flag stays set, so nothing is lost)
     CL.busy = false;
   }
   window.addEventListener('pagehide', () => { // last-chance save when the tab closes (a keep-alive request can finish after the page is gone)
     if (!CL || !CL.user || !CL.dirty || !CL.session) return;
-    try { fetch(SB_URL + '/rest/v1/profiles?id=eq.' + encodeURIComponent(CL.user.id), { method: 'PATCH', keepalive: true, headers: { apikey: SB_KEY, Authorization: 'Bearer ' + CL.session.access_token, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(Object.assign({ progress: cloudSnap(), wins: num(stats.wins), updated_at: new Date().toISOString() }, (CL.noRankCol ? {} : { rank_points: num(ranked.points) }), CL.noDuelCol ? {} : { duel_wins: num(stats.duelWins) })) }); } catch (e) { /* best effort */ }
+    try { sbFetch(SB_DIRECT + '/rest/v1/profiles?id=eq.' + encodeURIComponent(CL.user.id), { method: 'PATCH', keepalive: true, headers: { apikey: SB_KEY, Authorization: 'Bearer ' + CL.session.access_token, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(Object.assign({ progress: cloudSnap(), wins: num(stats.wins), updated_at: new Date().toISOString() }, (CL.noRankCol ? {} : { rank_points: num(ranked.points) }), CL.noDuelCol ? {} : { duel_wins: num(stats.duelWins) })) }); } catch (e) { /* best effort */ }
   });
   window.addEventListener('online', () => { if (CL && CL.user && lsGet('br_cloud_dirty')) cloudQueue(); });
   async function cloudSync() { // after sign-in / on load with a saved session: pull the account's data and reconcile it with this device
@@ -8262,7 +8170,7 @@
     #netDbg { position: fixed; left: 8px; bottom: 8px; z-index: 40; padding: 6px 9px; border-radius: 8px; background: rgba(0,0,0,0.6); color: #9bff9b; font: 12px/1.35 monospace; white-space: pre; pointer-events: none; display: none; }`;
   document.head.appendChild(olStyle);
   const olEl = document.createElement('div'); olEl.id = 'olobby'; olEl.hidden = true; olEl.setAttribute('role', 'dialog'); olEl.setAttribute('aria-modal', 'true');
-  olEl.innerHTML = '<div class="ol-box"><h2>ONLINE LOBBY</h2><div id="olStart"><div class="ol-row"><button id="olCreate" class="go">CREATE LOBBY</button><button id="olCreateP" title="For school networks that block live connections">SCHOOL-FRIENDLY LOBBY</button><span>or</span><input id="olCode" maxlength="6" placeholder="CODE" autocomplete="off" spellcheck="false"><button id="olJoin">JOIN</button></div></div>' +
+  olEl.innerHTML = '<div class="ol-box"><h2>ONLINE LOBBY</h2><div id="olStart"><div class="ol-row"><button id="olCreate" class="go">CREATE LOBBY</button><span>or</span><input id="olCode" maxlength="6" placeholder="CODE" autocomplete="off" spellcheck="false"><button id="olJoin">JOIN</button></div></div>' +
     '<div class="ol-msg" id="olMsg"></div>' +
     '<div class="ol-row"><button id="olClose">CLOSE</button></div></div>';
   document.body.appendChild(olEl);
@@ -8314,22 +8222,17 @@
     LB.lastN = pl.length; lbRender();
     if (!LB.host && !ONLINE.on && !LB.rjSent && hostM && hostM.m) { LB.rjSent = true; lbSend({ t: 'rj', u: LB.id, n: myName() }); olMsg('Match in progress: rejoining...'); }   // rejoin: ask the host for the match state
   }
-  function lbPollChannel(code, id) { // the school-friendly connection, shaped like a live channel (and counting yourself in the presence list)
-    const ch = pollChannel(code, id), ps = ch.presenceState;
-    ch.presenceState = () => { const o = ps(); if (ch.meta) o[id] = [ch.meta]; return o; };
-    return ch;
-  }
-  function lbFail(status) { // the connection never came up (or a school-friendly one died)
+  function lbFail(status) { // the connection never came up 
     if (LB.started || ONLINE.on) { lbStatus('connection lost', 'bad'); return; }
-    if (LB.host && !LB.poll && !LB.subscribed) { lbConnect(lbCode(true), true); toast('Live connection is blocked here, so this lobby uses the slower school-friendly connection.'); return; }   // fall back automatically, like the 1v1 room
-    lbLeave(status === 'NO_TABLE' ? 'School-friendly lobbies are not set up yet (the duel_msgs table is missing).' : LB.poll ? 'Could not connect. Check your internet.' : 'Could not connect: this network blocks live connections. Ask your friend to create a SCHOOL-FRIENDLY LOBBY and use their code.');
+    lbLeave('Could not connect. This network may block live connections, or check your internet.');
   }
   function lbConnect(code, host) {
-    const poll = isPollCode(code), sb = poll ? null : netSb(); if (!poll && !sb) { olMsg('Live connection is not available here. Try SCHOOL-FRIENDLY LOBBY.'); return; }
-    lbDrop(); LB.code = code; LB.host = host; LB.poll = poll; LB.subscribed = false; LB.id = Math.random().toString(36).slice(2, 10); LB.t = Date.now(); LB.ready = false; LB.rd = {}; LB.gone = {}; clearTimeout(LB.fullT); LB.fullT = 0; LB.started = false; LB.lastN = 0; LB.sawHost = host; LB.rjSent = false; olMsg(host ? 'Creating the lobby...' : 'Joining...');
-    let ch; try { ch = poll ? lbPollChannel(code, LB.id) : sb.channel('lobby:' + code, { config: { broadcast: { self: false }, presence: { key: LB.id } } }); } catch (e) { olMsg('Could not reach the online service.'); return; }
+    if (ONLINE_MAINTENANCE) { olMsg('Online play is under maintenance.'); return; }
+    const sb = netSb(); if (!sb) { olMsg('Live connection is not available here.'); return; }
+    lbDrop(); LB.code = code; LB.host = host; LB.poll = false; LB.subscribed = false; LB.id = Math.random().toString(36).slice(2, 10); LB.t = Date.now(); LB.ready = false; LB.rd = {}; LB.gone = {}; clearTimeout(LB.fullT); LB.fullT = 0; LB.started = false; LB.lastN = 0; LB.sawHost = host; LB.rjSent = false; olMsg(host ? 'Creating the lobby...' : 'Joining...');
+    let ch; try { ch = sb.channel('lobby:' + code, { config: { broadcast: { self: false }, presence: { key: LB.id } } }); } catch (e) { olMsg('Could not reach the online service.'); return; }
     LB.ch = ch; lbStatus('connecting');
-    if (!poll) { clearTimeout(LB.wsT); LB.wsT = setTimeout(() => { if (LB.ch === ch && !LB.subscribed) lbFail('TIMED_OUT'); }, 7000); }   // a blocked websocket never answers: give up after 7 seconds instead of retrying forever
+    { clearTimeout(LB.wsT); LB.wsT = setTimeout(() => { if (LB.ch === ch && !LB.subscribed) lbFail('TIMED_OUT'); }, 7000); }   // a blocked websocket never answers: give up after 7 seconds instead of retrying forever
     ch.on('presence', { event: 'sync' }, () => { if (LB.ch === ch) { lbSync(); if (ONLINE.on) onlinePresence(); } })
       .on('broadcast', { event: 'o' }, e => { if (LB.ch === ch && e && e.payload) onlineRecv(e.payload); })
       .subscribe(status => {
@@ -8337,7 +8240,7 @@
         if (status === 'SUBSCRIBED') {
           LB.subscribed = true; clearTimeout(LB.wsT);
           lbTrack(); lbRender();
-          if (!host) { clearTimeout(LB.findT); LB.findT = setTimeout(() => { if (LB.ch === ch && !lbPlayers().some(p => p.h)) lbLeave('Lobby not found. Check the code.'); }, poll ? 8000 : 6000); }
+          if (!host) { clearTimeout(LB.findT); LB.findT = setTimeout(() => { if (LB.ch === ch && !lbPlayers().some(p => p.h)) lbLeave('Lobby not found. Check the code.'); }, 6000); }
           else lbStatus('connected', 'ok');
         } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED' || status === 'NO_TABLE') {
           clearTimeout(LB.wsT);
@@ -8348,18 +8251,17 @@
   }
   function lbDrop(keepChannel) {
     clearTimeout(LB.findT); LB.findT = 0; clearTimeout(LB.fullT); LB.fullT = 0; clearTimeout(LB.wsT); LB.wsT = 0; const ch = LB.ch;
-    if (ch && !keepChannel) { try { ch.send({ type: 'broadcast', event: 'o', payload: { t: 'lg', u: LB.id } }); if (ch.isPoll) ch.send({ type: 'broadcast', event: 'o', payload: { t: 'bye' } }); } catch (e) { /* offline */ } }
+    if (ch && !keepChannel) { try { ch.send({ type: 'broadcast', event: 'o', payload: { t: 'lg', u: LB.id } }); } catch (e) { /* offline */ } }
     LB.ch = null;
-    if (ch && !keepChannel) { try { if (ch.isPoll) setTimeout(() => ch.close(), 400); else { ch.untrack && ch.untrack(); const sb = netSb(); sb && sb.removeChannel(ch); } } catch (e) { /* gone already */ } }   // (a school-friendly channel is closed a moment later so its goodbye messages go out first)
+    if (ch && !keepChannel) { try { ch.untrack && ch.untrack(); const sb = netSb(); sb && sb.removeChannel(ch); } catch (e) { /* gone already */ } }   // out first)
   }
   function lbLeave(msg) { lbDrop(); LB.host = false; LB.ready = false; lbRender(); if (msg && olEl.hidden && !LB.started && !ONLINE.on) lbOpen(); olMsg(msg || ''); }
   function lbOpen() { olEl.hidden = false; lobbyEl.inert = true; olMsg(''); lbRender(); document.addEventListener('keydown', lbKey, true); }
   function lbClose() { olEl.hidden = true; if (!newsOpen && authEl.hidden && duEl.hidden) lobbyEl.inert = false; document.removeEventListener('keydown', lbKey, true); }
   function lbKey(e) { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); lbClose(); } else e.stopPropagation(); }
-  lobbyBtn.addEventListener('click', () => { sfx('click'); lbOpen(); });
+  lobbyBtn.addEventListener('click', () => { sfx('click'); if (ONLINE_MAINTENANCE) { toast('ONLINE LOBBY is under maintenance. 1v1 Duel and Duos are unavailable right now - please check back later.'); return; } lbOpen(); });
   olQ('olClose').addEventListener('click', () => { sfx('click'); if (LB.ch && !LB.started) lbLeave(); lbClose(); });
   olQ('olCreate').addEventListener('click', () => { sfx('click'); lbConnect(lbCode(false), true); });
-  olQ('olCreateP').addEventListener('click', () => { sfx('click'); lbConnect(lbCode(true), true); });
   olQ('olJoin').addEventListener('click', () => { sfx('click'); const c = olQ('olCode').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, ''); if (c.length < 5) { olMsg('Enter the 5 or 6 character code.'); return; } lbConnect(c, false); });
   $('ppLeave').addEventListener('click', () => { sfx('click'); lbLeave(); });
   $('ppReady').addEventListener('click', () => { sfx('click'); LB.ready = !LB.ready; lbSend({ t: 'lr', u: LB.id, r: LB.ready }); lbRender(); });

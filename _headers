@@ -1,0 +1,6 @@
+# Cache the files that never change by name so returning players don't re-request them every visit.
+# index.html is NOT listed, so it keeps Netlify's default (always revalidate) and new game versions reach players immediately.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/supabase.min.js
+  Cache-Control: public, max-age=86400
