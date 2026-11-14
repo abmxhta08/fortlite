@@ -7553,14 +7553,7 @@
   function perfTick(now) {
     PERF.n++;
     if (now - PERF.t < 500) return;
-    PERF.fps = Math.round(PERF.n * 1000 / (now - PERF.t)); PERF.n = 0; PERF.t = now;
-    if (perfEl.style.display !== 'block') return;
-    const fc = PERF.fps >= 50 ? '#5ee27a' : PERF.fps >= 30 ? '#ffd24a' : '#ff5a4a', pc = PERF.ping < 0 ? '#9fb0c4' : PERF.ping < 60 ? '#5ee27a' : PERF.ping < 120 ? '#ffd24a' : '#ff5a4a';
-    perfEl.innerHTML = '<b style="color:' + fc + '">' + PERF.fps + ' FPS</b> &nbsp;<b style="color:' + pc + '">' + (PERF.ping < 0 ? '- ms' : PERF.ping + ' ms') + '</b>';
-    if (now - PERF.probeT > 4000 && !DIRECTOR && /^https?:$/.test(location.protocol) && !document.hidden) {
-      PERF.probeT = now; const t0 = performance.now();
-      fetch(location.pathname, { method: 'HEAD', cache: 'no-store' }).then(() => { PERF.ping = Math.round(performance.now() - t0); }).catch(() => { PERF.ping = -1; });
-    }
+    PERF.fps = Math.round(PERF.n * 1000 / (now - PERF.t)); PERF.n = 0; PERF.t = now;   // (the on-screen FPS/ping overlay and its HEAD ping to the site were removed; PERF.fps is still used internally)
   }
   function loop(now) {
     requestAnimationFrame(loop);
