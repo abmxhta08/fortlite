@@ -7638,6 +7638,7 @@
   // ----- connection -----
   function duelConnect(code, host) {
     if (ONLINE_MAINTENANCE) { duelUi('Online play is under maintenance.'); return; }
+    if (CL.banned) { duelUi(BAN_MSG); return; }
     const sb = duelClient();
     if (!sb) { duelUi('Live connection is not available here.'); return; }
     duelDropCh();
@@ -7863,7 +7864,7 @@
     if (sbViaProxy) return fetch(px, o);
     return fetch(u, o).catch(err => { if (o && o.signal && o.signal.aborted) throw err; sbViaProxy = true; try { localStorage.setItem('sbpx', String(Date.now())); } catch (e) { /* storage unavailable */ } return fetch(px, o); });
   }
-  CL = { sb: null, user: null, session: null, username: '', timer: 0, dirty: false, busy: false, initDone: false, newsDone: false, guest: false, autoShown: false, synced: '', status: '' };
+  CL = { sb: null, user: null, session: null, username: '', timer: 0, dirty: false, busy: false, initDone: false, newsDone: false, guest: false, autoShown: false, synced: '', status: '', banned: false };
   // ONE Supabase client for the whole game (accounts, profiles, leaderboard AND Realtime duels / lobbies / online count), so there is never a "Multiple GoTrueClient instances" warning.
   // It is created against the direct URL (Realtime websockets can't use the Netlify /sb proxy); on Netlify its ordinary REST/auth requests are rewritten to the proxy by the fetch wrapper below.
   // storageKey is the same one the old account client used (derived from SB_URL), so signed-in players stay signed in.
@@ -7903,9 +7904,9 @@
     if (canon(cloudSnap()) !== canon(sn)) cloudQueue();   // the game normalised something: save the cleaned copy back so both sides agree
     return changed;
   }
-  function cloudQueue() { if (!CL || !CL.user) return; CL.dirty = true; lsSet('br_cloud_dirty', '1'); clearTimeout(CL.timer); CL.timer = setTimeout(cloudPush, 2500); }
+  function cloudQueue() { if (!CL || !CL.user || CL.banned) return; CL.dirty = true; lsSet('br_cloud_dirty', '1'); clearTimeout(CL.timer); CL.timer = setTimeout(cloudPush, 2500); }
   async function cloudPush() {
-    if (!CL || !CL.user || !CL.sb) return;
+    if (!CL || !CL.user || !CL.sb || CL.banned) return;   // banned accounts never write to profiles
     if (CL.busy) { CL.timer = setTimeout(cloudPush, 1500); return; }
     const sig = canon([cloudSnap(), CL.noRankCol, CL.noDuelCol]);
     if (sig === CL.lastSaved) { CL.dirty = false; lsDel('br_cloud_dirty'); return; }   // nothing actually changed since the last successful save: no request
@@ -7922,7 +7923,7 @@
     CL.busy = false;
   }
   window.addEventListener('pagehide', () => { // last-chance save when the tab closes (a keep-alive request can finish after the page is gone)
-    if (!CL || !CL.user || !CL.dirty || !CL.session) return;
+    if (!CL || !CL.user || !CL.dirty || !CL.session || CL.banned) return;
     try { sbFetch(SB_DIRECT + '/rest/v1/profiles?id=eq.' + encodeURIComponent(CL.user.id), { method: 'PATCH', keepalive: true, headers: { apikey: SB_KEY, Authorization: 'Bearer ' + CL.session.access_token, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(Object.assign({ progress: cloudSnap(), wins: num(stats.wins), updated_at: new Date().toISOString() }, (CL.noRankCol ? {} : { rank_points: num(ranked.points) }), CL.noDuelCol ? {} : { duel_wins: num(stats.duelWins) })) }); } catch (e) { /* best effort */ }
   });
   window.addEventListener('online', () => { if (CL && CL.user && lsGet('br_cloud_dirty')) cloudQueue(); });
@@ -7930,6 +7931,7 @@
     const u = CL.user; if (!u || !CL.sb || CL.synced === u.id) return; CL.synced = u.id; CL.lastSaved = '';
     let row = null;
     try { const r = await CL.sb.from('profiles').select('*').eq('id', u.id).maybeSingle(); if (r.error) throw r.error; row = r.data; } catch (e) { acctRender('offline'); CL.synced = ''; return; }
+    if (row && row.banned === true) { cloudBanned(); return; }   // banned: sign out and wipe before anything is applied or saved
     const owner = lsGet('br_cloud_uid'), foreign = !!owner && owner !== u.id, local = foreign ? mergeSnap(null, null, false) : cloudSnap(), cloudData = row && row.progress && row.progress.v ? row.progress : null;
     if (!row) { // first login on a new account: create the profile (with the username chosen at sign-up) from this device's data
       let name = String((u.user_metadata && u.user_metadata.username) || (u.email || 'player').split('@')[0]).replace(/[^A-Za-z0-9_]/g, '').slice(0, 16); if (name.length < 3) name = 'player' + Math.floor(100 + Math.random() * 900);
@@ -8012,13 +8014,29 @@
       }
     } catch (er) { busy(false); authSay(authErrText(er)); }
   }
+  // ---- Banned accounts: end the session, remove this account's data from the device and say why (the profile row's `banned` column is the source of truth) ----
+  const BAN_KEY = 'br_ban_notice', BAN_MSG = 'This account has been banned.';
+  async function cloudBanned() {
+    CL.banned = true; CL.dirty = false; clearTimeout(CL.timer);   // no more profile writes from here on
+    const uid = CL.user && CL.user.id, owner = lsGet('br_cloud_uid');
+    try { await Promise.race([CL.sb.auth.signOut({ scope: 'local' }), new Promise(r => setTimeout(r, 4000))]); } catch (e) { /* signed out locally regardless */ }
+    try { Object.keys(localStorage).filter(k => /^sb-.*-auth-token/.test(k)).forEach(k => localStorage.removeItem(k)); } catch (e) { /* storage unavailable */ }
+    if (owner && owner === uid) ['br_progress', 'br_pass', 'br_stats', 'br_ranked'].forEach(lsDel);   // only data that followed this account (never a guest's or someone else's progress)
+    ['br_cloud_uid', 'br_cloud_ts', 'br_cloud_dirty'].forEach(lsDel);
+    lsSet(BAN_KEY, '1'); location.reload();   // back to a clean guest; the notice shows after the reload
+  }
+  async function banFresh() { // a fresh look at the signed-in account's flag (used before opening online play); true = banned
+    if (CL.banned) return true; if (!CL.sb || !CL.user) return false;
+    try { const r = await CL.sb.from('profiles').select('banned').eq('id', CL.user.id).maybeSingle(); if (!r.error && r.data && r.data.banned === true) { cloudBanned(); return true; } } catch (e) { /* offline: the server-side policy still applies */ }
+    return false;
+  }
   async function cloudLogout() {
     try { if (CL.dirty) await Promise.race([cloudPush(), new Promise(r => setTimeout(r, 4000))]); } catch (e) { /* offline: signing out anyway */ }   // (a slow save never blocks logging out)
     try { await Promise.race([CL.sb.auth.signOut({ scope: 'local' }), new Promise(r => setTimeout(r, 4000))]); } catch (e) { /* signed out locally regardless */ }   // 'local' ends this browser's session without needing the server (a failed server call used to leave the session in place)
     try { Object.keys(localStorage).filter(k => /^sb-.*-auth-token/.test(k)).forEach(k => localStorage.removeItem(k)); } catch (e) { /* storage unavailable */ }   // belt and braces: the saved session must be gone before the reload
     ['br_progress', 'br_pass', 'br_stats', 'br_ranked', 'br_cloud_uid', 'br_cloud_ts', 'br_cloud_dirty'].forEach(lsDel); location.reload();   // the device goes back to a clean guest
   }
-  function maybeAutoAuth() { if (CL.sb && CL.initDone && CL.newsDone && !CL.user && !CL.guest && !CL.autoShown && authEl.hidden) { CL.autoShown = true; authOpen('login'); } }
+  function maybeAutoAuth() { if (CL.sb && CL.initDone && CL.newsDone && !CL.user && !CL.guest && !CL.autoShown && authEl.hidden) { CL.autoShown = true; authOpen('login'); if (lsGet(BAN_KEY)) { lsDel(BAN_KEY); authSay(BAN_MSG); } } }
   if (CL.sb) {
     CL.sb.auth.onAuthStateChange((ev, session) => {
       CL.session = session || null; CL.user = session ? session.user : null;
@@ -8048,7 +8066,7 @@
     if (lbPending[lbMode]) return; lbPending[lbMode] = true; mine.textContent = 'Loading...';
     const mode = lbMode;
     try {
-      const r = await CL.sb.from('profiles').select('username,' + col).gt(col, 0).order(col, { ascending: false }).order('username').limit(LB_LIMIT);   // top 50 only
+      const r = await CL.sb.from('profiles').select('username,' + col).gt(col, 0).eq('banned', false).order(col, { ascending: false }).order('username').limit(LB_LIMIT);   // top 50 only
       if (lbMode !== (duel ? 'duel' : 'rank')) return;   // the player switched tabs while this was loading
       if (r.error) { tb.innerHTML = ''; mine.textContent = new RegExp(col, 'i').test(r.error.message || '') ? 'This leaderboard is not set up yet (the ' + col + ' column is missing in the database).' : 'Could not load the leaderboard.'; return; }
       const me = CL.username, rk = pts => RANKS[rankOf(pts)] || RANKS[0], rc = pts => rk(pts).color || '#cd7f32', mark = p => me && p.username === me ? ' class="me"' : '';
@@ -8056,7 +8074,7 @@
       else tb.innerHTML = '<tr><th>#</th><th>Player</th><th>Rank</th><th>Points</th></tr>' + (r.data.length ? r.data.map((p, i) => '<tr' + mark(p) + '><td>' + (i + 1) + '</td><td>' + esc(p.username) + '</td><td style="color:' + rc(num(p.rank_points)) + '">' + esc(rk(num(p.rank_points)).name.toUpperCase()) + '</td><td>' + num(p.rank_points) + '</td></tr>').join('') : '<tr><td colspan="4">No ranked players yet - win ranked matches to appear!</td></tr>');
       if (CL.user) {
         const w = duel ? num(stats.duelWins) : num(ranked.points);
-        if (w > 0) { const c = await CL.sb.from('profiles').select('id', { count: 'exact', head: true }).gt(col, w); if (lbMode === (duel ? 'duel' : 'rank')) mine.textContent = c.error ? '' : 'YOUR RANK: #' + ((c.count || 0) + 1) + ' \u2022 ' + (duel ? w + (w === 1 ? ' duel win' : ' duel wins') : rk(w).name.toUpperCase() + ' \u2022 ' + w + ' pts'); }
+        if (w > 0) { const c = await CL.sb.from('profiles').select('id', { count: 'exact', head: true }).gt(col, w).eq('banned', false); if (lbMode === (duel ? 'duel' : 'rank')) mine.textContent = c.error ? '' : 'YOUR RANK: #' + ((c.count || 0) + 1) + ' \u2022 ' + (duel ? w + (w === 1 ? ' duel win' : ' duel wins') : rk(w).name.toUpperCase() + ' \u2022 ' + w + ' pts'); }
         else mine.textContent = duel ? 'Win a 1v1 duel to get on the board.' : 'Earn ranked points (Ranked mode) to get on the board.';
       } else mine.textContent = 'Log in to appear on the leaderboard.';
       lbCache[mode] = { t: Date.now(), tbl: tb.innerHTML, mine: mine.textContent };
@@ -8221,6 +8239,7 @@
   }
   function lbConnect(code, host) {
     if (ONLINE_MAINTENANCE) { olMsg('Online play is under maintenance.'); return; }
+    if (CL.banned) { olMsg(BAN_MSG); return; }
     const sb = netSb(); if (!sb) { olMsg('Live connection is not available here.'); return; }
     lbDrop(); LB.code = code; LB.host = host; LB.poll = false; LB.subscribed = false; LB.id = Math.random().toString(36).slice(2, 10); LB.t = Date.now(); LB.ready = false; LB.rd = {}; LB.gone = {}; clearTimeout(LB.fullT); LB.fullT = 0; LB.started = false; LB.lastN = 0; LB.sawHost = host; LB.rjSent = false; olMsg(host ? 'Creating the lobby...' : 'Joining...');
     let ch; try { ch = sb.channel('lobby:' + code, { config: { broadcast: { self: false }, presence: { key: LB.id } } }); } catch (e) { olMsg('Could not reach the online service.'); return; }
@@ -8252,7 +8271,7 @@
   function lbOpen() { olEl.hidden = false; lobbyEl.inert = true; olMsg(''); lbRender(); document.addEventListener('keydown', lbKey, true); }
   function lbClose() { olEl.hidden = true; if (!newsOpen && authEl.hidden && duEl.hidden) lobbyEl.inert = false; document.removeEventListener('keydown', lbKey, true); }
   function lbKey(e) { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); lbClose(); } else e.stopPropagation(); }
-  lobbyBtn.addEventListener('click', () => { sfx('click'); if (ONLINE_MAINTENANCE) { toast('ONLINE LOBBY is under maintenance. 1v1 Duel and Duos are unavailable right now - please check back later.'); return; } lbOpen(); });
+  lobbyBtn.addEventListener('click', () => { sfx('click'); if (ONLINE_MAINTENANCE) { toast('ONLINE LOBBY is under maintenance. 1v1 Duel and Duos are unavailable right now - please check back later.'); return; } banFresh().then(b => { if (b) toast(BAN_MSG); else lbOpen(); }); });
   olQ('olClose').addEventListener('click', () => { sfx('click'); if (LB.ch && !LB.started) lbLeave(); lbClose(); });
   olQ('olCreate').addEventListener('click', () => { sfx('click'); lbConnect(lbCode(false), true); });
   olQ('olJoin').addEventListener('click', () => { sfx('click'); const c = olQ('olCode').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, ''); if (c.length < 5) { olMsg('Enter the 5 or 6 character code.'); return; } lbConnect(c, false); });
